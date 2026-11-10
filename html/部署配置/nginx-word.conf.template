@@ -1,0 +1,39 @@
+# Put these location blocks INSIDE the existing server {} serving index.html.
+# The example assumes index.html is at http://server/ .
+# If it is at /pdf/, replace all /word-api/ prefixes below with /pdf/word-api/.
+# Replace __WORD_TOKEN__ with the same private token used by PDF_TOOL_TOKEN.
+# Keep this config outside the public document root.
+
+location = /word-api/status {
+    proxy_pass http://127.0.0.1:8787/api/status;
+    proxy_set_header Host $http_host;
+    proxy_set_header X-PDF-Token "__WORD_TOKEN__";
+    proxy_connect_timeout 5s;
+    proxy_read_timeout 10s;
+    add_header Cache-Control "no-store" always;
+}
+
+location = /word-api/convert {
+    client_max_body_size 51m;
+    proxy_pass http://127.0.0.1:8787/api/convert;
+    proxy_set_header Host $http_host;
+    proxy_set_header X-PDF-Token "__WORD_TOKEN__";
+    proxy_http_version 1.1;
+    proxy_set_header Connection "";
+    proxy_request_buffering off;
+    proxy_buffering off;
+    proxy_connect_timeout 5s;
+    proxy_send_timeout 360s;
+    proxy_read_timeout 360s;
+}
+
+location = /word-api/download {
+    proxy_pass http://127.0.0.1:8787/api/download;
+    proxy_set_header Host $http_host;
+    proxy_set_header X-PDF-Token "__WORD_TOKEN__";
+    proxy_buffering off;
+    proxy_read_timeout 360s;
+    add_header Cache-Control "no-store" always;
+}
+
+location /word-api/ { return 404; }

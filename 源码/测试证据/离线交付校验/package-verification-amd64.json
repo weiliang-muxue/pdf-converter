@@ -1,0 +1,12 @@
+{
+  "result": "PASS",
+  "version": "1.0.3",
+  "archive": "E:\\CodeXWork\\创建 PDF 转换工具项目\\成果\\阿里云Linux3-x86_64离线部署包.tar.gz",
+  "bytes": 265537220,
+  "sha256": "4beb761d07606bb029eb4e73dc180d4886d4fc56b4770f61f280c5cac8275b73",
+  "files_verified": 17,
+  "architectures": [
+    "amd64"
+  ],
+  "validation": "archive content, source checksum, permissions and layout only"
+}

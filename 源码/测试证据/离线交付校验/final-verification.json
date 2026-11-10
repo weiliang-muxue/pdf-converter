@@ -1,0 +1,51 @@
+{
+  "runtime_compression": [
+    {
+      "architecture": "amd64",
+      "original_bytes": 273357988,
+      "compressed_bytes": 263882664,
+      "saved_bytes": 9475324,
+      "saved_percent": 3.47,
+      "original_sha256": "95bfb49a3db52b8b567cad71902ac768b3ba07b555b3dd4babf58c5c48c5633d",
+      "compressed_sha256": "2ba748892619a364621026466c8d69a197241e0b9a5b1b216dff244654d0611d",
+      "tar_sha256": "90ba594e0f99440432894601e831d250464d5a52de6de31c2b9a840e31f4c4b3",
+      "expanded_bytes": 562452480,
+      "lossless_verification": "PASS",
+      "elapsed_seconds": 142.6
+    },
+    {
+      "architecture": "arm64",
+      "original_bytes": 268664194,
+      "compressed_bytes": 260302400,
+      "saved_bytes": 8361794,
+      "saved_percent": 3.11,
+      "original_sha256": "86390adcae34331da9c9f5c09696078e21b3d81f6c8055294028cf17bb9a92cf",
+      "compressed_sha256": "054ff0b7bd4c20a95afbdb7255956353580e49a107e609873ffda0f9ffc8db74",
+      "tar_sha256": "fee9c34e7bd5055603644f71cf042ba9f450887fc77dfa8c014dfa2c518e85a4",
+      "expanded_bytes": 587356160,
+      "lossless_verification": "PASS",
+      "elapsed_seconds": 159.2
+    }
+  ],
+  "date": "2026-11-10",
+  "scope": "Lossless compression and complete single-architecture release packages",
+  "original_dual_architecture_bytes": 545306577,
+  "packages": [
+    {
+      "archive": "E:\\CodeXWork\\创建 PDF 转换工具项目\\成果\\阿里云Linux3-x86_64离线部署包.tar.gz",
+      "MiB": 253.24,
+      "architecture": "x86_64",
+      "result": "PASS",
+      "bytes": 265537220,
+      "sha256": "4beb761d07606bb029eb4e73dc180d4886d4fc56b4770f61f280c5cac8275b73"
+    },
+    {
+      "archive": "E:\\CodeXWork\\创建 PDF 转换工具项目\\成果\\阿里云Linux3-aarch64离线部署包.tar.gz",
+      "MiB": 249.16,
+      "architecture": "aarch64",
+      "result": "PASS",
+      "bytes": 261259560,
+      "sha256": "8a245142174d65cb4d721e5c23ae0ee8374afd63375b27923b773f5e4e8ea6ee"
+    }
+  ]
+}

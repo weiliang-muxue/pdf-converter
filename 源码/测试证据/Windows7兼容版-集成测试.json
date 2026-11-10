@@ -1,0 +1,15 @@
+{
+  "host": "Windows 10 x64",
+  "executable": "E:\\CodeXWork\\pdf\\exe\\Windows7\\PDF工具箱-Win7.exe",
+  "checks": [
+    "Bundled LibreOffice detected",
+    "7 images: JPG/PNG/BMP/GIF/TIFF, EXIF rotation, transparency, page order, strict PDF parsing",
+    "Letter portrait and original-size pages with zero margins",
+    "word-docx.pdf: two pages, Chinese text, table, image and page break",
+    "word-doc.pdf: two pages, Chinese text, table, image and page break",
+    "Batch DOC/DOCX: ZIP contains two PDFs with distinct names",
+    "Corrupt-file error and unauthenticated-request rejection"
+  ],
+  "platform": "windows/386",
+  "result": "PASS"
+}

@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-02T11:07:12.226Z",
+  "browser": "156.0.4314.50",
+  "checks": [
+    "ZIP numeric order 1, 2, 3, 10 and downloadable PDF",
+    "Invalid, encrypted, traversal, oversized and corrupt ZIP rejected; previous list preserved",
+    "Manual selection order, up button, page-number move and drag reorder",
+    "Numeric sort and remove",
+    "Transparent PNG, EXIF-rotated JPEG and WebP; original paper dimensions",
+    "Corrupt image errors and cancellation preserve editable list",
+    "ZIP and image conversion made no backend requests",
+    "DOCX to PDF through real Nginx proxy with private header authentication",
+    "Legacy DOC through Nginx",
+    "Static-only Nginx clearly reports Word unavailable while image PDF works",
+    "Single HTML file works locally without any server",
+    "No JavaScript errors or external network requests"
+  ],
+  "errors": [],
+  "external": [],
+  "requestCount": 7
+}

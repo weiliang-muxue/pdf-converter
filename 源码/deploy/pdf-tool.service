@@ -1,0 +1,22 @@
+[Unit]
+Description=PDF Toolbox
+After=network.target
+
+[Service]
+Type=simple
+# The launcher performs chroot setup, then drops the application to UID/GID 65534.
+User=root
+Group=root
+WorkingDirectory=/opt/pdf-tool
+EnvironmentFile=/etc/pdf-tool.env
+ExecStart=/bin/sh /opt/pdf-tool/start.sh --listen 127.0.0.1:8080
+Restart=on-failure
+RestartSec=5
+UMask=0077
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target

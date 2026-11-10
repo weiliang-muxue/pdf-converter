@@ -1,0 +1,140 @@
+﻿PDF 文件工坊 — HTML 离线版 v1.0.3
+日期：2026-11-02
+
+一、只做两步
+
+前提：服务器已经有正常运行的 Nginx。本套 pdf 文件夹中的 html、exe 保持原来的相对位置；启动脚本需要使用 exe 里的离线转换引擎。所有运行依赖已随包提供，不联网下载。
+
+第 1 步：把 html/index.html 复制到 Nginx 的网站文件夹。
+例如 Windows：D:/nginx/html/pdf/index.html
+例如 Linux：/usr/share/nginx/html/pdf/index.html
+也可以放在网站根目录或其他普通子目录。
+只把 index.html 放进网站目录，不要把整套 pdf、exe、启动脚本、口令或日志放进网站目录。
+
+第 2 步：在服务器上运行本包 html 文件夹里的启动入口。
+Windows：双击 start-windows.cmd。若网站配置在受保护目录，以管理员身份运行。
+Linux：进入本包 html 文件夹，执行 sudo sh start-linux.sh。
+例如本包位于 /opt/pdf：sudo sh /opt/pdf/html/start-linux.sh
+
+脚本会自动完成：
+- 识别服务器系统版本与 CPU，选择随包的对应程序。
+- 生成并保存本机服务口令，后续启动继续使用。
+- 找到正在运行的 Nginx，读取它实际使用的配置。
+- 查找已复制的本工具 index.html，识别对应网站和网址前缀。
+- 先备份原配置，再添加 Word 接口、检查配置并重新加载 Nginx。
+- 启动 Word 离线服务；网页显示已连接的系统和架构。
+
+不需要手动填写口令、选架构、粘贴 Nginx 配置或手动重载。
+看到配置成功后，访问原来的网页地址。Windows 通常等待数秒；Linux 首次解包可能需要几分钟，以网页显示“Word 转换服务已就绪”为准。
+例如：http://服务器内网IP/pdf/index.html
+普通用户只需选择文件、确认顺序、生成并下载 PDF。
+
+单独使用图片功能时，只需要第 1 步；双击本地 index.html 也能处理图片。
+Word 必须使用随包后台引擎，单独一个 HTML 文件不能完成 DOC/DOCX 的完整排版转换。
+
+二、脚本自动选择什么
+
+Windows 7 SP1 32/64 位：exe/Windows7 中的兼容程序。
+Windows 10 64 位：exe/Windows10 中的程序。
+32 位 Windows 10：自动使用 Windows7 兼容程序。
+Linux x86_64、ARM64、LoongArch64：自动选用 exe/信创Linux 中的对应可执行文件和运行环境。
+欧拉/openEuler、EulerOS、麒麟、统信等系统名称和版本从服务器 /etc/os-release 读取。
+Linux 使用程序自己的离线运行库，不向宿主安装 DEB/RPM，不把服务器系统更换成 Debian。
+检测对象是服务器系统；访问者的浏览器不需要选择服务器类型。
+
+不支持的 CPU 会明确报错，不会随便调用其他架构的文件。
+LoongArch64 要求上游 ABI 和 Linux 5.19+，不支持旧 MIPS 龙芯、旧 ABI 龙芯。
+Windows 7 需要 SP1；若提示缺少 api-ms-win-crt 运行库，请使用随包 Windows7/运行库补丁 中对应操作系统位数的离线补丁，具体见上一级说明。
+Linux 首次启动需要 root 建立私有 chroot 和挂载 proc，文档处理进程使用 UID/GID 65534。
+服务器需要正常的 tar、sha256sum、chroot、mount 等基础系统能力，建议至少 2 GB 可用内存、4 GB 可用磁盘。服务器不需要安装桌面、浏览器、Node、Python、Go、Java 或 Microsoft Office。
+
+三、ZIP 和多图的页面顺序
+
+ZIP 模式：把图片命名为 1.jpg、2.jpg、3.jpg……，做成普通 ZIP。
+网页按数字名称排列：1、2、3、10，不会排成 1、10、2、3。
+支持 ZIP 内的子文件夹，自动忽略非图片文件和 macOS 元数据。
+排序先比较图片文件名，再比较完整路径；建议所有图片使用唯一连续编号。
+
+多图模式：一次选择多张，也可以分批添加。
+列表从上到下就是 PDF 页序，可拖动、“↑ / ↓”、直接修改页码后回车或离开输入框。
+支持数字名称排序、移除、清空。选择纸张、方向、边距和文件名后生成并下载。
+图片和 ZIP 全部在当前浏览器处理，不上传服务器；原始文件不被修改。
+
+支持 JPG/JPEG、PNG、WebP、BMP、GIF。一图一页，等比例居中，透明背景变白，支持 JPEG EXIF 方向。GIF 仅导出一帧。
+ZIP 最大 200 MB；解压后的图片最多 200 张、总计 200 MB。
+单张最多 50 MB、2000 万像素、单边 20000 像素。
+不支持 RAR、7Z、加密 ZIP、分卷 ZIP、ZIP64，请先另存为普通 ZIP。
+长边超过 4000 像素会缩小，PDF 使用高质量 JPEG 压缩，不是无损归档；不提供 OCR。
+原尺寸按 96 DPI 换算。刷新或关闭网页会清除尚未下载的浏览器结果。
+
+四、Word 转 PDF
+
+每次选择一个 DOC 或 DOCX，单个不超过 50 MB，生成一份 PDF。
+文档只上传到你自己的内网服务器，不使用互联网转换服务。
+不支持密码保护文档；特殊字体、复杂排版与 Microsoft Word 可能有差异。
+结果保留 60 分钟。服务每个进程一次处理一个转换任务，忙碌时提示稍后重试。
+后台仅监听 127.0.0.1:8787，外部用户通过原来的网站访问，不必另外开放 8787 端口。
+服务口令由 Nginx 内部添加，不写入网页，也不放进下载地址。
+网页不提供用户账号系统，按内网受控服务使用；已有站点访问控制不会被自动取消。
+
+五、自动配置的边界和故障提示
+
+自动配置支持常见的本机 Nginx：普通静态 root、alias 目录、配置 include、多个 server，以及 / 或 /pdf/ 等子目录；要求 Nginx 支持 -T、-t 和 -s reload。
+配置只加入带 PDF-TOOL 标记的块，重复启动会更新该块，不会越加越多。原配置备份保存在 html/部署配置/nginx-backups，口令保存在同目录 service-token.txt。
+修改保留原配置文件的身份、权限和安全标签，配置检查或重载失败时恢复原文件。
+不要删除自动配置标记，也不要在网站公开目录存放这些私有文件。
+
+如果没有找到网页：先确认复制的是本包最新 index.html，确实位于 Nginx 的静态网站目录。
+如果未找到 Nginx：确认 Nginx 已安装、正在运行，脚本有权限读取其进程及配置。
+如果发现多个独立 Nginx 实例，或站点已有单独的访问控制、重写、手工 Word 代理，脚本会停止，避免改错配置或绕过原有规则。容器内的 Nginx 应在同一容器/运行环境部署，不能保证从宿主直接改配置。
+变量 root、非常深或超过 3000 条目的大型网站目录，可能需要通过高级参数限定目录前缀。
+已有严格 CSP 的站点可能禁止内嵌脚本；程序不会主动降低原站点策略，请由该站点维护者按既有策略处理。
+
+以上特殊情况会给出具体错误，不会联网下载其他版本，也不会自动关闭访问限制。
+常规 Nginx 静态网站按前面的两步完成即可。
+
+Windows 高级参数（通常不需要）：
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File start-windows.ps1 -NginxExe D:/nginx/nginx.exe -NginxPrefix D:/nginx/ -NginxConfig D:/nginx/conf/nginx.conf -SitePath /pdf/
+可选 -AppRoot 指定整个 pdf 目录，-Port 指定后台端口，-StateDir 指定私有状态目录。
+-CheckOnly 只显示系统识别结果，不启动或改配置。
+
+Linux 高级参数在管理员 shell 中通过环境变量设置：
+PDF_NGINX_BIN、PDF_NGINX_PREFIX、PDF_NGINX_CONFIG：指定目标 Nginx。
+PDF_SITE_PATH：限定网页前缀，如 /pdf/。
+PDF_APP_ROOT：指定整个 pdf 目录；PDF_WORD_PORT：指定后台端口。
+PDF_WORD_STATE_DIR：指定私有状态目录；PDF_TOOL_TOKEN：显式固定口令（24-128 位字母、数字、下划线或短横线）。
+sh start-linux.sh --check 只识别和检查，不启动或改配置。
+
+六、停止与重启
+
+Windows 后台会在启动窗口关闭后继续运行。PID 记录在 html/部署配置/service.pid，可在任务管理器确认相应 PDF 工具进程后停止。重新运行 start-windows.cmd 即可；同口令的已运行服务会复用。
+Linux 启动脚本默认前台运行，按 Ctrl+C 停止服务并卸载此次 proc 挂载。网页静态功能仍然存在。需要长期后台/开机启动时，由现有服务管理方式托管启动脚本；源码/deploy 中有 systemd 参考，需维护者按路径和配置写入权限调整。
+如果 Linux 提示已有实例，不要重复运行；先确认旧进程是否还在。异常终止留下锁目录的处理见 exe/信创Linux/部署说明.txt。proc 仍挂载时不能递归删除运行目录。
+正常退出清理临时文件；断电或强制终止可能遗留临时文件。
+
+七、浏览器与验证范围
+
+浏览器使用支持现代 HTML5 的 Chrome、Edge、Firefox 或兼容浏览器，不支持 IE。
+Win7 可使用已有的兼容 Chromium 浏览器，例如 Chrome 109。本包不安装浏览器或 Nginx。
+所有网页样式、图标、脚本、ZIP 解压库均在 index.html 内，不访问 CDN、外部字体或在线转换 API。
+
+已经在 Windows 10 专业版 x64 上完成真实 Nginx 两步自动部署、自动重载、重复启动、错误配置回退、ZIP、多图、DOC、DOCX 下载验证。
+PDF 已独立解析和渲染检查，确认数字/手动页序、中文分页、透明背景和 EXIF 旋转。
+Windows 版本选择，以及欧拉/麒麟/统信与三种 CPU 的识别逻辑，已用模拟系统信息测试。
+Win7、欧拉、麒麟、统信及 ARM/龙芯实机尚未逐一验收；识别和静态依赖检查不等于实际系统认证。
+本次交付的主程序版本为 1.0.3，请与当前 HTML 和启动脚本配套使用。
+
+八、维护文件
+
+网站文件：可编辑的 HTML、CSS、JavaScript 和本地 JSZip。
+生成单文件.cjs：维护者运行 node 生成单文件.cjs，重新生成 index.html；部署用户不需要 Node。
+测试：可复用的浏览器、PDF、自动识别测试脚本；测试依赖只在开发环境使用。
+测试结果：本次测试记录和界面截图。
+部署配置/nginx-word.conf.template：启动脚本使用的代理模板，通常不用手工修改。
+JSZip 3.10.1 的许可保留在 网站文件/assets/JSZIP-LICENSE.txt。
+
+官方兼容性参考，仅查阅使用，运行时不会访问：
+Chrome 109 / Win7：https://support.google.com/chrome/a/answer/7100626
+LibreOffice 25.2 / Win7 SP1：https://blog.documentfoundation.org/blog/2025/02/06/libreoffice-25-2/
+2026-11-09 已修复 Linux 运行目录权限、后台就绪检查和无关 Nginx 规则误拦截。
+阿里云 Linux 3 的本次验证范围详见 html/阿里云Linux3验证说明.txt（在 html 目录内直接查看同名文件）。

@@ -1,0 +1,16 @@
+﻿两步部署（服务器已有正常运行的 Nginx）
+
+1. 把 html/index.html 放进 Nginx 的网站文件夹。
+   例如：nginx/html/pdf/index.html
+
+2. 在本包 html 文件夹中运行：
+   Windows：双击 start-windows.cmd。
+   Linux：sudo sh start-linux.sh。
+
+系统识别、选择程序、口令、Nginx 配置、检查及重载都由脚本完成。
+看到成功信息后，用户访问 http://服务器IP/pdf/index.html 即可。
+
+启动脚本与 exe 离线引擎必须按原目录一起保留在服务器上。
+只把 index.html 放入网站公开目录，不要公开口令、日志和运行包。
+受保护目录需要管理员权限；无须联网下载依赖。
+特殊 Nginx 配置若无法安全识别，脚本会明确报错并停止，详见“使用说明.txt”。

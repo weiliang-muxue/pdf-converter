@@ -1,0 +1,8 @@
+{
+  "result": "PASS",
+  "scope": "Static dependency closure only; no Linux machine execution",
+  "architecture": "arm64",
+  "elf_objects_checked": 130,
+  "cjk_font_files": 4,
+  "runtime": "E:\\CodeXWork\\pdf\\exe\\信创Linux\\离线运行环境\\runtime-arm64.tar.gz"
+}

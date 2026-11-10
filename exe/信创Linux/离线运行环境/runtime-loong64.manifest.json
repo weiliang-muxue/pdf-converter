@@ -1,0 +1,1401 @@
+{
+  "architecture": "loong64",
+  "suite": "unstable",
+  "index_sha256": "bcbe7a3aa9299def8715e38dc255eda800c4b5ea25f9fa7914efe9a04ab3a26b",
+  "packages": [
+    {
+      "Package": "coreutils",
+      "Version": "9.12-0.3",
+      "Source": "",
+      "Filename": "pool/main/c/coreutils/coreutils_9.12-0.3_loong64.deb",
+      "SHA256": "1fdce326cc2969c9415ec425083aee4453bc83cdbb71044aa0ca2f577d354718",
+      "Size": "3292620"
+    },
+    {
+      "Package": "dash",
+      "Version": "0.5.12-12+b1",
+      "Source": "dash (0.5.12-12)",
+      "Filename": "pool/main/d/dash/dash_0.5.12-12+b1_loong64.deb",
+      "SHA256": "6a480833eb89ac2a8f9179a9c122fc125d36ccbba5c873cf89c8804d09fd6444",
+      "Size": "101400"
+    },
+    {
+      "Package": "debconf",
+      "Version": "1.5.92",
+      "Source": "",
+      "Filename": "pool/main/d/debconf/debconf_1.5.92_all.deb",
+      "SHA256": "cdee7273fe92dad870fa6c7e3a8aa5b4001a8ddeffccb0958e1607bf15879803",
+      "Size": "122512"
+    },
+    {
+      "Package": "debianutils",
+      "Version": "5.24",
+      "Source": "",
+      "Filename": "pool/main/d/debianutils/debianutils_5.24_loong64.deb",
+      "SHA256": "441d15151724ee991cfd36676def3b85450cba456951e8935801ca9c134ae9c9",
+      "Size": "93096"
+    },
+    {
+      "Package": "dirmngr",
+      "Version": "2.4.9-8",
+      "Source": "gnupg2",
+      "Filename": "pool/main/g/gnupg2/dirmngr_2.4.9-8_loong64.deb",
+      "SHA256": "ff377121d6e0c3a362dfc96387f7916fd9f2abf3efbf485651767ee913bdbd6c",
+      "Size": "373964"
+    },
+    {
+      "Package": "fontconfig",
+      "Version": "2.17.1-5",
+      "Source": "",
+      "Filename": "pool/main/f/fontconfig/fontconfig_2.17.1-5_loong64.deb",
+      "SHA256": "59f1049929f16095112f3a95a0133b7ed6bd9cd48481770f227eb849f7a6009d",
+      "Size": "190976"
+    },
+    {
+      "Package": "fontconfig-config",
+      "Version": "2.17.1-5",
+      "Source": "fontconfig",
+      "Filename": "pool/main/f/fontconfig/fontconfig-config_2.17.1-5_loong64.deb",
+      "SHA256": "d5372c938d4b5d1c815c7a0b0024358f940ec5bcc2c5b89113b410fc534c21c5",
+      "Size": "56060"
+    },
+    {
+      "Package": "fonts-liberation",
+      "Version": "1:2.1.5-3",
+      "Source": "",
+      "Filename": "pool/main/f/fonts-liberation/fonts-liberation_2.1.5-3_all.deb",
+      "SHA256": "3d5c47480067b9615f6bf9b0eda6eefcab9d837af609827015445e8e759b5b8c",
+      "Size": "1475396"
+    },
+    {
+      "Package": "fonts-noto-cjk",
+      "Version": "1:20240730+repack1-1",
+      "Source": "",
+      "Filename": "pool/main/f/fonts-noto-cjk/fonts-noto-cjk_20240730+repack1-1_all.deb",
+      "SHA256": "f5dc28a754e17327d99f0a612134d92c8dd6187314ae967cb77f25df60860139",
+      "Size": "56674044"
+    },
+    {
+      "Package": "fonts-opensymbol",
+      "Version": "4:102.13+LibO26.8.2.2-2",
+      "Source": "libreoffice (4:26.8.2.2-2)",
+      "Filename": "pool/main/libr/libreoffice/fonts-opensymbol_102.13+LibO26.8.2.2-2_all.deb",
+      "SHA256": "99c0b9693b513415490c0283616e8002d6a6d5b4651bd19b0927cd1e3ddc9480",
+      "Size": "113444"
+    },
+    {
+      "Package": "gcc-16-base",
+      "Version": "16.2.0-4",
+      "Source": "gcc-16",
+      "Filename": "pool/main/g/gcc-16/gcc-16-base_16.2.0-4_loong64.deb",
+      "SHA256": "00489f0b7cdd392b8bc66943fe9313038aed42684fc45098da0026b15bb1c333",
+      "Size": "39340"
+    },
+    {
+      "Package": "gnupg",
+      "Version": "2.4.9-8",
+      "Source": "gnupg2",
+      "Filename": "pool/main/g/gnupg2/gnupg_2.4.9-8_all.deb",
+      "SHA256": "bdf99fef596facabe030de147a66da8ce4251025638f9f613cf2daad55cca09d",
+      "Size": "415264"
+    },
+    {
+      "Package": "gnupg-l10n",
+      "Version": "2.4.9-8",
+      "Source": "gnupg2",
+      "Filename": "pool/main/g/gnupg2/gnupg-l10n_2.4.9-8_all.deb",
+      "SHA256": "86ae7275930c6b044531ae320a0b995f8c4edf6c7ab54724e883cbef3bcf9c3c",
+      "Size": "748544"
+    },
+    {
+      "Package": "gpg",
+      "Version": "2.4.9-8",
+      "Source": "gnupg2",
+      "Filename": "pool/main/g/gnupg2/gpg_2.4.9-8_loong64.deb",
+      "SHA256": "3af9ac88ab2a5f83328ad058d0f468cf6c845e4b8e840757dc8c85299a65e197",
+      "Size": "615888"
+    },
+    {
+      "Package": "gpg-agent",
+      "Version": "2.4.9-8",
+      "Source": "gnupg2",
+      "Filename": "pool/main/g/gnupg2/gpg-agent_2.4.9-8_loong64.deb",
+      "SHA256": "ca06555adbad98636dfb9101e6a1616b942aaa1e1f2e672e4e9f79783e75bd73",
+      "Size": "261860"
+    },
+    {
+      "Package": "gpgconf",
+      "Version": "2.4.9-8",
+      "Source": "gnupg2",
+      "Filename": "pool/main/g/gnupg2/gpgconf_2.4.9-8_loong64.deb",
+      "SHA256": "90c5133652d2cc5289241f3cafae3b33725b1cf7766480c2e3a1161cfe72d476",
+      "Size": "123908"
+    },
+    {
+      "Package": "gpgsm",
+      "Version": "2.4.9-8",
+      "Source": "gnupg2",
+      "Filename": "pool/main/g/gnupg2/gpgsm_2.4.9-8_loong64.deb",
+      "SHA256": "09627d651436c534353ad56c48b008988dad051fe40a5f5ac581f276e62cae76",
+      "Size": "263128"
+    },
+    {
+      "Package": "libabsl20260526",
+      "Version": "20260526.0-2+b1",
+      "Source": "abseil (20260526.0-2)",
+      "Filename": "pool/main/a/abseil/libabsl20260526_20260526.0-2+b1_loong64.deb",
+      "SHA256": "74f58feb4a1af83d9ece2f5289bbd6d627ede5398af7f9488592991af3a0ced5",
+      "Size": "536228"
+    },
+    {
+      "Package": "libabw-0.1-1",
+      "Version": "0.1.4-1",
+      "Source": "libabw",
+      "Filename": "pool/main/liba/libabw/libabw-0.1-1_0.1.4-1_loong64.deb",
+      "SHA256": "e6943ee5174e48633b7ace1257145820ac6e5e6b0f0dafdee91f296d6bf06188",
+      "Size": "112504"
+    },
+    {
+      "Package": "libacl1",
+      "Version": "2.4.0-1",
+      "Source": "acl",
+      "Filename": "pool/main/a/acl/libacl1_2.4.0-1_loong64.deb",
+      "SHA256": "f68bcef64e1fa2a5947abfeb3b9d6d0d14d8d0add8df93dc888f9dcc1fc1d503",
+      "Size": "37908"
+    },
+    {
+      "Package": "libargon2-1",
+      "Version": "0~20190702+dfsg-6",
+      "Source": "argon2",
+      "Filename": "pool/main/a/argon2/libargon2-1_0~20190702+dfsg-6_loong64.deb",
+      "SHA256": "b42f854d292ad4c22d00cc24d03640029e32839e3a03d54891bf0fe54d021f10",
+      "Size": "21568"
+    },
+    {
+      "Package": "libassuan9",
+      "Version": "3.0.2-2+b2",
+      "Source": "libassuan (3.0.2-2)",
+      "Filename": "pool/main/liba/libassuan/libassuan9_3.0.2-2+b2_loong64.deb",
+      "SHA256": "2c218fde1eeb5f0edc073565c5eb41c8c6d23c8c6d901bc4b466975ed473cebc",
+      "Size": "59928"
+    },
+    {
+      "Package": "libatomic1",
+      "Version": "16.2.0-4",
+      "Source": "gcc-16",
+      "Filename": "pool/main/g/gcc-16/libatomic1_16.2.0-4_loong64.deb",
+      "SHA256": "60a736626572c65b8d6a0e9713e89a8703a5cddc014a2889b5dbe000333a1fa7",
+      "Size": "9240"
+    },
+    {
+      "Package": "libattr1",
+      "Version": "1:2.6.0-1",
+      "Source": "attr",
+      "Filename": "pool/main/a/attr/libattr1_2.6.0-1_loong64.deb",
+      "SHA256": "3917095cae186a089cd91dfd06ab9a12ef2d84fe8c6cb63a85a170a61f58a962",
+      "Size": "24784"
+    },
+    {
+      "Package": "libblkid1",
+      "Version": "2.42.4-1",
+      "Source": "util-linux",
+      "Filename": "pool/main/u/util-linux/libblkid1_2.42.4-1_loong64.deb",
+      "SHA256": "7a423760b0bc62c4c61b6d5b0c5993ca09f4609768d9a50f9cb39180a9645bd1",
+      "Size": "178988"
+    },
+    {
+      "Package": "libboost-locale1.92.0",
+      "Version": "1.92.0-4+b1",
+      "Source": "boost1.92 (1.92.0-4)",
+      "Filename": "pool/main/b/boost1.92/libboost-locale1.92.0_1.92.0-4+b1_loong64.deb",
+      "SHA256": "85958802fa84d921760c06e766c45faf73b7917aa7dc9ce2c0ccc50bb44c81a9",
+      "Size": "448436"
+    },
+    {
+      "Package": "libboost-thread1.92.0",
+      "Version": "1.92.0-4+b1",
+      "Source": "boost1.92 (1.92.0-4)",
+      "Filename": "pool/main/b/boost1.92/libboost-thread1.92.0_1.92.0-4+b1_loong64.deb",
+      "SHA256": "4ca31e256efffedc21d9971a72f9850b98d3ec58652a13db399c553e860dfcca",
+      "Size": "257284"
+    },
+    {
+      "Package": "libbrotli1",
+      "Version": "1.2.0-4.1",
+      "Source": "brotli",
+      "Filename": "pool/main/b/brotli/libbrotli1_1.2.0-4.1_loong64.deb",
+      "SHA256": "46dee133a9a8c6b133e091810f31abd38e3bace2c3dbba7ab678afe067214bf0",
+      "Size": "312360"
+    },
+    {
+      "Package": "libbz2-1.0",
+      "Version": "1.0.8-6+b2",
+      "Source": "bzip2 (1.0.8-6)",
+      "Filename": "pool/main/b/bzip2/libbz2-1.0_1.0.8-6+b2_loong64.deb",
+      "SHA256": "2ee74162f81529128c51b994538c02656bfaf94b85fb74a8532bc72186dcdce8",
+      "Size": "39812"
+    },
+    {
+      "Package": "libc-bin",
+      "Version": "2.43-7",
+      "Source": "glibc",
+      "Filename": "pool/main/g/glibc/libc-bin_2.43-7_loong64.deb",
+      "SHA256": "d24a2a96ab8c937f875a10f502ab540f55c316584aef8b16b5e307e5801f0331",
+      "Size": "570860"
+    },
+    {
+      "Package": "libc-gconv-modules-extra",
+      "Version": "2.43-7",
+      "Source": "glibc",
+      "Filename": "pool/main/g/glibc/libc-gconv-modules-extra_2.43-7_loong64.deb",
+      "SHA256": "2b50e6624b44691053ba8d1c91245beeaca5813caa45bcf96a5f248a497bb19e",
+      "Size": "1157244"
+    },
+    {
+      "Package": "libc6",
+      "Version": "2.43-7",
+      "Source": "glibc",
+      "Filename": "pool/main/g/glibc/libc6_2.43-7_loong64.deb",
+      "SHA256": "b6346725a3b73f4dde5c9ba15d7399b15b45076e923d8a91dedfafc22c649efb",
+      "Size": "1357144"
+    },
+    {
+      "Package": "libcairo2",
+      "Version": "1.18.4-3+b1",
+      "Source": "cairo (1.18.4-3)",
+      "Filename": "pool/main/c/cairo/libcairo2_1.18.4-3+b1_loong64.deb",
+      "SHA256": "06eb692324d9afadac112667198b6a95f1ae9b55e8161bc4feeabc5b00d39cfd",
+      "Size": "529644"
+    },
+    {
+      "Package": "libcap2",
+      "Version": "1:2.78-1+b1",
+      "Source": "libcap2 (1:2.78-1)",
+      "Filename": "pool/main/libc/libcap2/libcap2_2.78-1+b1_loong64.deb",
+      "SHA256": "d037364b996f60b5265e0bfaf3eb5acfff4f94c98e13325ad19b17a34b938b00",
+      "Size": "28092"
+    },
+    {
+      "Package": "libclucene-contribs1t64",
+      "Version": "2.3.3.4+dfsg-2",
+      "Source": "clucene-core",
+      "Filename": "pool/main/c/clucene-core/libclucene-contribs1t64_2.3.3.4+dfsg-2_loong64.deb",
+      "SHA256": "ed9e676d6a4747a4e4448411262ba64e1a7e9a0a97f25f74936ec6212585168b",
+      "Size": "81724"
+    },
+    {
+      "Package": "libclucene-core1t64",
+      "Version": "2.3.3.4+dfsg-2",
+      "Source": "clucene-core",
+      "Filename": "pool/main/c/clucene-core/libclucene-core1t64_2.3.3.4+dfsg-2_loong64.deb",
+      "SHA256": "10bd4b262950c44804c6929cf1e445d4330d84c0fb9192f3c17d2ee1041dfa8a",
+      "Size": "494240"
+    },
+    {
+      "Package": "libcmis-0.6-6t64",
+      "Version": "0.6.3-1+b1",
+      "Source": "libcmis (0.6.3-1)",
+      "Filename": "pool/main/libc/libcmis/libcmis-0.6-6t64_0.6.3-1+b1_loong64.deb",
+      "SHA256": "184d10dc581bb756c1d0afdf05928f9eb711bca99678471d3ab3fc0b5229271b",
+      "Size": "502900"
+    },
+    {
+      "Package": "libcom-err2",
+      "Version": "1.47.4-1+b2",
+      "Source": "e2fsprogs (1.47.4-1)",
+      "Filename": "pool/main/e/e2fsprogs/libcom-err2_1.47.4-1+b2_loong64.deb",
+      "SHA256": "f4c5b43d34148c0e8e85680dd4854c6f807cc7c7848865d9ba7a6d9cbc947839",
+      "Size": "19408"
+    },
+    {
+      "Package": "libcrypt1",
+      "Version": "1:4.5.2+20251210-1",
+      "Source": "libxcrypt",
+      "Filename": "pool/main/libx/libxcrypt/libcrypt1_4.5.2+20251210-1_loong64.deb",
+      "SHA256": "f0c1a7efd4a6f27644759041264f2944de9ce517a73912e3a95f7ccc31a36be5",
+      "Size": "94756"
+    },
+    {
+      "Package": "libcurl4-gnutls",
+      "Version": "8.23.0-1",
+      "Source": "curl",
+      "Filename": "pool/main/c/curl/libcurl4-gnutls_8.23.0-1_loong64.deb",
+      "SHA256": "694115e243d0e680dac4cea059c46140998d864024acf7b5627b9148e700c38b",
+      "Size": "429988"
+    },
+    {
+      "Package": "libcurl4t64",
+      "Version": "8.23.0-1",
+      "Source": "curl",
+      "Filename": "pool/main/c/curl/libcurl4t64_8.23.0-1_loong64.deb",
+      "SHA256": "7377f6e18e2412af07586c916e4bf2c8da00a3ac18ffad3c59ebd719fca25d2d",
+      "Size": "435120"
+    },
+    {
+      "Package": "libdb5.3t64",
+      "Version": "5.3.28+dfsg2-12",
+      "Source": "db5.3",
+      "Filename": "pool/main/d/db5.3/libdb5.3t64_5.3.28+dfsg2-12_loong64.deb",
+      "SHA256": "7506dbc590e751389065befcf9dbfa84b83c757013a872800d90aaaa60cf28ae",
+      "Size": "695412"
+    },
+    {
+      "Package": "libdconf1",
+      "Version": "51.0-2",
+      "Source": "dconf",
+      "Filename": "pool/main/d/dconf/libdconf1_51.0-2_loong64.deb",
+      "SHA256": "bd8d759b01d3302141e6ae1616cfd15f376d094b34f7d7b51707f94468116d86",
+      "Size": "42872"
+    },
+    {
+      "Package": "libdeflate0",
+      "Version": "1.25-1",
+      "Source": "libdeflate",
+      "Filename": "pool/main/libd/libdeflate/libdeflate0_1.25-1_loong64.deb",
+      "SHA256": "73b8ed11ab68211a219156454d990ecd98f20399cda60384ea895f174b871281",
+      "Size": "36120"
+    },
+    {
+      "Package": "libe-book-0.1-1",
+      "Version": "0.1.4-1",
+      "Source": "libe-book",
+      "Filename": "pool/main/libe/libe-book/libe-book-0.1-1_0.1.4-1_loong64.deb",
+      "SHA256": "8303c7dab3d43265270f29d5a44ee736976377cda8e243c59ca4b9d633157c19",
+      "Size": "213884"
+    },
+    {
+      "Package": "libeot0",
+      "Version": "0.01-5+b3",
+      "Source": "libeot (0.01-5)",
+      "Filename": "pool/main/libe/libeot/libeot0_0.01-5+b3_loong64.deb",
+      "SHA256": "4a2f161dd371b9f595ce6bb716566292cafd5c68fde13b42f00370e42617a84f",
+      "Size": "27968"
+    },
+    {
+      "Package": "libepubgen-0.1-1",
+      "Version": "0.1.1-2",
+      "Source": "libepubgen",
+      "Filename": "pool/main/libe/libepubgen/libepubgen-0.1-1_0.1.1-2_loong64.deb",
+      "SHA256": "b3aeb43d0224ed86cd522b433e17933fe38ff2842640fdb01585210bc761ed78",
+      "Size": "143112"
+    },
+    {
+      "Package": "libetonyek-0.1-1",
+      "Version": "0.1.13-3",
+      "Source": "libetonyek",
+      "Filename": "pool/main/libe/libetonyek/libetonyek-0.1-1_0.1.13-3_loong64.deb",
+      "SHA256": "565896337b948e28d672e47688c4654a9c68a58a50859d694c735952c2eb19f4",
+      "Size": "794416"
+    },
+    {
+      "Package": "libexpat1",
+      "Version": "2.9.0-1",
+      "Source": "expat",
+      "Filename": "pool/main/e/expat/libexpat1_2.9.0-1_loong64.deb",
+      "SHA256": "3e1558b458bfe0bb1592f4cc154fbc56c2a490efd07ed833390a3c9e4d124b91",
+      "Size": "124436"
+    },
+    {
+      "Package": "libexttextcat-2.0-1",
+      "Version": "3.4.8-3",
+      "Source": "libexttextcat",
+      "Filename": "pool/main/libe/libexttextcat/libexttextcat-2.0-1_3.4.8-3_loong64.deb",
+      "SHA256": "e3fd1cbf5671470eb6cf5ac0306402d48cb8807e83709f64d51f687f8318f7d7",
+      "Size": "15612"
+    },
+    {
+      "Package": "libexttextcat-data",
+      "Version": "3.4.8-3",
+      "Source": "libexttextcat",
+      "Filename": "pool/main/libe/libexttextcat/libexttextcat-data_3.4.8-3_all.deb",
+      "SHA256": "f7683a80cc187e7fc1aadddd2e123ba97fe06ba0b5840020d4e4335a40e49818",
+      "Size": "184096"
+    },
+    {
+      "Package": "libffi8",
+      "Version": "3.8.0-2",
+      "Source": "libffi",
+      "Filename": "pool/main/libf/libffi/libffi8_3.8.0-2_loong64.deb",
+      "SHA256": "267db6bfe8fe15984106526c3fb9ea2fc3b4816f8fd09c4953f64dbe555c1911",
+      "Size": "26288"
+    },
+    {
+      "Package": "libfontconfig1",
+      "Version": "2.17.1-5",
+      "Source": "fontconfig",
+      "Filename": "pool/main/f/fontconfig/libfontconfig1_2.17.1-5_loong64.deb",
+      "SHA256": "234a8998df450d4cd83f9c0a4a942fe1892b556122ff96fc737e0c74cb9c4421",
+      "Size": "136696"
+    },
+    {
+      "Package": "libfreetype6",
+      "Version": "2.14.3+dfsg-3",
+      "Source": "freetype",
+      "Filename": "pool/main/f/freetype/libfreetype6_2.14.3+dfsg-3_loong64.deb",
+      "SHA256": "8449e0b01aade8e61f3158969ddac7e506fd43d342850443dc54beffb6718762",
+      "Size": "485848"
+    },
+    {
+      "Package": "libgcc-s1",
+      "Version": "16.2.0-4",
+      "Source": "gcc-16",
+      "Filename": "pool/main/g/gcc-16/libgcc-s1_16.2.0-4_loong64.deb",
+      "SHA256": "737ba3eaed19149116c1af0119369c121e01821faaf0aa78696a91b6dc491589",
+      "Size": "104464"
+    },
+    {
+      "Package": "libgcrypt20",
+      "Version": "1.12.4-2",
+      "Source": "",
+      "Filename": "pool/main/libg/libgcrypt20/libgcrypt20_1.12.4-2_loong64.deb",
+      "SHA256": "f4be57a56e18b2554a184d48c363dc1133b38e61056e0f6e31ebae23ec16bc27",
+      "Size": "808144"
+    },
+    {
+      "Package": "libglib2.0-0t64",
+      "Version": "2.90.1-2",
+      "Source": "glib2.0",
+      "Filename": "pool/main/g/glib2.0/libglib2.0-0t64_2.90.1-2_loong64.deb",
+      "SHA256": "bedcd8be8ebb883e146a57ddba1d4de0f2ddd80f6e91bf457f0461f1097b8560",
+      "Size": "1521152"
+    },
+    {
+      "Package": "libgmp10",
+      "Version": "2:6.3.0+dfsg-5+b2",
+      "Source": "gmp (2:6.3.0+dfsg-5)",
+      "Filename": "pool/main/g/gmp/libgmp10_6.3.0+dfsg-5+b2_loong64.deb",
+      "SHA256": "26ed85dbba1883586861c92f7306d1850280324ccdfd9d4bac5b04f839099757",
+      "Size": "567496"
+    },
+    {
+      "Package": "libgnutls30t64",
+      "Version": "3.8.13-1",
+      "Source": "gnutls28",
+      "Filename": "pool/main/g/gnutls28/libgnutls30t64_3.8.13-1_loong64.deb",
+      "SHA256": "8155b6fd6d8332d448616eafb05f3fed48507bb0fab372ed79b17340ef0c29e2",
+      "Size": "1488416"
+    },
+    {
+      "Package": "libgpg-error0",
+      "Version": "1.61-5",
+      "Source": "libgpg-error",
+      "Filename": "pool/main/libg/libgpg-error/libgpg-error0_1.61-5_loong64.deb",
+      "SHA256": "60da4b4e3a2a7884d1701538fdaf82784a8ef548931097696e539f0d7a1b0546",
+      "Size": "90776"
+    },
+    {
+      "Package": "libgpgme45",
+      "Version": "2.2.0-2",
+      "Source": "gpgme1.0",
+      "Filename": "pool/main/g/gpgme1.0/libgpgme45_2.2.0-2_loong64.deb",
+      "SHA256": "f6b83e6f250ab94b781a67e42320f24744e9d45302325d9bb7ae78f7017daaaa",
+      "Size": "345368"
+    },
+    {
+      "Package": "libgpgmepp7",
+      "Version": "2.2.0-3",
+      "Source": "gpgmepp",
+      "Filename": "pool/main/g/gpgmepp/libgpgmepp7_2.2.0-3_loong64.deb",
+      "SHA256": "8d04598e15060c16713a7ebc3e64fb91d41557f5ff53bd32006ea464b97142eb",
+      "Size": "164924"
+    },
+    {
+      "Package": "libgraphite2-3",
+      "Version": "1.3.15-2",
+      "Source": "graphite2",
+      "Filename": "pool/main/g/graphite2/libgraphite2-3_1.3.15-2_loong64.deb",
+      "SHA256": "1557053ecef4ce0a6ad1f84eb12a1c22f23f0ab022514ccc7a7c15c55b196a01",
+      "Size": "73932"
+    },
+    {
+      "Package": "libgssapi-krb5-2",
+      "Version": "1.22.1-3",
+      "Source": "krb5",
+      "Filename": "pool/main/k/krb5/libgssapi-krb5-2_1.22.1-3_loong64.deb",
+      "SHA256": "5eab183e1330119b8c242b8c8e08ad6583c2e3826018e0f64087179a46bf3e63",
+      "Size": "137048"
+    },
+    {
+      "Package": "libharfbuzz-icu0",
+      "Version": "12.3.2-2+b2",
+      "Source": "harfbuzz (12.3.2-2)",
+      "Filename": "pool/main/h/harfbuzz/libharfbuzz-icu0_12.3.2-2+b2_loong64.deb",
+      "SHA256": "29cc2c1d4251827002072e5a9f30c6d6103fdcb9c75cf9a7e04256ba86acbe0a",
+      "Size": "13656"
+    },
+    {
+      "Package": "libharfbuzz-subset0",
+      "Version": "12.3.2-2+b2",
+      "Source": "harfbuzz (12.3.2-2)",
+      "Filename": "pool/main/h/harfbuzz/libharfbuzz-subset0_12.3.2-2+b2_loong64.deb",
+      "SHA256": "4e87061e17e5069ebfb78aa5cf3c7ab1e5d8f6fd5c2856e7086dddb50119be31",
+      "Size": "558708"
+    },
+    {
+      "Package": "libharfbuzz0b",
+      "Version": "12.3.2-2+b2",
+      "Source": "harfbuzz (12.3.2-2)",
+      "Filename": "pool/main/h/harfbuzz/libharfbuzz0b_12.3.2-2+b2_loong64.deb",
+      "SHA256": "5c3528af0df32275a0cd22e487fa4f6f40a6a1163f8e2f3fe89874c71b7e086a",
+      "Size": "504580"
+    },
+    {
+      "Package": "libhogweed6t64",
+      "Version": "3.10.2-1+b1",
+      "Source": "nettle (3.10.2-1)",
+      "Filename": "pool/main/n/nettle/libhogweed6t64_3.10.2-1+b1_loong64.deb",
+      "SHA256": "112706fa8bd2b35693a6013f5f44c9c09231a8bea580dd8c5c23a91ddc68e6cf",
+      "Size": "335988"
+    },
+    {
+      "Package": "libhunspell-1.7-0",
+      "Version": "1.7.6-3",
+      "Source": "hunspell",
+      "Filename": "pool/main/h/hunspell/libhunspell-1.7-0_1.7.6-3_loong64.deb",
+      "SHA256": "aa98a9eed5d5228ff7c7f1d2ec62fa7b507ecae198d93850439ade5f202b72a4",
+      "Size": "202400"
+    },
+    {
+      "Package": "libhyphen0",
+      "Version": "2.8.10-2",
+      "Source": "hyphen",
+      "Filename": "pool/main/h/hyphen/libhyphen0_2.8.10-2_loong64.deb",
+      "SHA256": "ff1af13fbb8cd2b76c79fa87182ce1267ede4a04701f5fe2f7612ff5a8710504",
+      "Size": "30652"
+    },
+    {
+      "Package": "libicu78",
+      "Version": "78.3-2",
+      "Source": "icu",
+      "Filename": "pool/main/i/icu/libicu78_78.3-2_loong64.deb",
+      "SHA256": "f69d0ba680569aa2077408c05de80ace14bbc75e7d1aa5c1d0e2491bc128bb09",
+      "Size": "9977424"
+    },
+    {
+      "Package": "libidn2-0",
+      "Version": "2.3.8-5",
+      "Source": "libidn2",
+      "Filename": "pool/main/libi/libidn2/libidn2-0_2.3.8-5_loong64.deb",
+      "SHA256": "e8898f1f9c747c140a5d00384f0ccb35d44c846c7c882b0170af1870db20d3d4",
+      "Size": "108588"
+    },
+    {
+      "Package": "libjbig0",
+      "Version": "2.1-6.1+b3",
+      "Source": "jbigkit (2.1-6.1)",
+      "Filename": "pool/main/j/jbigkit/libjbig0_2.1-6.1+b3_loong64.deb",
+      "SHA256": "ff6d8c8028134dc5b509b4d6a14effdabbc03d64c8306d40566d2dc616efeec7",
+      "Size": "31908"
+    },
+    {
+      "Package": "libjpeg62-turbo",
+      "Version": "1:3.1.3-4",
+      "Source": "libjpeg-turbo",
+      "Filename": "pool/main/libj/libjpeg-turbo/libjpeg62-turbo_3.1.3-4_loong64.deb",
+      "SHA256": "bf9f96e5a7b2b90ecd3c01db1ca3b43bdc80605376b25e707088fcb7f6a735ca",
+      "Size": "207980"
+    },
+    {
+      "Package": "libk5crypto3",
+      "Version": "1.22.1-3",
+      "Source": "krb5",
+      "Filename": "pool/main/k/krb5/libk5crypto3_1.22.1-3_loong64.deb",
+      "SHA256": "ff83b2746c43037ae4c0f18a845150af7892902dfe46c748a7fd9f945ab96953",
+      "Size": "81944"
+    },
+    {
+      "Package": "libkeyutils1",
+      "Version": "1.6.3-6+b2",
+      "Source": "keyutils (1.6.3-6)",
+      "Filename": "pool/main/k/keyutils/libkeyutils1_1.6.3-6+b2_loong64.deb",
+      "SHA256": "68f2d1e7e24552a2b70f419d053e4fbbf127a588dfd2d480e35e9f74249da522",
+      "Size": "9524"
+    },
+    {
+      "Package": "libkrb5-3",
+      "Version": "1.22.1-3",
+      "Source": "krb5",
+      "Filename": "pool/main/k/krb5/libkrb5-3_1.22.1-3_loong64.deb",
+      "SHA256": "cfe1c0801d27edb4a0f6fb2ce8f04a0c3a9c33e6d8fe39dc1ab0d48dfd552a96",
+      "Size": "342340"
+    },
+    {
+      "Package": "libkrb5support0",
+      "Version": "1.22.1-3",
+      "Source": "krb5",
+      "Filename": "pool/main/k/krb5/libkrb5support0_1.22.1-3_loong64.deb",
+      "SHA256": "6d71211df0ba19ca906a60853c4f5c10d5fa7cddbe8bfac23f44d0755fb7084a",
+      "Size": "31436"
+    },
+    {
+      "Package": "libksba8",
+      "Version": "1.8.1-1",
+      "Source": "libksba",
+      "Filename": "pool/main/libk/libksba/libksba8_1.8.1-1_loong64.deb",
+      "SHA256": "e9a868be77c577e2637cbe528c41bd510a9b94fe95024d4231de60f1d424d19c",
+      "Size": "136484"
+    },
+    {
+      "Package": "liblangtag-common",
+      "Version": "0.6.8-4",
+      "Source": "liblangtag",
+      "Filename": "pool/main/libl/liblangtag/liblangtag-common_0.6.8-4_all.deb",
+      "SHA256": "8dc63fa2b779a044e04ca4b339acc5b549b97ee3af360694bea75613c9d8a6b3",
+      "Size": "191208"
+    },
+    {
+      "Package": "liblangtag1",
+      "Version": "0.6.8-4",
+      "Source": "liblangtag",
+      "Filename": "pool/main/libl/liblangtag/liblangtag1_0.6.8-4_loong64.deb",
+      "SHA256": "9b9d18bcd151a70cb2e05d3fc5d82e45dd3c6fc7575bba3a6f4b5d71fa6e9f16",
+      "Size": "51060"
+    },
+    {
+      "Package": "liblcms2-2",
+      "Version": "2.19.1-1",
+      "Source": "lcms2",
+      "Filename": "pool/main/l/lcms2/liblcms2-2_2.19.1-1_loong64.deb",
+      "SHA256": "4a5c6aaa7709dbdfb89e452ab844af1e7722b8a799df9b98511410c0f9bca3ae",
+      "Size": "167708"
+    },
+    {
+      "Package": "libldap2",
+      "Version": "2.6.14+dfsg-2",
+      "Source": "openldap",
+      "Filename": "pool/main/o/openldap/libldap2_2.6.14+dfsg-2_loong64.deb",
+      "SHA256": "8fe62bf0f664fd2aaa457aba8634845b160fdd5c4267a4f0787fb94c0d7fb83d",
+      "Size": "187724"
+    },
+    {
+      "Package": "liblerc4",
+      "Version": "4.3.0+ds-1",
+      "Source": "lerc",
+      "Filename": "pool/main/l/lerc/liblerc4_4.3.0+ds-1_loong64.deb",
+      "SHA256": "0cf82b7e27aeb09d978efe2638cb6c2de921fd52a5afe38204ceb0f13326bac8",
+      "Size": "182888"
+    },
+    {
+      "Package": "libltdl7",
+      "Version": "2.6.2-3",
+      "Source": "libtool",
+      "Filename": "pool/main/libt/libtool/libltdl7_2.6.2-3_loong64.deb",
+      "SHA256": "3cf4d2cabb639fde19924bfc44ed5c7812f7ef5c5b54c282eaeda4f14ba88b2a",
+      "Size": "426612"
+    },
+    {
+      "Package": "liblzma5",
+      "Version": "5.8.4-1",
+      "Source": "xz-utils",
+      "Filename": "pool/main/x/xz-utils/liblzma5_5.8.4-1_loong64.deb",
+      "SHA256": "bf8ab6239eaded94c2aa577631862ee70c6411604c8ec47dd0b7306c96fe5610",
+      "Size": "340692"
+    },
+    {
+      "Package": "libmd4c0",
+      "Version": "0.5.3-1",
+      "Source": "md4c",
+      "Filename": "pool/main/m/md4c/libmd4c0_0.5.3-1_loong64.deb",
+      "SHA256": "d1ca2e9e3e75c9e9f34d2cee420ecbbb2815ca0b6293cd4790c536301b309be9",
+      "Size": "49708"
+    },
+    {
+      "Package": "libmhash2",
+      "Version": "0.9.9.9-11+b1",
+      "Source": "mhash (0.9.9.9-11)",
+      "Filename": "pool/main/m/mhash/libmhash2_0.9.9.9-11+b1_loong64.deb",
+      "SHA256": "315e6aee88f11acb15a126e32918bdbdc347fbb0b432c36bfbdd2a08c7c6c9a0",
+      "Size": "95348"
+    },
+    {
+      "Package": "libmount1",
+      "Version": "2.42.4-1",
+      "Source": "util-linux",
+      "Filename": "pool/main/u/util-linux/libmount1_2.42.4-1_loong64.deb",
+      "SHA256": "d68bf31fe0d9e2248767b6c746d1c36b0fe3c5a51356d6ad01d09a2bba23c4f6",
+      "Size": "219676"
+    },
+    {
+      "Package": "libmwaw-0.3-3",
+      "Version": "0.3.23-1",
+      "Source": "libmwaw",
+      "Filename": "pool/main/libm/libmwaw/libmwaw-0.3-3_0.3.23-1_loong64.deb",
+      "SHA256": "ebb754cf32dcbf700cf98ed8c0fbd57189dd14586bb0a5e6006cf457c3473ec0",
+      "Size": "2683608"
+    },
+    {
+      "Package": "libmythes-1.2-0",
+      "Version": "2:1.2.6-1",
+      "Source": "mythes",
+      "Filename": "pool/main/m/mythes/libmythes-1.2-0_1.2.6-1_loong64.deb",
+      "SHA256": "6a3f23e06a8557f9e5ef79b3ba68e63039915ef87909195de1e7ab30d93e7f66",
+      "Size": "8248"
+    },
+    {
+      "Package": "libncursesw6",
+      "Version": "6.6+20260608-2",
+      "Source": "ncurses",
+      "Filename": "pool/main/n/ncurses/libncursesw6_6.6+20260608-2_loong64.deb",
+      "SHA256": "5be6b1a08fbba48364a6f6494089e7146b3d32bd3c82357e58951ff2be893214",
+      "Size": "137140"
+    },
+    {
+      "Package": "libnettle8t64",
+      "Version": "3.10.2-1+b1",
+      "Source": "nettle (3.10.2-1)",
+      "Filename": "pool/main/n/nettle/libnettle8t64_3.10.2-1+b1_loong64.deb",
+      "SHA256": "aaf497dc5063c0128fe36c88156b4d4df6605ee0503e5f88f5f1fb832a80b3ae",
+      "Size": "313444"
+    },
+    {
+      "Package": "libnghttp2-14",
+      "Version": "1.70.0-1",
+      "Source": "nghttp2",
+      "Filename": "pool/main/n/nghttp2/libnghttp2-14_1.70.0-1_loong64.deb",
+      "SHA256": "5c59087a3efc845c9eb134f65d45a67ce4f4ce7d008c29aa650c5bfcd7c79837",
+      "Size": "93536"
+    },
+    {
+      "Package": "libnghttp3-9",
+      "Version": "1.17.0-1",
+      "Source": "nghttp3",
+      "Filename": "pool/main/n/nghttp3/libnghttp3-9_1.17.0-1_loong64.deb",
+      "SHA256": "564a183d2a57d0f805e8dc04701f031f231d98749858b5c69d61fe9e08f91bb5",
+      "Size": "68540"
+    },
+    {
+      "Package": "libngtcp2-16",
+      "Version": "1.24.0-1",
+      "Source": "ngtcp2",
+      "Filename": "pool/main/n/ngtcp2/libngtcp2-16_1.24.0-1_loong64.deb",
+      "SHA256": "406d9d72047bda791bce63ec3920293a686ddcdc03e2b5d44701b3b924124b6f",
+      "Size": "144024"
+    },
+    {
+      "Package": "libngtcp2-crypto-gnutls8",
+      "Version": "1.24.0-1",
+      "Source": "ngtcp2",
+      "Filename": "pool/main/n/ngtcp2/libngtcp2-crypto-gnutls8_1.24.0-1_loong64.deb",
+      "SHA256": "b6d230bdc575f32347d7e4356097a4c2846ed65c0d11eb515cace9f444740ad9",
+      "Size": "23120"
+    },
+    {
+      "Package": "libngtcp2-crypto-ossl0",
+      "Version": "1.24.0-1",
+      "Source": "ngtcp2",
+      "Filename": "pool/main/n/ngtcp2/libngtcp2-crypto-ossl0_1.24.0-1_loong64.deb",
+      "SHA256": "f2e60e5081a71b70c8299106f673eaf1e11cde9deb4b4d4d22ac539d71fa9228",
+      "Size": "25864"
+    },
+    {
+      "Package": "libnpth0t64",
+      "Version": "1.8-4",
+      "Source": "npth",
+      "Filename": "pool/main/n/npth/libnpth0t64_1.8-4_loong64.deb",
+      "SHA256": "f1d58aeb4786dfbd47a95edf92de7b83ece92f6178669e47b8a9a267d69d370d",
+      "Size": "22720"
+    },
+    {
+      "Package": "libnspr4",
+      "Version": "2:4.40-1",
+      "Source": "nspr",
+      "Filename": "pool/main/n/nspr/libnspr4_4.40-1_loong64.deb",
+      "SHA256": "91989e491d0fa9e73fa25a906dd9129217ba07a543e0df5eeee36a1bfe905e67",
+      "Size": "109172"
+    },
+    {
+      "Package": "libnss3",
+      "Version": "2:3.132-1",
+      "Source": "nss",
+      "Filename": "pool/main/n/nss/libnss3_3.132-1_loong64.deb",
+      "SHA256": "0bb4436d1847c11e0747b207ed970c2eb25926413e41672465646dfb35814c73",
+      "Size": "1439460"
+    },
+    {
+      "Package": "libnumbertext-1.0-0",
+      "Version": "1.0.11-4+b3",
+      "Source": "libnumbertext (1.0.11-4)",
+      "Filename": "pool/main/libn/libnumbertext/libnumbertext-1.0-0_1.0.11-4+b3_loong64.deb",
+      "SHA256": "068862f8b1803019aa36f5acca51d4d04a9be57ef22546ea7927590de5d1d703",
+      "Size": "106692"
+    },
+    {
+      "Package": "libnumbertext-data",
+      "Version": "1.0.11-4",
+      "Source": "libnumbertext",
+      "Filename": "pool/main/libn/libnumbertext/libnumbertext-data_1.0.11-4_all.deb",
+      "SHA256": "3d11ce427e22a8f7e9272f917f68c0413a0e5e4c66a7fa530e257069fcb4c5e1",
+      "Size": "70424"
+    },
+    {
+      "Package": "libodfgen-0.1-1",
+      "Version": "0.1.8-4",
+      "Source": "libodfgen",
+      "Filename": "pool/main/libo/libodfgen/libodfgen-0.1-1_0.1.8-4_loong64.deb",
+      "SHA256": "2e30c21eae41a75697c83c9197e8c91abb3358e98ffb828a9c6804705f3b37a9",
+      "Size": "294624"
+    },
+    {
+      "Package": "libopenjp2-7",
+      "Version": "2.5.4-1.1",
+      "Source": "openjpeg2",
+      "Filename": "pool/main/o/openjpeg2/libopenjp2-7_2.5.4-1.1_loong64.deb",
+      "SHA256": "37212e354a15733b48b9aa4ce81bf05cacdf64b237f964ee75c55b650cb08553",
+      "Size": "204128"
+    },
+    {
+      "Package": "libp11-kit0",
+      "Version": "0.26.5-1",
+      "Source": "p11-kit",
+      "Filename": "pool/main/p/p11-kit/libp11-kit0_0.26.5-1_loong64.deb",
+      "SHA256": "aacb3f2946da6c9a3f11a25e916ae7f9205a3bbc82bb928d803dc218dfc1b470",
+      "Size": "432344"
+    },
+    {
+      "Package": "libpcre2-8-0",
+      "Version": "10.49-1",
+      "Source": "pcre2",
+      "Filename": "pool/main/p/pcre2/libpcre2-8-0_10.49-1_loong64.deb",
+      "SHA256": "65e4a6adc71900019db8cff8974c919f30ee2b40f6e78c752796bf816e6d2871",
+      "Size": "299740"
+    },
+    {
+      "Package": "libpixman-1-0",
+      "Version": "0.46.4-1+b2",
+      "Source": "pixman (0.46.4-1)",
+      "Filename": "pool/main/p/pixman/libpixman-1-0_0.46.4-1+b2_loong64.deb",
+      "SHA256": "7d17aff3d97cd3f0256b612ff4c0a5d94795457888d0f85ea82cb294038cc37d",
+      "Size": "162524"
+    },
+    {
+      "Package": "libpng16-16t64",
+      "Version": "1.6.59-1",
+      "Source": "libpng1.6",
+      "Filename": "pool/main/libp/libpng1.6/libpng16-16t64_1.6.59-1_loong64.deb",
+      "SHA256": "c83a39ae8d96a939dd49fb9a4e7342ac12b8b9b51656075c418d989cf840d701",
+      "Size": "285748"
+    },
+    {
+      "Package": "libpoppler162",
+      "Version": "26.07.0-3",
+      "Source": "poppler",
+      "Filename": "pool/main/p/poppler/libpoppler162_26.07.0-3_loong64.deb",
+      "SHA256": "509887732570220e1e1174abbac092e7f1b6972e21c891be116fe4008a70d889",
+      "Size": "2144904"
+    },
+    {
+      "Package": "libproc2-1",
+      "Version": "2:4.0.7-1",
+      "Source": "procps",
+      "Filename": "pool/main/p/procps/libproc2-1_4.0.7-1_loong64.deb",
+      "SHA256": "1d4c6a987bf219f834e856ab380a987ad51353b0103f4d88969c60117c4193a4",
+      "Size": "69844"
+    },
+    {
+      "Package": "libpsl5t64",
+      "Version": "0.23.3-1",
+      "Source": "libpsl",
+      "Filename": "pool/main/libp/libpsl/libpsl5t64_0.23.3-1_loong64.deb",
+      "SHA256": "5f12ac5a6c08442f86482b938e3133f7f9ee9fa6c222f5348af7a9ca1571e3e4",
+      "Size": "61564"
+    },
+    {
+      "Package": "libraptor2-0",
+      "Version": "2.0.16-7",
+      "Source": "raptor2",
+      "Filename": "pool/main/r/raptor2/libraptor2-0_2.0.16-7_loong64.deb",
+      "SHA256": "83e0723e9c7763e47166a21e9b4f17c3dff017f114cd9689a57d8924f6ecc6a1",
+      "Size": "175884"
+    },
+    {
+      "Package": "librasqal3t64",
+      "Version": "0.9.33-4",
+      "Source": "rasqal",
+      "Filename": "pool/main/r/rasqal/librasqal3t64_0.9.33-4_loong64.deb",
+      "SHA256": "dc9f7ee92308a5dafa42a5ac5835638fb95393c6e7e1bf39696d8daa106e4a2e",
+      "Size": "192268"
+    },
+    {
+      "Package": "librdf0t64",
+      "Version": "1.0.17-10",
+      "Source": "redland",
+      "Filename": "pool/main/r/redland/librdf0t64_1.0.17-10_loong64.deb",
+      "SHA256": "ca4848f0f68b7c78759c4b56a59a99c9eee2dc0fa54db82496d50db34ea72a73",
+      "Size": "90836"
+    },
+    {
+      "Package": "libreadline8t64",
+      "Version": "8.3-4",
+      "Source": "readline",
+      "Filename": "pool/main/r/readline/libreadline8t64_8.3-4_loong64.deb",
+      "SHA256": "b4747361387591bc0afe788da915950b0c23c1d65de8236f915433a433911d8b",
+      "Size": "180996"
+    },
+    {
+      "Package": "libreoffice-base-core",
+      "Version": "4:26.8.2.2-2",
+      "Source": "libreoffice",
+      "Filename": "pool/main/libr/libreoffice/libreoffice-base-core_26.8.2.2-2_loong64.deb",
+      "SHA256": "1aebefeafa95b5da6a028687c92a3eddbf4e3e3abde787ae0fd34350af351c86",
+      "Size": "822368"
+    },
+    {
+      "Package": "libreoffice-common",
+      "Version": "4:26.8.2.2-2",
+      "Source": "libreoffice",
+      "Filename": "pool/main/libr/libreoffice/libreoffice-common_26.8.2.2-2_all.deb",
+      "SHA256": "a3bd13c1ed41dc5cd0fe556c38ece9368c8ce46a99e9321f47f147e58c038923",
+      "Size": "21609932"
+    },
+    {
+      "Package": "libreoffice-core-nogui",
+      "Version": "4:26.8.2.2-2",
+      "Source": "libreoffice",
+      "Filename": "pool/main/libr/libreoffice/libreoffice-core-nogui_26.8.2.2-2_loong64.deb",
+      "SHA256": "d48735045bb83bad190a0d237fe424bc9388cfb250280767aa3f59dbb7517260",
+      "Size": "30133168"
+    },
+    {
+      "Package": "libreoffice-style-colibre",
+      "Version": "4:26.8.2.2-2",
+      "Source": "libreoffice",
+      "Filename": "pool/main/libr/libreoffice/libreoffice-style-colibre_26.8.2.2-2_all.deb",
+      "SHA256": "385bf24afc9ed6a572eaf05a6feaf896b7adeae2f42de4999d34f45daed7a11e",
+      "Size": "7348884"
+    },
+    {
+      "Package": "libreoffice-uiconfig-common",
+      "Version": "4:26.8.2.2-2",
+      "Source": "libreoffice",
+      "Filename": "pool/main/libr/libreoffice/libreoffice-uiconfig-common_26.8.2.2-2_all.deb",
+      "SHA256": "95410eb52c61bdf53221b128c870d0b94eae42fa2c04ca4470abfd81cdf35557",
+      "Size": "375280"
+    },
+    {
+      "Package": "libreoffice-writer-nogui",
+      "Version": "4:26.8.2.2-2",
+      "Source": "libreoffice",
+      "Filename": "pool/main/libr/libreoffice/libreoffice-writer-nogui_26.8.2.2-2_loong64.deb",
+      "SHA256": "9128a7e791d30249cc421bd24700d97d93fb0ce7100a6fa3c82f588f59cc8c43",
+      "Size": "8983816"
+    },
+    {
+      "Package": "librevenge-0.0-0",
+      "Version": "0.0.6-1",
+      "Source": "librevenge",
+      "Filename": "pool/main/libr/librevenge/librevenge-0.0-0_0.0.6-1_loong64.deb",
+      "SHA256": "995f3bf3b4a7072815654ffb9064cd5d9cc1c3ccff4a903bd3b64f5865fba2cc",
+      "Size": "273620"
+    },
+    {
+      "Package": "libsasl2-2",
+      "Version": "2.1.28+dfsg1-12",
+      "Source": "cyrus-sasl2",
+      "Filename": "pool/main/c/cyrus-sasl2/libsasl2-2_2.1.28+dfsg1-12_loong64.deb",
+      "SHA256": "62adcb86e2d5b2a081ae3752617b4e5f3073dde8b5833dfe1fe70651cfc8db50",
+      "Size": "56480"
+    },
+    {
+      "Package": "libsasl2-modules-db",
+      "Version": "2.1.28+dfsg1-12",
+      "Source": "cyrus-sasl2",
+      "Filename": "pool/main/c/cyrus-sasl2/libsasl2-modules-db_2.1.28+dfsg1-12_loong64.deb",
+      "SHA256": "acc18dc18f68fa7993531e74630cdff7e7f41c6fadac19424a399d5e9acb5014",
+      "Size": "17912"
+    },
+    {
+      "Package": "libselinux1",
+      "Version": "3.11-2.1+b1",
+      "Source": "libselinux (3.11-2.1)",
+      "Filename": "pool/main/libs/libselinux/libselinux1_3.11-2.1+b1_loong64.deb",
+      "SHA256": "48f9913d6c66d5b9f6ac1739ad7f3196d8a7d9155e024c7d2f80ce506f5de363",
+      "Size": "86960"
+    },
+    {
+      "Package": "libsharpyuv0",
+      "Version": "1.6.0-0.1",
+      "Source": "libwebp",
+      "Filename": "pool/main/libw/libwebp/libsharpyuv0_1.6.0-0.1_loong64.deb",
+      "SHA256": "812999b9d1757b1abc4b030185978d8a0f1cdf04c96e2c68be29a976d5966228",
+      "Size": "114880"
+    },
+    {
+      "Package": "libsqlite3-0",
+      "Version": "3.53.4-2",
+      "Source": "sqlite3",
+      "Filename": "pool/main/s/sqlite3/libsqlite3-0_3.53.4-2_loong64.deb",
+      "SHA256": "32705550191b75045c9167bd9cb6500413bd7fc966d28dcbf5f0e0e6335a1484",
+      "Size": "950496"
+    },
+    {
+      "Package": "libssh2-1t64",
+      "Version": "1.11.1-6",
+      "Source": "libssh2",
+      "Filename": "pool/main/libs/libssh2/libssh2-1t64_1.11.1-6_loong64.deb",
+      "SHA256": "6862775dcfc6e305cae33e1efb15a00ce9bce260ba842cbfcbef3c75b9894b84",
+      "Size": "245144"
+    },
+    {
+      "Package": "libssl3t64",
+      "Version": "3.6.5-1",
+      "Source": "openssl",
+      "Filename": "pool/main/o/openssl/libssl3t64_3.6.5-1_loong64.deb",
+      "SHA256": "a720e52eb1d3be435a5e23f6f773510413e95925216aecd0a4b38fc0d3db1159",
+      "Size": "2156460"
+    },
+    {
+      "Package": "libstaroffice-0.0-0",
+      "Version": "0.0.8-1",
+      "Source": "libstaroffice",
+      "Filename": "pool/main/libs/libstaroffice/libstaroffice-0.0-0_0.0.8-1_loong64.deb",
+      "SHA256": "ea9d0ae43cfa75af7143ce2c6c099af48a6060b2f50d63217a7f036f1fbe7aa1",
+      "Size": "716968"
+    },
+    {
+      "Package": "libstdc++6",
+      "Version": "16.2.0-4",
+      "Source": "gcc-16",
+      "Filename": "pool/main/g/gcc-16/libstdc++6_16.2.0-4_loong64.deb",
+      "SHA256": "46292ab49029b87746dfe807456a208096b070e6dae590451a3f9da06bb6eeb7",
+      "Size": "750044"
+    },
+    {
+      "Package": "libsystemd0",
+      "Version": "262.1-1",
+      "Source": "systemd",
+      "Filename": "pool/main/s/systemd/libsystemd0_262.1-1_loong64.deb",
+      "SHA256": "ec7456c333d854214e8494b7c99d6268da61d98aba891147764fa29ef8b514a0",
+      "Size": "464952"
+    },
+    {
+      "Package": "libtasn1-6",
+      "Version": "4.21.0-2+b1",
+      "Source": "libtasn1-6 (4.21.0-2)",
+      "Filename": "pool/main/libt/libtasn1-6/libtasn1-6_4.21.0-2+b1_loong64.deb",
+      "SHA256": "23b211c51e9ae7affe893450cc6e70e1aa235807e49586a8b58baa0fd87e5ce2",
+      "Size": "50172"
+    },
+    {
+      "Package": "libtext-charwidth-perl",
+      "Version": "0.04-12+b1",
+      "Source": "libtext-charwidth-perl (0.04-12)",
+      "Filename": "pool/main/libt/libtext-charwidth-perl/libtext-charwidth-perl_0.04-12+b1_loong64.deb",
+      "SHA256": "a9e0b7e6e6a411f9e33b992cac6fd934eb3e1e5ed0f935f50d17451cea78bc41",
+      "Size": "9404"
+    },
+    {
+      "Package": "libtext-wrapi18n-perl",
+      "Version": "0.06-11",
+      "Source": "",
+      "Filename": "pool/main/libt/libtext-wrapi18n-perl/libtext-wrapi18n-perl_0.06-11_all.deb",
+      "SHA256": "78f3e536289c5f07351b1251980d42ec8706a4638de160dbe184a479d7e5bc14",
+      "Size": "7788"
+    },
+    {
+      "Package": "libtiff6",
+      "Version": "4.7.2-1",
+      "Source": "tiff",
+      "Filename": "pool/main/t/tiff/libtiff6_4.7.2-1_loong64.deb",
+      "SHA256": "4a7648120d76779b751fd312af74691242ef267945205df07fbd4e2420161cb4",
+      "Size": "373428"
+    },
+    {
+      "Package": "libtinfo6",
+      "Version": "6.6+20260608-2",
+      "Source": "ncurses",
+      "Filename": "pool/main/n/ncurses/libtinfo6_6.6+20260608-2_loong64.deb",
+      "SHA256": "6993eb3809d6e021a810f3c07cc72bf2be5338bebc1d401e783558d472b03290",
+      "Size": "352352"
+    },
+    {
+      "Package": "libunistring5",
+      "Version": "1.4.2-1",
+      "Source": "libunistring",
+      "Filename": "pool/main/libu/libunistring/libunistring5_1.4.2-1_loong64.deb",
+      "SHA256": "b025591e7308443c0a03c1733c4a1aac6e03509a75764d431d0df009cd42fcc5",
+      "Size": "483032"
+    },
+    {
+      "Package": "libuno-cppu3t64",
+      "Version": "4:26.8.2.2-2",
+      "Source": "libreoffice",
+      "Filename": "pool/main/libr/libreoffice/libuno-cppu3t64_26.8.2.2-2_loong64.deb",
+      "SHA256": "f5d85d5a36b0f654451cf9377301ad4c94ea76176a27760a770493dde8cca879",
+      "Size": "107388"
+    },
+    {
+      "Package": "libuno-cppuhelpergcc3-3t64",
+      "Version": "4:26.8.2.2-2",
+      "Source": "libreoffice",
+      "Filename": "pool/main/libr/libreoffice/libuno-cppuhelpergcc3-3t64_26.8.2.2-2_loong64.deb",
+      "SHA256": "f0a479d8a8bb9766688b01302cd554b182951ab0329b664e13649b03cac6a441",
+      "Size": "324144"
+    },
+    {
+      "Package": "libuno-purpenvhelpergcc3-3t64",
+      "Version": "4:26.8.2.2-2",
+      "Source": "libreoffice",
+      "Filename": "pool/main/libr/libreoffice/libuno-purpenvhelpergcc3-3t64_26.8.2.2-2_loong64.deb",
+      "SHA256": "6fc9d15f7bf999f3d63c280f7b1c5128370ee19e79c134c47d2aa81cadec24ac",
+      "Size": "36504"
+    },
+    {
+      "Package": "libuno-sal3t64",
+      "Version": "4:26.8.2.2-2",
+      "Source": "libreoffice",
+      "Filename": "pool/main/libr/libreoffice/libuno-sal3t64_26.8.2.2-2_loong64.deb",
+      "SHA256": "7efd5541ce47ae1578da46fa570d3d845b8eaafc2f6423378d5fb74266079731",
+      "Size": "199376"
+    },
+    {
+      "Package": "libuno-salhelpergcc3-3t64",
+      "Version": "4:26.8.2.2-2",
+      "Source": "libreoffice",
+      "Filename": "pool/main/libr/libreoffice/libuno-salhelpergcc3-3t64_26.8.2.2-2_loong64.deb",
+      "SHA256": "799883795fb7c5e8221dacdb6198977dbf56c397bceb5ec91a4ec982b258d0b9",
+      "Size": "40624"
+    },
+    {
+      "Package": "libwebp7",
+      "Version": "1.6.0-0.1",
+      "Source": "libwebp",
+      "Filename": "pool/main/libw/libwebp/libwebp7_1.6.0-0.1_loong64.deb",
+      "SHA256": "91176033e07dddecc16d357bb8ccbf9f95a8ab95619fe51adbcf95a2987df63b",
+      "Size": "290788"
+    },
+    {
+      "Package": "libwpd-0.10-10",
+      "Version": "0.10.3-4",
+      "Source": "libwpd",
+      "Filename": "pool/main/libw/libwpd/libwpd-0.10-10_0.10.3-4_loong64.deb",
+      "SHA256": "b279168d5211a46741f985e32ec1492ec33c7aba6dd320b628a95b7bcf868591",
+      "Size": "255220"
+    },
+    {
+      "Package": "libwpg-0.3-3",
+      "Version": "0.3.4-4",
+      "Source": "libwpg",
+      "Filename": "pool/main/libw/libwpg/libwpg-0.3-3_0.3.4-4_loong64.deb",
+      "SHA256": "c696ca065acc9ec588f9eabb043e254af8b5d19c54bfdb40c5734aad73360282",
+      "Size": "77276"
+    },
+    {
+      "Package": "libwps-0.4-4",
+      "Version": "0.4.14-2+b3",
+      "Source": "libwps (0.4.14-2)",
+      "Filename": "pool/main/libw/libwps/libwps-0.4-4_0.4.14-2+b3_loong64.deb",
+      "SHA256": "31fcb3e047b8575bf465e97956e85da9ea19d1316a7a77dee5836d5090a43af1",
+      "Size": "859760"
+    },
+    {
+      "Package": "libx11-6",
+      "Version": "2:1.8.14-1",
+      "Source": "libx11",
+      "Filename": "pool/main/libx/libx11/libx11-6_1.8.14-1_loong64.deb",
+      "SHA256": "4edc12aba870284417cb983d32afda6a16972c66361d52b25c4cce024f23bdd4",
+      "Size": "820728"
+    },
+    {
+      "Package": "libx11-data",
+      "Version": "2:1.8.14-1",
+      "Source": "libx11",
+      "Filename": "pool/main/libx/libx11/libx11-data_1.8.14-1_all.deb",
+      "SHA256": "4e9d56e61e5eca504179adf0fe32aed8bce39dc2d112049a80387f6c1e1cb66b",
+      "Size": "348828"
+    },
+    {
+      "Package": "libxau6",
+      "Version": "1:1.0.11-1+b2",
+      "Source": "libxau (1:1.0.11-1)",
+      "Filename": "pool/main/libx/libxau/libxau6_1.0.11-1+b2_loong64.deb",
+      "SHA256": "c7bf585b2b90446f0cc78ac1a50ffb833f8fdae1386617ac73a2e5fc9760190c",
+      "Size": "20972"
+    },
+    {
+      "Package": "libxcb-render0",
+      "Version": "1.17.0-2+b2",
+      "Source": "libxcb (1.17.0-2)",
+      "Filename": "pool/main/libx/libxcb/libxcb-render0_1.17.0-2+b2_loong64.deb",
+      "SHA256": "3b9dda8c6f06b135f6e856c31e0514371eca2ed03fc58697cc8b27eb01bbbd58",
+      "Size": "114764"
+    },
+    {
+      "Package": "libxcb-shm0",
+      "Version": "1.17.0-2+b2",
+      "Source": "libxcb (1.17.0-2)",
+      "Filename": "pool/main/libx/libxcb/libxcb-shm0_1.17.0-2+b2_loong64.deb",
+      "SHA256": "0fa23b582c056b13ec9f645ed3942a6150001964c58ec168faba4f1243c401ff",
+      "Size": "105104"
+    },
+    {
+      "Package": "libxcb1",
+      "Version": "1.17.0-2+b2",
+      "Source": "libxcb (1.17.0-2)",
+      "Filename": "pool/main/libx/libxcb/libxcb1_1.17.0-2+b2_loong64.deb",
+      "SHA256": "ff9304605d55b276fa50e7e4427a8e28d0367da91edbfb405ce86770f76324e4",
+      "Size": "143952"
+    },
+    {
+      "Package": "libxdmcp6",
+      "Version": "1:1.1.5-2+b1",
+      "Source": "libxdmcp (1:1.1.5-2)",
+      "Filename": "pool/main/libx/libxdmcp/libxdmcp6_1.1.5-2+b1_loong64.deb",
+      "SHA256": "9bf52889e82b7fe2ada3b57e274789dabcab7ecb3b108378be00cc7fa8c3435d",
+      "Size": "28408"
+    },
+    {
+      "Package": "libxext6",
+      "Version": "2:1.3.4-1+b4",
+      "Source": "libxext (2:1.3.4-1)",
+      "Filename": "pool/main/libx/libxext/libxext6_1.3.4-1+b4_loong64.deb",
+      "SHA256": "11407f00e648fb147223bb2915f0b24e541e3ec8f78b76c2ba03a44f3bcc30f6",
+      "Size": "51380"
+    },
+    {
+      "Package": "libxml2-16",
+      "Version": "2.15.4+dfsg-1+b1",
+      "Source": "libxml2 (2.15.4+dfsg-1)",
+      "Filename": "pool/main/libx/libxml2/libxml2-16_2.15.4+dfsg-1+b1_loong64.deb",
+      "SHA256": "44ec7834abc86e7bc9e893ab9c77b7933b768335c18d374bcc1369f058e89c12",
+      "Size": "654224"
+    },
+    {
+      "Package": "libxmlsec1-10310",
+      "Version": "1.3.10-2",
+      "Source": "xmlsec1",
+      "Filename": "pool/main/x/xmlsec1/libxmlsec1-10310_1.3.10-2_loong64.deb",
+      "SHA256": "763227e21876649d37f92f48d3d389c643106c5fe59118253b131064ed82dfaf",
+      "Size": "159276"
+    },
+    {
+      "Package": "libxmlsec1-nss10310",
+      "Version": "1.3.10-2",
+      "Source": "xmlsec1",
+      "Filename": "pool/main/x/xmlsec1/libxmlsec1-nss10310_1.3.10-2_loong64.deb",
+      "SHA256": "6929b29ec5c8f7aca245097e56577c5489b6bcacde60902075ee5bab1446c1b2",
+      "Size": "86532"
+    },
+    {
+      "Package": "libxrender1",
+      "Version": "1:0.9.13-1",
+      "Source": "libxrender",
+      "Filename": "pool/main/libx/libxrender/libxrender1_0.9.13-1_loong64.deb",
+      "SHA256": "a675fe627193f3179b055e90ae06155f5a1b0149dcc20428c3bb4173673c296b",
+      "Size": "27872"
+    },
+    {
+      "Package": "libxslt1.1",
+      "Version": "1.1.45-0.1",
+      "Source": "libxslt",
+      "Filename": "pool/main/libx/libxslt/libxslt1.1_1.1.45-0.1_loong64.deb",
+      "SHA256": "668496629518f4b6b54764b19d39cb79ff5c443029675cf01b2dcee3db006fde",
+      "Size": "157468"
+    },
+    {
+      "Package": "libyajl2",
+      "Version": "2.1.0-7",
+      "Source": "yajl",
+      "Filename": "pool/main/y/yajl/libyajl2_2.1.0-7_loong64.deb",
+      "SHA256": "52c7b6607f097a0c624b35b80bd2a61b6c4f8f664bc2813c80a0437757f53440",
+      "Size": "23692"
+    },
+    {
+      "Package": "libzstd1",
+      "Version": "1.5.7+dfsg-4",
+      "Source": "libzstd",
+      "Filename": "pool/main/libz/libzstd/libzstd1_1.5.7+dfsg-4_loong64.deb",
+      "SHA256": "0a6ceb17c2a05c02c30d7bba35dd469f78a4e5c8edee6820ff13ba2784194434",
+      "Size": "284616"
+    },
+    {
+      "Package": "libzxcvbn0",
+      "Version": "2.6+dfsg-1+b2",
+      "Source": "zxcvbn-c (2.6+dfsg-1)",
+      "Filename": "pool/main/z/zxcvbn-c/libzxcvbn0_2.6+dfsg-1+b2_loong64.deb",
+      "SHA256": "fd58c2f7744b42997880a6d7fb1d2a6576120bb8a0fe18a108b5763201f8c7c4",
+      "Size": "857736"
+    },
+    {
+      "Package": "openssl-provider-legacy",
+      "Version": "3.6.5-1",
+      "Source": "openssl",
+      "Filename": "pool/main/o/openssl/openssl-provider-legacy_3.6.5-1_loong64.deb",
+      "SHA256": "5e8e335e2db7b5fa178246da00656b37e349fdb9e5a8fbdd6e4f6b8390ffe109",
+      "Size": "324972"
+    },
+    {
+      "Package": "perl-base",
+      "Version": "5.42.3-1",
+      "Source": "perl",
+      "Filename": "pool/main/p/perl/perl-base_5.42.3-1_loong64.deb",
+      "SHA256": "9072a33061455a1c333782b4f5c08903eb1293351afb6fe64de11adb7b8b770c",
+      "Size": "1821040"
+    },
+    {
+      "Package": "pinentry-curses",
+      "Version": "1.3.3-3",
+      "Source": "pinentry",
+      "Filename": "pool/main/p/pinentry/pinentry-curses_1.3.3-3_loong64.deb",
+      "SHA256": "deb5facd5e58c40756fa3ed7143e1f9307a9304884e218169f07c01dd307e9aa",
+      "Size": "90680"
+    },
+    {
+      "Package": "procps",
+      "Version": "2:4.0.7-1",
+      "Source": "",
+      "Filename": "pool/main/p/procps/procps_4.0.7-1_loong64.deb",
+      "SHA256": "f074c162cc302efbc73b67a143470936502aa1df3822b09722858d18c48169d7",
+      "Size": "978764"
+    },
+    {
+      "Package": "readline-common",
+      "Version": "8.3-4",
+      "Source": "readline",
+      "Filename": "pool/main/r/readline/readline-common_8.3-4_all.deb",
+      "SHA256": "0fbae1769293deda3cf2a349c472bc50302225812d8900def5c9dfa02404ad6d",
+      "Size": "74828"
+    },
+    {
+      "Package": "sensible-utils",
+      "Version": "0.0.26",
+      "Source": "",
+      "Filename": "pool/main/s/sensible-utils/sensible-utils_0.0.26_all.deb",
+      "SHA256": "26a99bab6fb8488d385402a6fae2af8edb83fe9379ee4cbb2811bbdc40771683",
+      "Size": "27000"
+    },
+    {
+      "Package": "ucf",
+      "Version": "3.0056",
+      "Source": "",
+      "Filename": "pool/main/u/ucf/ucf_3.0056_all.deb",
+      "SHA256": "d96c7609eea296fd04fd8d47ea7c42800d6520b342851c00ce289acacd9aa685",
+      "Size": "47144"
+    },
+    {
+      "Package": "uno-libs-private",
+      "Version": "4:26.8.2.2-2",
+      "Source": "libreoffice",
+      "Filename": "pool/main/libr/libreoffice/uno-libs-private_26.8.2.2-2_loong64.deb",
+      "SHA256": "24cdfeaab063632a709c165e42124bdb204151b6b49733444c28ed88675e10c8",
+      "Size": "220296"
+    },
+    {
+      "Package": "ure",
+      "Version": "4:26.8.2.2-2",
+      "Source": "libreoffice",
+      "Filename": "pool/main/libr/libreoffice/ure_26.8.2.2-2_loong64.deb",
+      "SHA256": "9113163eb4d663770826583ac40e9b80b16032bef2bb87eaa571970fda4655d4",
+      "Size": "1212752"
+    },
+    {
+      "Package": "zlib1g",
+      "Version": "1:1.3.dfsg+really1.3.2-4",
+      "Source": "zlib",
+      "Filename": "pool/main/z/zlib/zlib1g_1.3.dfsg+really1.3.2-4_loong64.deb",
+      "SHA256": "eee9e66fa901260fc12fe8ef9e02bdc0b7d8a7d9af0688bac3c7404fd70f1df9",
+      "Size": "88184"
+    }
+  ],
+  "runtime_sha256": "5fd31e7d80c4b35d14191da58299a82484a0476f1be03611b79afbf7095e7478",
+  "runtime_bytes": 266979984
+}

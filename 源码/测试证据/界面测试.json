@@ -1,0 +1,14 @@
+{
+  "result": "PASS",
+  "checks": [
+    "desktop render",
+    "upload and reorder",
+    "image conversion and download",
+    "Word conversion",
+    "clear list",
+    "corrupt image feedback",
+    "375px no horizontal overflow",
+    "reduced motion",
+    "no JavaScript errors"
+  ]
+}

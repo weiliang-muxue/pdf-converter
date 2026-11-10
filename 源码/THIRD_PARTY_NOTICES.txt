@@ -1,0 +1,37 @@
+PDF 工具箱所使用的第三方组件
+
+1. Go runtime / standard library
+Windows 7 构建：Go 1.20.14；Windows 10 和 Linux 构建：Go 1.27.3。
+许可：BSD-style license，见 third_party/GO_LICENSE.txt。
+源码及发行版本：https://go.dev/dl/
+
+2. golang.org/x/image v0.14.0
+用于 BMP / TIFF 解码。
+许可：BSD-style license，见 vendor/golang.org/x/image/LICENSE。
+源码：https://go.googlesource.com/image/
+本项目依赖已通过 go.sum 固定，并随源码提供 vendor 副本。
+
+3. LibreOffice 25.2.7.2 Windows x86
+随 exe/Windows7/LibreOffice 与 exe/Windows10/LibreOffice 提供，来源为 The Document Foundation 官方签名 MSI 的行政解包。
+未改动 LibreOffice 程序源码或二进制；未在当前系统安装或注册该套件。
+完整许可与第三方声明见各 LibreOffice 文件夹中的 LICENSE.html、license.txt、NOTICE。
+主许可 MPL 2.0；其它包含组件遵循各自许可。该产品与本项目无隶属关系。
+原始下载：https://downloadarchive.documentfoundation.org/libreoffice/old/25.2.7.2/win/x86/LibreOffice_25.2.7.2_Win_x86.msi
+MSI SHA256：80339487132640e665a43924dfad16591b3bb150c585cb00d774f6d757b3d04c
+对应源码：https://downloadarchive.documentfoundation.org/libreoffice/old/25.2.7.2/src/
+官方代码仓库：https://git.libreoffice.org/core
+
+4. Microsoft VC++ 14.29 和 Windows 7 KB2999226
+来自同一 LibreOffice MSI 的原始组件。VC++ DLL 放在 LibreOffice/program，
+Windows 7 的 UCRT 补丁位于 Windows7/运行库补丁；遵循各组件原有许可。
+
+5. Linux 私有离线运行环境
+来源为 https://deb.debian.org/debian/ 官方包仓库。
+amd64、arm64 使用 bookworm，loong64 使用 unstable 的对应架构包。
+包含 LibreOffice、Noto CJK / Liberation 字体和依赖库。
+每个包的名称、版本、来源文件、SHA256 记录在 runtime-架构.manifest.json。
+各组件的原始许可文件保留在运行环境 usr/share/doc/包名/copyright 中。
+对应源包可按清单中的 Source/Version 在 https://sources.debian.org/ 或
+https://snapshot.debian.org/ 查找。未修改包内二进制；只组合运行环境、
+补充静态用户配置、把绝对符号链接转换为等价相对链接，省略手册及翻译目录。
+离线包只在私有目录内使用，不向宿主操作系统安装这些包。

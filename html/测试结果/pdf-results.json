@@ -1,0 +1,11 @@
+{
+  "checks": [
+    "ZIP数字排序.pdf: page order [1, 2, 3, 10], readable JPEG objects and A4 dimensions",
+    "手动排序.pdf: page order [2, 3, 1], readable JPEG objects and A4 dimensions",
+    "纯静态部署.pdf: page order [1, 2, 3, 10], readable JPEG objects and A4 dimensions",
+    "本地HTML.pdf: page order [1, 2, 3, 10], readable JPEG objects and A4 dimensions",
+    "PNG transparency flattened to white; EXIF orientation and 96 DPI dimensions correct; WebP decoded",
+    "DOCX: 2 pages, Chinese text and page-break markers preserved",
+    "DOC: readable, nonempty text PDF"
+  ]
+}

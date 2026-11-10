@@ -1,0 +1,20 @@
+{
+  "checks": [
+    "Automatic Windows OS/CPU selection",
+    "Automatic running Nginx discovery including -p/-c",
+    "Automatic /pdf/ site discovery and proxy setup",
+    "Real Nginx config validation and reload",
+    "Invalid configuration restored byte-for-byte",
+    "Repeated launch reused service and token without duplicate locations"
+  ],
+  "server": {
+    "architecture": "AMD64",
+    "engineTarget": "Windows10",
+    "maxMB": 200,
+    "platform": "windows/amd64",
+    "server": true,
+    "system": "Microsoft Windows 10 专业版 10.0.19045",
+    "version": "1.0.2",
+    "wordReady": true
+  }
+}

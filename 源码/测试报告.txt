@@ -1,0 +1,41 @@
+﻿PDF 工具箱 v1.0.0 验证记录
+日期：2026-11-02
+
+实际测试宿主：Microsoft Windows 10 专业版 x64。
+Windows7 兼容版为 Go 1.20.14 / windows/386。
+Windows10 版为 Go 1.27.3 / windows/amd64。
+Linux 三个主程序为 Go 1.27.3 / linux amd64、arm64、loong64，CGO 关闭。
+
+通过的实际测试（两个最终 Windows EXE 分别执行）：
+- 检测随附 LibreOffice 25.2.7.2，无需调用 Microsoft Office。
+- JPG、PNG、BMP、GIF、TIFF、多图顺序、透明背景、手机 EXIF 方向。
+- A4 自动横竖、Letter 纵向、原尺寸、零边距及页面数量。
+- DOCX、真实旧版 DOC：中文、表格、图片、两页分页。
+- 多个 Word 分别转换并生成无重名 ZIP；独立 pypdf 严格解析通过。
+- 损坏图片错误、无访问口令拒绝、原始上传文件清理。
+
+最终界面测试（独立 Edge 无头实例）：
+- 选择照片、点击上移改变顺序、生成 PDF、实际下载。
+- Word 选择与转换结果，清空、损坏文件提示。
+- 桌面界面、375px 无横向溢出、减少动画偏好、无 JavaScript 异常。
+
+Go 测试及 go vet 通过：页面排版、透明背景、8 种方向、损坏输入、
+取消后的文件清理、鉴权/跨站请求/方法校验、下载、并发限制、服务退出。
+最终 PDF 经 Poppler 渲染并人工视觉检查，中文、表格和图片无明显截断或缺字。
+Poppler 的环境路径对三种无关语言映射文件发出读取提示，实际中文页面渲染正常。
+
+信创离线包检查：
+- amd64、arm64 各 190 个依赖包，LibreOffice 7.4.7（Debian bookworm 更新版）。
+- loong64 共 174 个依赖包，LibreOffice 26.8.2.2（Debian unstable）。
+- 每个架构检查引擎入口、ELF CPU、解释器路径、130 个 ELF 对象依赖闭包。
+- 三个包都含 Noto CJK 字体；SHA-256 已生成；启动脚本通过 bash -n。
+- 交付脚本只校验/解包本地文件，不执行联网下载或在线包安装。
+
+明确未验证：
+- Windows 7 SP1 实机、32 位 Windows 主机；目前在 Win10 x64 验证兼容 EXE。
+- 欧拉、麒麟、统信及 ARM64/LoongArch64 实机执行；静态检查不等于实机通过。
+- 所有真实业务文档的复杂版式、专用字体或特殊旧版 Linux ABI。
+
+详细 JSON 和界面/渲染截图见“测试证据”目录。
+v1.0.2 增补：13 项 Go 测试和 go vet 通过；新增 Nginx 两步自动部署、实际配置回退、系统识别测试。
+完整 HTML 版记录见 ../html/测试结果说明.txt，原 v1.0.0 记录保留为历史验证。

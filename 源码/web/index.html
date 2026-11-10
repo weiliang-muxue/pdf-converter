@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light"><title>PDF 工具箱</title><link rel="stylesheet" href="/style.css"></head>
+<body>
+<header class="topbar"><div class="brand"><span class="brand-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6M9 16h6"/></svg></span><span>PDF 工具箱<small>让文件整理更简单</small></span></div><div class="top-actions"><span class="local-badge" id="locationLabel">本机离线处理</span><button id="exitBtn" class="text-button" type="button" hidden>退出程序</button></div></header>
+<main>
+<div class="intro"><p class="eyebrow">DOCUMENT WORKSPACE</p><h1>整理文件，一步生成 PDF</h1><p id="privacyText">图片合并、Word 转换，文件在本机处理，无需联网。</p></div>
+<section class="workspace" aria-label="文件转换">
+<div class="mode-tabs" aria-label="选择转换方式"><button type="button" id="imagesTab" class="mode active" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.5"/><path d="m3 17 5-5 4 4 4-7 5 8"/></svg><span>图片转 PDF<small>多张图片，合成一份文件</small></span></button><button type="button" id="wordTab" class="mode" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6M9 16h6"/></svg><span>Word 转 PDF<small>保留文档版式，便于分享</small></span></button></div>
+<div class="workspace-body">
+<div id="engineNote" class="notice" hidden>未检测到 Word 转换引擎。请将随附的 LibreOffice 文件夹放在 EXE 旁，或按使用说明安装 LibreOffice 后重新启动。</div>
+<div class="dropzone" id="dropzone"><span class="upload-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M16 21V5m-6 6 6-6 6 6M6 20v7h20v-7"/></svg></span><h2 id="dropTitle">将图片拖到这里</h2><p id="formatHint">支持 JPG、PNG、BMP、GIF、TIFF，可一次添加多张</p><button type="button" class="primary choose-button" id="chooseBtn">选择图片</button><input type="file" id="fileInput" multiple accept=".jpg,.jpeg,.png,.bmp,.gif,.tif,.tiff" hidden><p class="limit-hint" id="limitHint">每张最多 50 MB · 每批最多 200 张 / 200 MB</p></div>
+<div class="files-header"><div><h2>待转换文件 <span id="fileCount" class="count">0</span></h2><p id="orderHint">按下方顺序生成 PDF，每张图片一页</p></div><button type="button" id="clearBtn" class="text-button" disabled>清空列表</button></div>
+<div id="emptyState" class="empty-state">还没有添加文件，选择文件后即可开始</div><ol id="fileList" class="file-list" aria-label="文件顺序"></ol>
+<div id="imageSettings" class="settings"><div class="field"><label for="paper">纸张大小</label><select id="paper"><option value="a4">A4</option><option value="letter">Letter</option><option value="original">图片原尺寸（96 DPI）</option></select></div><div class="field"><label for="orientation">页面方向</label><select id="orientation"><option value="auto">自动适应图片</option><option value="portrait">纵向</option><option value="landscape">横向</option></select></div><div class="field"><label for="margin">页边距</label><select id="margin"><option value="0">无边距</option><option value="5">5 毫米</option><option value="10" selected>10 毫米</option><option value="20">20 毫米</option></select></div></div>
+<p class="settings-note" id="settingsNote">图片保持比例、居中放置；透明背景转为白色。GIF / TIFF 仅取第一帧 / 页。</p>
+<div id="message" role="status" aria-live="polite" class="message" hidden></div>
+<div id="progressBox" class="progress-box" hidden><div><span id="progressText">正在上传…</span><button id="cancelBtn" class="text-button" type="button">取消转换</button></div><progress id="progress" value="0" max="100" aria-label="转换进度"></progress></div>
+<div id="resultBox" class="result-box" hidden><div><strong>转换完成</strong><p id="resultName"></p><small>请在 60 分钟内下载，退出程序后文件会被清理。</small></div><a id="downloadLink" class="primary" href="#">下载 PDF</a></div>
+<div class="bottom-bar"><p id="summary">请选择要转换的图片</p><button type="button" id="convertBtn" class="primary convert-button" disabled>生成 PDF <span aria-hidden="true">→</span></button></div>
+</div></section>
+<div class="footnotes"><span><span class="status-dot" aria-hidden="true"></span><span id="engineStatus">正在检查转换环境…</span></span><span id="versionText">PDF 工具箱</span></div>
+<p class="footer-note" id="footerNote">关闭浏览器页面不会结束程序。完成后可点击右上角“退出程序”。</p>
+</main>
+<div class="login-backdrop" id="loginPanel" hidden><section class="login-panel" aria-labelledby="loginTitle"><span class="eyebrow">PDF TOOLBOX</span><h2 id="loginTitle">连接 PDF 工具箱</h2><p>请输入服务启动时配置的访问口令，或使用包含口令的完整地址。</p><label for="tokenInput">访问口令</label><input id="tokenInput" type="password" autocomplete="off"><button class="primary" id="loginBtn" type="button">连接</button><p id="loginError" role="alert"></p></section></div>
+<script src="/app.js"></script>
+</body></html>

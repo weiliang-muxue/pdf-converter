@@ -1,0 +1,7 @@
+{
+  "wrongTokenRejected": "PASS",
+  "authenticatedCLI": "PASS",
+  "wordReady": true,
+  "scope": "Windows localhost smoke, not AL3 machine execution",
+  "version": "1.0.3"
+}

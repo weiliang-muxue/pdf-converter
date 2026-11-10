@@ -1,0 +1,53 @@
+﻿Alibaba Cloud Linux 3 部署前验证
+2026-11-09，适用于本项目 v1.0.3
+
+验证结论
+阿里云 Linux 3 的 x86_64 和 ARM64 属于现有离线包的目标架构。旧版 Linux 启动流程存在确定的权限错误，此次已修复。当前结果来自源码审查、归档和 ELF 检查、程序回归及模拟启动测试，尚未在阿里云 Linux 3 实机完成 Word 转换验收。
+用户反馈目前没有服务器报错，本次按部署前检查处理。
+
+已修复的问题
+1. 运行根目录的权限。
+   网页启动器和 systemd 使用 umask 077，原先创建的 runtime-架构 根目录为 root 专有的 0700。离线归档不包含根目录自身，不能修正这个权限。随后切换到 UID 65534 时，服务无法遍历目录，可能出现 Permission denied。
+   现在每次启动都会在降权前明确设置运行根目录为 0755，也覆盖旧版已经解包并留下就绪标记的目录。
+2. 后台未就绪时就修改 Nginx。
+   现在先启动后台，使用随包程序的 --check-service 通过本机 HTTP 检查版本、访问口令、服务器模式和引擎就绪状态，成功后才执行 Nginx 配置。后台启动失败时保留原代理配置。
+   此检查确认后台可达和引擎入口存在，真实业务文档转换仍以生成结果为准。
+3. 无关 Nginx location 导致自动配置误拦截。
+   现在按 PDF 网页和三个 API 的实际路径检查规则。/health 的 return、隐藏文件规则等无关位置可以保留。影响 PDF 路径的认证或禁止访问规则仍须按站点既有策略处理。
+   同时修正 Nginx 正则反斜杠解析，避免把 /\. 错误读成 /.
+
+与阿里云 Linux 3 的静态匹配
+阿里云官方说明该系统采用 Linux 5.10，默认 glibc 2.32，提供 x86 和 ARM 版本。
+两个随包主程序分别为 x86_64、AArch64 ELF，均没有动态解释器依赖。
+两份离线运行环境包含 LibreOffice 7.4.7 和 glibc 2.36。运行时使用私有 chroot 内的随包库。
+实际读取 libc 和 soffice 的 ELF GNU 最低内核标记，amd64 为 3.2，arm64 为 3.7，阿里云 Linux 3 的 5.10 满足该静态门槛。
+两份运行环境的 SHA-256 与交付 manifest 相符。内部 opt、home 等目录模式正常，修复仅针对遗漏的运行根目录。
+
+本次验证覆盖
+- Go 回归检查通过，包含后台就绪与口令校验、Nginx 正则保留和 12 个访问规则匹配案例。
+- Alibaba Cloud Linux 3 / kernel 5.10 的 x86_64、aarch64 自动识别用例通过。
+- 通过 Git Bash 执行真实启动脚本，并用命令替身模拟 Linux 外部命令，首次解包、已有就绪标记、后台失败、后台成功四条分支通过。
+- 移除权限修复的对照脚本在模拟 chroot 检查中以退出码 77 失败，复现旧行为。
+- 模拟检查没有执行真实挂载、切换系统 UID 或 Linux ELF。离线运行环境的动态库检查也不等同实机运行认证。
+
+部署时使用更新后的整套程序和脚本，保留 exe/信创Linux/离线运行环境。
+网页仍按现有两步部署，从 html/start-linux.sh 启动，由脚本自动选择架构。
+本机 Nginx 与服务仍通过 127.0.0.1:8787 通信，不需要联网下载运行依赖。
+若服务器启用 SELinux enforcing，代理访问可能取决于既有网络访问策略。需要结合实际 getenforce 和审计记录判断，本次未更改服务器策略。
+Nginx 重载命令成功表示重载信号已发出，实际对外访问和真实 Word 样例转换仍应在目标服务器核对。
+
+官方参考
+阿里云 Linux 的内核、glibc 和镜像架构
+https://help.aliyun.com/zh/ecs/user-guide/alibaba-cloud-linux
+Nginx 重载信号的含义
+https://trac.nginx.org/nginx/ticket/1591
+
+维护回归入口
+源码/tests/linux_launcher_regression.sh
+html/测试/autodetect-linux.test.sh
+源码/nginx_setup_test.go
+源码/service_check_test.go
+关键校验记录保存在 源码/测试证据/离线交付校验，回归脚本可重新生成测试日志。
+最终交付检查
+Windows7、Windows10、Linux amd64/arm64/loong64 五个程序均已重新编译为 v1.0.3。go vet 通过。
+Windows 本机真实启动后，--check-service 成功，错误口令返回 HTTP 401 并退出失败。该检查属于本机 HTTP/命令行验证。
