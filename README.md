@@ -8,6 +8,19 @@
 
 [下载 Release 部署包](https://github.com/weiliang-muxue/pdf-converter/releases/latest)
 
+
+GitHub 附件名称与服务器架构对应。
+
+- x86_64 使用 pdf-converter-linux-x86_64-v1.0.3.tar.gz。
+- aarch64 使用 pdf-converter-linux-aarch64-v1.0.3.tar.gz。
+
+同时下载同名 .sha256 文件。以 x86_64 包为例，校验并解压后执行下面的部署步骤。
+
+```sh
+sha256sum -c pdf-converter-linux-x86_64-v1.0.3.tar.gz.sha256
+sudo tar -xzf pdf-converter-linux-x86_64-v1.0.3.tar.gz -C /opt
+```
+
 ## 功能
 
 - ZIP 内图片按数字名称排列，例如 1、2、3、10。
