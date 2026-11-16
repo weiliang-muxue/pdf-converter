@@ -1,0 +1,14 @@
+{
+  "architecture": "arm64",
+  "tag": "pdf-converter:1.1.0-arm64",
+  "image_id": "sha256:2ad15eb74ea795980ed8ec1b2dec22aed120de55f9c91177bd1ad82390800912",
+  "bytes": 263574298,
+  "sha256": "3ae8873712f10cca2509fdbd30a110a6e12261b990cad1e3909ecae66d52be48",
+  "archive": "pdf-converter-k8s-arm64-v1.1.0.tar.gz",
+  "runtime_sha256": "86390adcae34331da9c9f5c09696078e21b3d81f6c8055294028cf17bb9a92cf",
+  "binary_sha256": "4a086207a3f5e52514393f58ac21a247a2e20dc25cd03621374745fea475e594",
+  "diff_ids": [
+    "sha256:dbd524d6c0752ea75549b1a9953360547d4d5cfd45129fd06ccc310c8d29cd3d",
+    "sha256:4a977e9d99a0ba723fa79037f9d2f93dbf7cffa309eddbd7f6ec15f8bc354ba8"
+  ]
+}

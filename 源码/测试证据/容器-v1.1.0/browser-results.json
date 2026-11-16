@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-16T07:47:43.125Z",
+  "browser": "157.0.4341.60",
+  "checks": [
+    "ZIP numeric order 1, 2, 3, 10 and downloadable PDF",
+    "Invalid, encrypted, traversal, oversized and corrupt ZIP rejected; previous list preserved",
+    "Manual selection order, up button, page-number move and drag reorder",
+    "Numeric sort and remove",
+    "Transparent PNG, EXIF-rotated JPEG and WebP; original paper dimensions",
+    "Corrupt image errors and cancellation preserve editable list",
+    "ZIP and image conversion made no backend requests",
+    "DOCX returned in the same request as a browser Blob, without download token",
+    "Legacy DOC through direct-response conversion",
+    "PDF download works without any server request; no Pod affinity or retained file required",
+    "No JavaScript errors or external network requests"
+  ],
+  "errors": [],
+  "external": [],
+  "requestCount": 8
+}

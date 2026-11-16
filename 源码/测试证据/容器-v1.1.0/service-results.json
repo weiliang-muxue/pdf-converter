@@ -1,0 +1,7 @@
+{
+  "server_files_after_requests": [],
+  "invalid_word_rejected": true,
+  "cancelled_word_cleaned": true,
+  "no_backend_download_endpoint": true,
+  "test_platform": "Windows host, same application source; Linux container not executed"
+}

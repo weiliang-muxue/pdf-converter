@@ -1,0 +1,10 @@
+{
+  "image_structure_validation": "crane v0.22.1 PASS (amd64 and arm64)",
+  "image_payload_validation": "Independent SHA-256, layer, architecture, fonts and engine checks PASS",
+  "go_tests": "PASS",
+  "go_vet": "PASS",
+  "web_core_tests": "PASS",
+  "browser_platform": "Windows / Edge with real bundled LibreOffice",
+  "linux_container_validation": "pending GitHub Actions",
+  "production_k8s_cluster": "not accessed"
+}
