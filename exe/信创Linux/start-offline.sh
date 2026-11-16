@@ -49,6 +49,18 @@ if [ ! -f "$ROOT/.pdf-runtime-ready" ]; then
   [ -e "$ROOT/dev/urandom" ] || mknod -m 666 "$ROOT/dev/urandom" c 1 9
   touch "$ROOT/.pdf-runtime-ready"
 fi
+# Debian postinst normally activates the shipped configuration defaults.
+# Repair old private runtimes too; no network or host package changes.
+REGISTRY_SOURCE="$ROOT/usr/lib/libreoffice/share/.registry"
+REGISTRY_TARGET="$ROOT/etc/libreoffice/registry"
+if [ -d "$REGISTRY_SOURCE" ]; then
+  mkdir -p "$REGISTRY_TARGET"
+  cp -Rp "$REGISTRY_SOURCE/." "$REGISTRY_TARGET/"
+  chmod 755 "$REGISTRY_TARGET"
+fi
+for CONFIG in main.xcd writer.xcd; do
+  [ -s "$REGISTRY_TARGET/$CONFIG" ] || { echo "Missing LibreOffice registry: $CONFIG" >&2; exit 1; }
+done
 # The HTML launcher and systemd use umask 077. The archive does not contain
 # the root directory itself, so repair its traversal mode on every launch,
 # including runtimes already marked ready by an older version.

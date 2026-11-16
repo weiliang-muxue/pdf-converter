@@ -1,18 +1,20 @@
 # PDF 文件工坊
 
-离线图片、ZIP 图片和 Word 转 PDF 工具，提供浏览器界面与 Go 后台。提供 v1.1.0 K8S 独立容器镜像，并保留 v1.0.3 原 Nginx 部署包。
+离线图片、ZIP 图片和 Word 转 PDF 工具，提供浏览器界面与 Go 后台。提供 v1.1.1 K8S 独立容器镜像，并保留 v1.0.3 原 Nginx 部署包。
 
 ## K8S 容器镜像
 
-v1.1.0 镜像内置完整网页、转换程序、LibreOffice、字体及运行库，监听 8080。
+v1.1.1 正在完成原生 Linux 容器验收，通过后才作为正式镜像。v1.1.0 已发现引擎配置遗漏，请勿部署。
+
+v1.1.1 镜像内置完整网页、转换程序、LibreOffice、字体及运行库，监听 8080。
 SLB / K8S 负责流量分发，应用不增加轮询逻辑。无需接入宿主机 Nginx。
 
-- amd64 节点使用 `pdf-converter:1.1.0-amd64`。
-- arm64 节点使用 `pdf-converter:1.1.0-arm64`。
+- amd64 节点使用 `pdf-converter:1.1.1-amd64`。
+- arm64 节点使用 `pdf-converter:1.1.1-arm64`。
 - Word 在同一 HTTP 请求中返回 PDF，浏览器本地下载。无 Pod 结果状态、共享存储或会话粘滞要求。
 - 转换临时文件按请求清理，不保留成品 PDF。健康接口为 `/healthz` 和 `/readyz`。
 - SIGTERM 时先撤销就绪，再等待在途请求。建议 K8S 终止宽限期 400 秒。
-- 镜像默认非 root 用户 65534，支持只读根目录并为 `/tmp` 提供可写临时卷。
+- 镜像默认非 root 用户 65534。无需任何外部挂载；临时文件使用 Pod 自身的可写层。
 
 [镜像接入参数](源码/container/镜像说明.txt) · [Linux 容器验收](https://github.com/weiliang-muxue/pdf-converter/actions/workflows/container-smoke.yml)
 

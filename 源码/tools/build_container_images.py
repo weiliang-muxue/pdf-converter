@@ -3,6 +3,8 @@ No daemon, base-image pull, package installation, or deployment-time download.
 """
 from pathlib import Path
 import argparse
+import copy
+import xml.etree.ElementTree as ET
 import gzip
 import hashlib
 import io
@@ -10,7 +12,7 @@ import json
 import shutil
 import tarfile
 
-VERSION = '1.1.0'
+VERSION = '1.1.1'
 CREATED = '2026-11-16T00:00:00Z'
 PROJECT = Path(__file__).resolve().parents[2]
 WORK = PROJECT / '临时文件' / ('container-v' + VERSION)
@@ -63,6 +65,24 @@ def build(arch):
             key = member.name.removeprefix('./').rstrip('/')
             if key and key != '.':
                 final[key] = member
+        # Debian postinst normally copies these defaults into /etc. A raw
+        # offline rootfs has not run it. Activate the complete registry now.
+        registry_prefix = 'usr/lib/libreoffice/share/.registry/'
+        copied = 0
+        for key, member in list(final.items()):
+            if key.startswith(registry_prefix) and member.isfile():
+                data = source.extractfile(member).read()
+                if key.endswith('.xcd'):
+                    ET.fromstring(data)
+                destination = 'etc/libreoffice/registry/' + key[len(registry_prefix):]
+                if destination not in final:
+                    clone = copy.copy(member)
+                    clone.name = destination
+                    final[destination] = clone
+                    copied += 1
+        for required in ['main.xcd', 'writer.xcd', 'Langpack-en-US.xcd', 'res/fcfg_langpack_en-US.xcd']:
+            assert final['etc/libreoffice/registry/' + required].isfile(), required
+        print('Prepared offline LibreOffice registry:', copied, 'files', flush=True)
         for key, member in sorted(final.items(), key=lambda pair: pair[1].offset):
             member.name = key
             target.addfile(member, source.extractfile(member) if member.isfile() else None)

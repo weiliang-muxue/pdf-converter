@@ -1,8 +1,8 @@
-PDF 文件工坊 K8S 镜像 v1.1.0
+PDF 文件工坊 K8S 镜像 v1.1.1
 
 交付为已经构建好的 Docker-save 离线镜像归档，不需要现场构建或联网下载依赖。
-amd64 镜像标签 pdf-converter:1.1.0-amd64，适配 x86_64 节点。
-arm64 镜像标签 pdf-converter:1.1.0-arm64，适配 aarch64 节点。
+amd64 镜像标签 pdf-converter:1.1.1-amd64，适配 x86_64 节点。
+arm64 镜像标签 pdf-converter:1.1.1-arm64，适配 aarch64 节点。
 同名 .sha256 文件用于校验归档。请按实际 Pod 所在节点的 CPU 架构选择。
 镜像应推送到全部候选节点可访问的内网镜像仓库，K8S 使用该仓库地址。
 只导入某一台节点时，扩容调度到其他节点可能找不到镜像。
@@ -33,7 +33,7 @@ startupProbe 和 readinessProbe 使用 GET /readyz，端口 8080。
 收到 SIGTERM 后 readiness 失败，保留 5 秒传播窗口，再等待已有 HTTP 请求结束，最多 360 秒。
 SLB/代理如有请求超时设置，应覆盖 Word 转换所需时间，建议至少 360 秒。
 镜像默认 UID/GID 65534，不需要 privileged、hostPath、Docker socket 或附加 Linux capability。
-只读根文件系统时，为 /tmp 挂载可写 emptyDir；需要纯内存临时文件时使用 medium: Memory。
+不配置 volumeMounts、hostPath 或 PVC。保持容器可写层可用（不要启用 readOnlyRootFilesystem），/tmp 直接使用 Pod 自身的临时可写层；扩容不需要往 ECS 上传文件。
 临时目录必须有足够空间容纳原文件、PDF 和 Office 工作文件。
 不需要指定宿主机发行版。镜像的用户态依赖已经包含，节点使用正常 Linux 容器运行时即可。
 

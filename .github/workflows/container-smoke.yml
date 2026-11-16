@@ -5,7 +5,7 @@ on:
       release_tag:
         description: Release containing offline image archives
         required: true
-        default: v1.1.0
+        default: v1.1.1
 permissions:
   contents: read
 jobs:
@@ -47,13 +47,18 @@ jobs:
           docker load -i "pdf-converter-k8s-${IMAGE_ARCH}-${RELEASE_TAG}.tar.gz"
           cd 源码
           CGO_ENABLED=0 go build -mod=vendor -trimpath -o ../smoke-client ./tests/container-smoke
+      - name: Embed verification client in disposable test image
+        run: |
+          mkdir smoke-context
+          mv smoke-client smoke-context/
+          printf 'FROM pdf-converter:%s-%s\nCOPY --chmod=755 smoke-client /opt/pdf-smoke-client\n' "${RELEASE_TAG#v}" "${IMAGE_ARCH}" > smoke-context/Dockerfile
+          docker build --network none --pull=false -t pdf-smoke-test smoke-context
       - name: Test offline unprivileged container
         run: |
-          docker run -d --name pdf-smoke --network none --read-only \
+          docker run -d --name pdf-smoke --network none \
             --cap-drop ALL --security-opt no-new-privileges \
-            --mount type=bind,source="$(pwd)/smoke-client",target=/opt/pdf-smoke-client,readonly \
-            --tmpfs /tmp:rw,nosuid,nodev,size=536870912,mode=1777 \
-            "pdf-converter:${RELEASE_TAG#v}-${IMAGE_ARCH}"
+            pdf-smoke-test
+          test "$(docker inspect -f '{{len .Mounts}}' pdf-smoke)" = 0
           docker exec pdf-smoke /opt/pdf-smoke-client
           docker stop --time 400 pdf-smoke
           test "$(docker inspect -f '{{.State.ExitCode}}' pdf-smoke)" = 0

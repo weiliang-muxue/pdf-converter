@@ -58,11 +58,11 @@ func docx() []byte {
 	}
 	return b.Bytes()
 }
-func body(doc []byte) ([]byte, string) {
+func body(doc []byte, name string) ([]byte, string) {
 	var b bytes.Buffer
 	f := multipart.NewWriter(&b)
 	f.WriteField("kind", "word")
-	w, _ := f.CreateFormFile("files", "probe.docx")
+	w, _ := f.CreateFormFile("files", name)
 	w.Write(doc)
 	f.Close()
 	return b.Bytes(), f.FormDataContentType()
@@ -80,8 +80,8 @@ func clean() {
 	}
 	panic("retained job files")
 }
-func render(doc []byte) (int, []byte) {
-	payload, typ := body(doc)
+func render(doc []byte, name string) (int, []byte) {
+	payload, typ := body(doc, name)
 	req, _ := http.NewRequest("POST", base+"/word-api/render", bytes.NewReader(payload))
 	req.Header.Set("Content-Type", typ)
 	req.Header.Set("X-PDF-Request", "1")
@@ -124,7 +124,7 @@ func main() {
 			ctx, stop := context.WithTimeout(context.Background(), 30*time.Second)
 			output, err := exec.CommandContext(ctx, "/usr/lib/libreoffice/program/soffice.bin", args...).CombinedOutput()
 			stop()
-			fmt.Printf("ENGINE DIAGNOSTIC %v: %v\\n%s\\n", args, err, output)
+			fmt.Printf("ENGINE DIAGNOSTIC %v: %v\n%s\n", args, err, output)
 		}
 	}
 	must(ready, "startup conversion failed")
@@ -137,17 +137,38 @@ func main() {
 	json.Unmarshal(b, &status)
 	must(s == 200 && status["wordReady"] == true && status["directDownload"] == true, "status mismatch")
 	doc := docx()
-	s, pdf := render(doc)
+	s, pdf := render(doc, "probe.docx")
 	must(s == 200 && bytes.HasPrefix(pdf, []byte("%PDF-")) && len(pdf) > 1000, fmt.Sprintf("conversion: HTTP %d %s", s, pdf))
+	clean()
+	// Generate an actual OLE Word 97 document, then exercise the public DOC path.
+	dir, e := os.MkdirTemp("", "legacy-doc-test-")
+	if e != nil {
+		panic(e)
+	}
+	defer os.RemoveAll(dir)
+	input := filepath.Join(dir, "legacy.docx")
+	if e = os.WriteFile(input, doc, 0600); e != nil {
+		panic(e)
+	}
+	ctx, stop := context.WithTimeout(context.Background(), 30*time.Second)
+	output, err := exec.CommandContext(ctx, "/usr/lib/libreoffice/program/soffice.bin",
+		"-env:UserInstallation=file://"+filepath.Join(dir, "profile"), "--headless",
+		"--convert-to", "doc:MS Word 97", "--outdir", dir, input).CombinedOutput()
+	stop()
+	must(err == nil, fmt.Sprintf("DOC fixture generation: %v %s", err, output))
+	legacy, err := os.ReadFile(filepath.Join(dir, "legacy.doc"))
+	must(err == nil && bytes.HasPrefix(legacy, []byte{0xd0, 0xcf, 0x11, 0xe0}), "DOC fixture invalid")
+	s, legacyPDF := render(legacy, "legacy.doc")
+	must(s == 200 && bytes.HasPrefix(legacyPDF, []byte("%PDF-")) && len(legacyPDF) > 1000, "legacy DOC conversion failed")
 	clean()
 	s, _ = get("/word-api/download?id=invalid")
 	must(s == 404, "stateful download exposed")
 	s, _ = get("/api/status")
 	must(s == 404, "legacy API exposed")
-	s, _ = render([]byte("invalid"))
+	s, _ = render([]byte("invalid"), "probe.docx")
 	must(s == 400, "invalid Word accepted")
 	clean()
-	payload, typ := body(doc)
+	payload, typ := body(doc, "probe.docx")
 	conn, e := net.DialTimeout("tcp", "127.0.0.1:8080", 5*time.Second)
 	if e != nil {
 		panic(e)
@@ -170,7 +191,7 @@ func main() {
 	}
 	s, _ = get("/healthz")
 	must(s == 200, "liveness failed")
-	result := map[string]interface{}{"pdf_bytes": len(pdf), "direct_response": true, "temporary_files_cleaned": true, "cancel_cleanup": true, "offline_container": true, "version": status["version"], "architecture": status["architecture"]}
+	result := map[string]interface{}{"pdf_bytes": len(pdf), "direct_response": true, "legacy_doc": true, "temporary_files_cleaned": true, "cancel_cleanup": true, "offline_container": true, "version": status["version"], "architecture": status["architecture"]}
 	text, _ := json.Marshal(result)
 	fmt.Println("PASS:", string(text))
 }
