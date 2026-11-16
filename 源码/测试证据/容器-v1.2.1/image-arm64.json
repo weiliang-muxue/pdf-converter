@@ -1,0 +1,8 @@
+{
+  "archive": "word-pdf-20261116220524-arm64.tar.gz",
+  "architecture": "arm64",
+  "sha256": "6ee5afafd2ecb201ee4398e21172916fa081c5abbd95377bbea899af0a5d59fa",
+  "image_id": "e865d1ec20b146b2ebdb46ab69f5b6f4afc1528aa56f3ee690f9ae6c41b85a7e",
+  "rootfs_entries": 8431,
+  "verified": true
+}

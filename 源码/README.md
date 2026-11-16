@@ -110,9 +110,9 @@ node tests/ui.cjs ./test-output "http://127.0.0.1:8080/#token=测试口令"
 
 ## K8S 镜像维护
 
-容器版使用独立模式 `--standalone`，镜像版本通过 `-ldflags="-X main.version=1.1.2"` 注入。默认源码版本仍为旧部署方案的 1.0.3，以便维护原包。
+容器版使用独立模式 `--standalone`，镜像版本通过 `-ldflags="-X main.version=1.2.1"` 注入。默认源码版本仍为旧部署方案的 1.0.3，以便维护原包。
 
-网页可编辑源仍在 ../html/网站文件。修改后运行 tools/sync_container_web.py 同步到 standaloneweb，然后编译。镜像构建器 tools/build_container_images.py 使用已校验的原离线运行库和 临时文件/container-v1.1.2/bin/pdf-tool-linux-{amd64,arm64}。它按最终有效路径去掉重复 tar 头，将 Debian 包中 share/.registry 的原始配置完整激活到 etc/libreoffice/registry，不裁剪引擎文件，生成 Docker-save 格式归档。tools/verify_container_image.py 和官方 crane 可独立验证镜像。
+网页可编辑源仍在 ../html/网站文件。修改后运行 tools/sync_container_web.py 同步到 standaloneweb，然后编译。镜像构建器 tools/build_container_images.py 使用已校验的原离线运行库和 临时文件/container-v1.2.1/bin/pdf-tool-linux-{amd64,arm64}。它按最终有效路径去掉重复 tar 头，将 Debian 包中 share/.registry 的原始配置完整激活到 etc/libreoffice/registry，不裁剪引擎文件，生成 Docker-save 格式归档。tools/verify_container_image.py 和官方 crane 可独立验证镜像。
 
 容器接口 /word-api/render 直接返回 PDF；网页根据 status.directDownload 选择该接口。旧 Nginx 接口仍使用原下载逻辑。转换引擎的 TMP/TEMP/TMPDIR 被限制在每个请求的私有目录，结束后整体清理。
 
@@ -123,3 +123,9 @@ GitHub 的 container-smoke 工作流下载精确交付归档，在 amd64 / ARM64
 容器和离线 Linux 入口使用随包 oosplash 启动器，它负责 LibreOffice 首次配置完成后的重启；直接执行 soffice.bin 会把正常初始化退出码 81 误判成转换失败。上游实现见 https://github.com/LibreOffice/core/blob/libreoffice-7-4/desktop/unx/source/start.c 。两架构预验证记录见 测试证据/容器-v1.1.2/launcher-preflight.json；最终验收必须使用镜像默认参数，不开启工作流的 verify_launcher 诊断覆盖。
 
 本次成果目录只保留最终镜像、EXE 和 Nginx 三类交付。原始 v1.0.3 Nginx 发布归档保留在 ../制作资料/原始离线交付-v1.0.3，供 build_legacy_updates.py 做受哈希保护的离线修订；该大文件输入不进入 Git，原件仍可从历史 v1.0.3 Release 获取。构建缓存和失败候选可再生文件已清理，原始 exe/离线引擎未裁剪。
+
+新版镜像批次信息统一来自 container/release.json：version 是程序/镜像标签，build_time 是北京时间 14 位 YYYYMMDDHHmmss。两架构用同一批次时间；输出为 word-pdf-{build_time}-{arch}.tar.gz，docker load 显示 word-pdf-{build_time}-{arch}:{version}。
+
+RAR/7Z 通过 /word-api/archive 在单次请求内转换成图片 ZIP，随后浏览器排序并生成 PDF。每个文件走限量 stdout 管道，避免解包到用户指定路径；单文件、总量、数量、时间和进程内存均有限制。Linux 利用镜像已有 /bin/sh 的 ulimit 后 exec 静态 7zzs，命令字符串固定、文件名只通过位置参数传入，不在 Go 运行时自身设置低地址空间上限。完整原版 7-Zip 二进制、许可和对应源码在 third_party/7zip，部署时无需下载。
+
+最终工作流对每个架构连续发起 100 个压缩包请求，并检查禁网、零外部挂载、Word DOC/DOCX、无持久文件、取消及正常终止。amd64 同时运行真实 Chrome 网页测试，逐页检查 PDF 中图片顺序、尺寸与中文 Word 内容。测试浏览器的字体从交付镜像复制到独立测试目录，不改变交付镜像。

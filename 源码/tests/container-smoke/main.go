@@ -234,6 +234,30 @@ func main() {
 	for iteration := 0; iteration < 20; iteration++ {
 		archiveChecks()
 	}
+	// Disconnect while an archive is being uploaded; no input may remain.
+	connArchive, err := net.DialTimeout("tcp", "127.0.0.1:8080", 5*time.Second)
+	must(err == nil, "archive cancel connection")
+	prefix := "--cancel-archive\r\nContent-Disposition: form-data; name=\"files\"; filename=\"cancel.7z\"\r\nContent-Type: application/octet-stream\r\n\r\n"
+	prefix += strings.Repeat("partial", 128)
+	fmt.Fprintf(connArchive, "POST /word-api/archive HTTP/1.1\r\nHost: 127.0.0.1:8080\r\nX-PDF-Request: 1\r\nContent-Type: multipart/form-data; boundary=cancel-archive\r\nContent-Length: 1000000\r\n\r\n%s", prefix)
+	var active []string
+	for attempt := 0; attempt < 100; attempt++ {
+		active, _ = filepath.Glob(filepath.Join(os.TempDir(), "pdf-tool-*", "archive-*", "upload.archive"))
+		if len(active) > 0 {
+			break
+		}
+		time.Sleep(10 * time.Millisecond)
+	}
+	must(len(active) > 0, "archive cancel did not reach upload")
+	connArchive.Close()
+	for attempt := 0; attempt < 100; attempt++ {
+		active, _ = filepath.Glob(filepath.Join(os.TempDir(), "pdf-tool-*", "archive-*"))
+		if len(active) == 0 {
+			break
+		}
+		time.Sleep(10 * time.Millisecond)
+	}
+	must(len(active) == 0, "cancelled archive retained files")
 	doc := docx()
 	s, pdf := render(doc, "probe.docx")
 	must(s == 200 && bytes.HasPrefix(pdf, []byte("%PDF-")) && len(pdf) > 1000, fmt.Sprintf("conversion: HTTP %d %s", s, pdf))
@@ -289,7 +313,7 @@ func main() {
 	}
 	s, _ = get("/healthz")
 	must(s == 200, "liveness failed")
-	result := map[string]interface{}{"archive_requests": 100, "archives_zip_rar4_rar5_7z": true, "pdf_bytes": len(pdf), "direct_response": true, "legacy_doc": true, "temporary_files_cleaned": true, "cancel_cleanup": true, "offline_container": true, "version": status["version"], "architecture": status["architecture"]}
+	result := map[string]interface{}{"archive_cancel_cleanup": true, "archive_requests": 100, "archives_zip_rar4_rar5_7z": true, "pdf_bytes": len(pdf), "direct_response": true, "legacy_doc": true, "temporary_files_cleaned": true, "cancel_cleanup": true, "offline_container": true, "version": status["version"], "architecture": status["architecture"]}
 	text, _ := json.Marshal(result)
 	fmt.Println("PASS:", string(text))
 }
