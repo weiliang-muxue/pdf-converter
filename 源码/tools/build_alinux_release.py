@@ -19,7 +19,7 @@ output = project / '成果'
 work = project / '临时文件' / 'alinux3-release-20261110'
 output.mkdir(exist_ok=True)
 work.mkdir(parents=True, exist_ok=True)
-version = re.search(r'const version = "([^"]+)"', (project/'源码/main.go').read_text(encoding='utf-8')).group(1)
+version = re.search(r'(?:const|var) version = "([^"]+)"', (project/'源码/main.go').read_text(encoding='utf-8')).group(1)
 if version != '1.0.3':
     raise RuntimeError('Review the release instructions before packaging another version')
 

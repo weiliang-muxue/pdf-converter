@@ -30,7 +30,8 @@ import (
 //go:embed web/*
 var assets embed.FS
 
-const version = "1.0.3"
+var version = "1.0.3"
+
 const maxUpload = 200 << 20
 
 type result struct {
@@ -40,12 +41,14 @@ type result struct {
 }
 
 type application struct {
-	token, root, office string
-	serverMode          bool
-	mu                  sync.Mutex
-	results             map[string]result
-	busy                chan struct{}
-	stop                context.CancelFunc
+	token, root, office         string
+	serverMode                  bool
+	standalone, standaloneReady bool
+	draining                    bool
+	mu                          sync.Mutex
+	results                     map[string]result
+	busy                        chan struct{}
+	stop                        context.CancelFunc
 }
 
 func randomID() string {
@@ -59,6 +62,7 @@ func randomID() string {
 func main() {
 	listen := flag.String("listen", "127.0.0.1:0", "监听地址，服务器示例 0.0.0.0:8080")
 	serverMode := flag.Bool("server", false, "服务器模式，不自动打开浏览器")
+	standalone := flag.Bool("standalone", false, "独立容器网页及无状态 Word 接口")
 	noBrowser := flag.Bool("no-browser", false, "不自动打开浏览器")
 	office := flag.String("office", "", "LibreOffice soffice 可执行文件完整路径")
 	showVersion := flag.Bool("version", false, "显示版本")
@@ -92,13 +96,17 @@ func main() {
 		fmt.Printf("PDF Tool %s %s/%s %s\n", version, runtime.GOOS, runtime.GOARCH, runtime.Version())
 		return
 	}
-	if err := run(*listen, *serverMode, *noBrowser, *office); err != nil {
+	if *standalone {
+		*serverMode = true
+		*noBrowser = true
+	}
+	if err := run(*listen, *serverMode, *noBrowser, *office, *standalone); err != nil {
 		showError(err.Error())
 		os.Exit(1)
 	}
 }
 
-func run(address string, serverMode, noBrowser bool, office string) error {
+func run(address string, serverMode, noBrowser bool, office string, standalone bool) error {
 	host, _, err := net.SplitHostPort(address)
 	if err != nil {
 		return fmt.Errorf("监听地址格式不正确：%w", err)
@@ -121,18 +129,23 @@ func run(address string, serverMode, noBrowser bool, office string) error {
 	defer os.RemoveAll(root)
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer cancel()
-	a := &application{token: token, root: root, office: findOffice(office), serverMode: serverMode, results: map[string]result{}, busy: make(chan struct{}, 1), stop: cancel}
+	workCtx, stopWork := context.WithCancel(context.Background())
+	defer stopWork()
+	a := &application{token: token, root: root, office: findOffice(office), serverMode: serverMode, standalone: standalone, results: map[string]result{}, busy: make(chan struct{}, 1), stop: cancel}
 	ln, err := net.Listen("tcp", address)
 	if err != nil {
 		return fmt.Errorf("无法启动服务：%w", err)
 	}
-	srv := &http.Server{Handler: a.handler(), ReadHeaderTimeout: 10 * time.Second, ReadTimeout: 5 * time.Minute, WriteTimeout: 10 * time.Minute, IdleTimeout: 60 * time.Second, MaxHeaderBytes: 32 << 10, BaseContext: func(net.Listener) context.Context { return ctx }}
+	srv := &http.Server{Handler: a.handler(), ReadHeaderTimeout: 10 * time.Second, ReadTimeout: 5 * time.Minute, WriteTimeout: 10 * time.Minute, IdleTimeout: 60 * time.Second, MaxHeaderBytes: 32 << 10, BaseContext: func(net.Listener) context.Context { return workCtx }}
 	urlHost := ln.Addr().String()
 	if host == "0.0.0.0" || host == "" || host == "::" {
 		_, port, _ := net.SplitHostPort(urlHost)
 		urlHost = net.JoinHostPort("127.0.0.1", port)
 	}
 	launchURL := "http://" + urlHost + "/#token=" + url.QueryEscape(token)
+	if standalone {
+		launchURL = "http://" + urlHost + "/"
+	}
 	fmt.Printf("PDF Tool %s\n地址: %s\n远程访问请把 127.0.0.1 替换为服务器 IP。\n", version, launchURL)
 	if !serverMode {
 		// A visible fallback URL for desktop builds with no console.
@@ -146,14 +159,26 @@ func run(address string, serverMode, noBrowser bool, office string) error {
 	}
 	done := make(chan error, 1)
 	go func() { done <- srv.Serve(ln) }()
-	go a.cleanup(ctx)
+	go a.cleanup(workCtx)
+	if standalone {
+		go a.initializeStandalone(workCtx)
+	}
 	select {
 	case err := <-done:
 		if !errors.Is(err, http.ErrServerClosed) {
 			return err
 		}
 	case <-ctx.Done():
-		shutdownCtx, stop := context.WithTimeout(context.Background(), 10*time.Second)
+		grace := 10 * time.Second
+		if standalone {
+			a.mu.Lock()
+			a.draining = true
+			a.mu.Unlock()
+			// Allow endpoint removal to propagate while serving existing traffic.
+			time.Sleep(5 * time.Second)
+			grace = 360 * time.Second
+		}
+		shutdownCtx, stop := context.WithTimeout(context.Background(), grace)
 		defer stop()
 		if err := srv.Shutdown(shutdownCtx); err != nil {
 			_ = srv.Close()
@@ -163,6 +188,9 @@ func run(address string, serverMode, noBrowser bool, office string) error {
 }
 
 func (a *application) handler() http.Handler {
+	if a.standalone {
+		return a.standaloneHandler()
+	}
 	mux := http.NewServeMux()
 	mux.HandleFunc("/api/status", a.auth(a.status))
 	mux.HandleFunc("/api/convert", a.auth(a.convert))
@@ -222,7 +250,7 @@ func (a *application) status(w http.ResponseWriter, r *http.Request) {
 	if !requireMethod(w, r, "GET") {
 		return
 	}
-	writeJSON(w, 200, map[string]interface{}{"version": version, "wordReady": a.office != "", "server": a.serverMode, "platform": runtime.GOOS + "/" + runtime.GOARCH, "maxMB": 200,
+	writeJSON(w, 200, map[string]interface{}{"version": version, "wordReady": a.wordReady(), "directDownload": a.standalone, "server": a.serverMode, "platform": runtime.GOOS + "/" + runtime.GOARCH, "maxMB": 200,
 		"system": hostLabel("PDF_HOST_OS", runtime.GOOS), "architecture": hostLabel("PDF_HOST_ARCH", runtime.GOARCH), "engineTarget": hostLabel("PDF_ENGINE_VARIANT", "")})
 }
 
@@ -236,6 +264,10 @@ func hostLabel(key, fallback string) string {
 }
 
 func (a *application) convert(w http.ResponseWriter, r *http.Request) {
+	a.convertWithDelivery(w, r, false)
+}
+
+func (a *application) convertWithDelivery(w http.ResponseWriter, r *http.Request, direct bool) {
 	if !requireMethod(w, r, "POST") {
 		return
 	}
@@ -286,6 +318,10 @@ func (a *application) convert(w http.ResponseWriter, r *http.Request) {
 	paths := make([]string, 0, len(files))
 	names := make([]string, 0, len(files))
 	kind := r.FormValue("kind")
+	if direct && (kind != "word" || len(files) != 1) {
+		fail(w, 400, "请选择一个 Word 文档")
+		return
+	}
 	if kind != "images" && kind != "word" {
 		fail(w, 400, "请选择图片或 Word 转换")
 		return
@@ -348,6 +384,26 @@ func (a *application) convert(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if r.Context().Err() != nil {
+		return
+	}
+	if direct {
+		// Return the PDF in the upload response and always remove job files.
+		// No Pod-local download ID is sent to the browser.
+		f, openErr := os.Open(output)
+		if openErr != nil {
+			fail(w, 500, "无法读取转换结果")
+			return
+		}
+		defer f.Close()
+		stat, statErr := f.Stat()
+		if statErr != nil {
+			fail(w, 500, "无法读取转换结果")
+			return
+		}
+		w.Header().Set("Content-Type", "application/pdf")
+		w.Header().Set("Content-Disposition", mime.FormatMediaType("attachment", map[string]string{"filename": name}))
+		w.Header().Set("Content-Length", fmt.Sprint(stat.Size()))
+		_, _ = io.Copy(w, f)
 		return
 	}
 	// Input documents and the office profile are no longer needed after conversion.

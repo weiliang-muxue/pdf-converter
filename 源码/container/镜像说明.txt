@@ -1,0 +1,43 @@
+PDF 文件工坊 K8S 镜像 v1.1.0
+
+交付为已经构建好的 Docker-save 离线镜像归档，不需要现场构建或联网下载依赖。
+amd64 镜像标签 pdf-converter:1.1.0-amd64，适配 x86_64 节点。
+arm64 镜像标签 pdf-converter:1.1.0-arm64，适配 aarch64 节点。
+同名 .sha256 文件用于校验归档。请按实际 Pod 所在节点的 CPU 架构选择。
+
+镜像已内置启动参数，无需覆盖 command / args。
+容器端口 8080，网页路径 /。
+网页和 ZIP、多图排序及 Word 转 PDF 接口都在同一端口，不需要 Nginx。
+SLB 和 K8S 继续负责流量分发。通过已有 Service/NodePort 暴露后，访问 IP:端口即可。
+镜像采用内网免登录访问方式。
+
+多副本与文件处理
+Word PDF 在上传请求的响应里直接返回浏览器。
+下载按钮使用当前页面的 Blob，不再请求某个 Pod，也没有结果 ID。
+无需共享目录、数据库或会话粘滞。增加 Pod 不会导致下载到另一 Pod 后找不到文件。
+转换引擎仅使用必要的临时工作目录，正常完成、失败或取消后清理。
+不保留转换历史和成品 PDF，不挂载持久存储。
+图片及 ZIP 在浏览器处理，不上传。
+每个 Pod 同时执行一个 Word 转换；繁忙时会提示稍后重试，可按负载扩容。
+已完成的 PDF 不依赖 Pod。被强制终止的进行中请求仍需重试。
+
+K8S 接入参数
+livenessProbe 使用 GET /healthz，端口 8080。
+startupProbe 和 readinessProbe 使用 GET /readyz，端口 8080。
+启动时先实际转换一份测试 Word，再返回 ready；可给启动探针约 180 秒窗口。
+建议 terminationGracePeriodSeconds 为 400。
+收到 SIGTERM 后 readiness 失败，保留 5 秒传播窗口，再等待已有 HTTP 请求结束，最多 360 秒。
+SLB/代理如有请求超时设置，应覆盖 Word 转换所需时间，建议至少 360 秒。
+镜像默认 UID/GID 65534，不需要 privileged、hostPath、Docker socket 或附加 Linux capability。
+只读根文件系统时，为 /tmp 挂载可写 emptyDir；需要纯内存临时文件时使用 medium: Memory。
+临时目录必须有足够空间容纳原文件、PDF 和 Office 工作文件。
+不需要指定宿主机发行版。镜像的用户态依赖已经包含，节点使用正常 Linux 容器运行时即可。
+
+客户端
+Win7、Win10、信创电脑使用兼容的 Chrome、Edge 或 Firefox 访问同一个地址。
+无需根据客户端操作系统选择镜像。
+
+验收
+本机浏览器检查包含 ZIP 数字顺序、拖动/按钮/页码排序、DOC/DOCX 和离线下载。
+镜像格式、层校验与真实 Linux 容器验收结果见仓库 Actions 的 Offline container smoke。
+未连接你的 SLB 和 K8S 集群，集群接入以现场 Service、探针和网络配置为准。

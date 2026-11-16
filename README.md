@@ -1,12 +1,26 @@
 # PDF 文件工坊
 
-离线图片、ZIP 图片和 Word 转 PDF 工具，提供浏览器界面与 Go 后台。当前交付版本为 v1.0.3。
+离线图片、ZIP 图片和 Word 转 PDF 工具，提供浏览器界面与 Go 后台。提供 v1.1.0 K8S 独立容器镜像，并保留 v1.0.3 原 Nginx 部署包。
 
-## 获取部署包
+## K8S 容器镜像
+
+v1.1.0 镜像内置完整网页、转换程序、LibreOffice、字体及运行库，监听 8080。
+SLB / K8S 负责流量分发，应用不增加轮询逻辑。无需接入宿主机 Nginx。
+
+- amd64 节点使用 `pdf-converter:1.1.0-amd64`。
+- arm64 节点使用 `pdf-converter:1.1.0-arm64`。
+- Word 在同一 HTTP 请求中返回 PDF，浏览器本地下载。无 Pod 结果状态、共享存储或会话粘滞要求。
+- 转换临时文件按请求清理，不保留成品 PDF。健康接口为 `/healthz` 和 `/readyz`。
+- SIGTERM 时先撤销就绪，再等待在途请求。建议 K8S 终止宽限期 400 秒。
+- 镜像默认非 root 用户 65534，支持只读根目录并为 `/tmp` 提供可写临时卷。
+
+[镜像接入参数](源码/container/镜像说明.txt) · [Linux 容器验收](https://github.com/weiliang-muxue/pdf-converter/actions/workflows/container-smoke.yml)
+
+## 获取原 Nginx 部署包
 
 在服务器执行 `uname -m` 后，选择对应的 x86_64 或 aarch64 包及 SHA-256 文件。两个包分别包含完整的离线运行环境。
 
-[下载 Release 部署包](https://github.com/weiliang-muxue/pdf-converter/releases/latest)
+[下载 Release 部署包](https://github.com/weiliang-muxue/pdf-converter/releases/tag/v1.0.3)
 
 
 GitHub 附件名称与服务器架构对应。

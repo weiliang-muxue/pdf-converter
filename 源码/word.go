@@ -104,6 +104,10 @@ func validateWord(path string) error {
 func wordPDF(ctx context.Context, office string, paths, names []string, dir string) (output, name string, err error) {
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Minute)
 	defer cancel()
+	workTemp := filepath.Join(dir, "tmp")
+	if err = os.Mkdir(workTemp, 0700); err != nil {
+		return
+	}
 	profile := filepath.Join(dir, "profile")
 	if err = os.MkdirAll(filepath.Join(profile, "user"), 0700); err != nil {
 		return
@@ -125,7 +129,7 @@ func wordPDF(ctx context.Context, office string, paths, names []string, dir stri
 		}
 		oneCtx, stop := context.WithTimeout(ctx, 2*time.Minute)
 		cmd := exec.Command(office, "-env:UserInstallation="+fileURL(profile), "--headless", "--nologo", "--nodefault", "--norestore", "--convert-to", "pdf:writer_pdf_Export", "--outdir", outdir, path)
-		cmd.Env = append(os.Environ(), "SAL_USE_VCLPLUGIN=svp")
+		cmd.Env = append(os.Environ(), "SAL_USE_VCLPLUGIN=svp", "TMPDIR="+workTemp, "TMP="+workTemp, "TEMP="+workTemp)
 		configureCommand(cmd)
 		var diagnostic bytes.Buffer
 		cmd.Stdout = &diagnostic

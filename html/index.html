@@ -238,7 +238,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 (function () {
   'use strict';
   var core = window.PDFWeb, mode = 'zip', groups = { zip: [], images: [], word: [] }, names = { zip: '图片合并', images: '图片合并', word: '' };
-  var zipLabel = '', busy = false, signal = { cancelled: false }, xhr = null, resultURL = null, wordReady = false, serviceChecking = false, dragIndex = -1;
+  var zipLabel = '', busy = false, signal = { cancelled: false }, xhr = null, resultURL = null, wordReady = false, directDownload = false, serviceChecking = false, dragIndex = -1;
   function el(id) { return document.getElementById(id); }
   function text(id, value) { el(id).textContent = value; }
   function show(id, value) { el(id).hidden = !value; }
@@ -247,9 +247,21 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   function message(value, info) { text('message', value); el('message').className = 'message' + (info ? ' info' : ''); show('message', !!value); }
   function invalidate() { if (resultURL) URL.revokeObjectURL(resultURL); resultURL = null; el('downloadBtn').removeAttribute('href'); show('resultBox', false); message(''); }
   function apiPath(name) { return 'word-api/' + name; }
-  function api(method, name, data, callback, isConvert) {
+  function api(method, name, data, callback, isConvert, binary) {
     var request = new XMLHttpRequest(); request.open(method, apiPath(name), true); request.timeout = isConvert ? 360000 : 8000;
-    request.onload = function () { var result; try { result = JSON.parse(request.responseText); } catch (_) { result = null; }
+    if (method === 'POST') request.setRequestHeader('X-PDF-Request', '1');
+    if (binary) request.responseType = 'blob';
+    request.onload = function () {
+      if (binary) {
+        if (request.status >= 200 && request.status < 300 && /^application\/pdf\b/i.test(request.getResponseHeader('Content-Type') || '')) {
+          callback(null, request.response); return;
+        }
+        var reader = new FileReader();
+        reader.onload = function () { var error; try { error = JSON.parse(reader.result).error; } catch (_) {} callback(new Error(error || 'Word 转换失败，请稍后重试')); };
+        reader.onerror = function () { callback(new Error('无法读取转换结果')); };
+        reader.readAsText(request.response); return;
+      }
+      var result; try { result = JSON.parse(request.responseText); } catch (_) { result = null; }
       if (request.status >= 200 && request.status < 300 && result) callback(null, result);
       else callback(new Error(result && result.error ? result.error : 'Word 转换服务未连接，请联系管理员启用服务。图片功能可独立使用。'));
     };
@@ -267,10 +279,10 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     serviceChecking = true; wordReady = false; text('wordServiceLabel', '正在检查 Word 转换服务…'); text('wordServiceHint', 'Word 文件由内网服务器处理。'); update();
     if (location.protocol === 'file:') { serviceChecking = false; text('wordServiceLabel', '当前为本地 HTML 文件'); text('wordServiceHint', '图片功能可以直接使用；Word 请通过部署好的内网网页访问。'); update(); return; }
     api('GET', 'status', null, function (error, data) {
-      serviceChecking = false; wordReady = !error && !!data.wordReady;
+      serviceChecking = false; wordReady = !error && !!data.wordReady; directDownload = !error && !!data.directDownload;
       text('wordServiceLabel', wordReady ? 'Word 转换服务已就绪' : 'Word 转换服务尚未就绪');
       var serverLabel = data && data.system ? '已连接：' + data.system + ' / ' + data.architecture + (data.engineTarget ? '，自动匹配 ' + data.engineTarget + '。' : '。') : '';
-      text('wordServiceHint', wordReady ? serverLabel + '文档在内网转换，结果保留 60 分钟。' : '请联系管理员启用 Word 转换服务。压缩包和图片功能不受影响。');
+      text('wordServiceHint', wordReady ? serverLabel + (directDownload ? '文档在内网转换，完成后返回当前浏览器。' : '文档在内网转换，结果保留 60 分钟。') : '请联系管理员启用 Word 转换服务。压缩包和图片功能不受影响。');
       el('wordNotice').className = 'notice' + (wordReady ? ' ready' : ''); update();
     });
   }
@@ -372,16 +384,19 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     el('outputName').value = names[mode] || '图片合并'; render(); if (word) checkService();
   }
   function outputName() { var name = el('outputName').value.trim().replace(/\.pdf$/i, '').replace(/[<>:"/\\|?*\u0000-\u001f]/g, '_'); return (name || '图片合并') + '.pdf'; }
-  function result(name, href, remote) { text('resultName', name); el('downloadBtn').href = href; el('downloadBtn').download = name; text('resultHint', remote ? '请在 60 分钟内下载，服务器会自动清理过期文件。' : '已在浏览器生成，请及时下载保存。'); show('resultBox', true); el('downloadBtn').focus(); }
+  function result(name, href, remote) { text('resultName', name); el('downloadBtn').href = href; el('downloadBtn').download = name; text('resultHint', remote ? '请在 60 分钟内下载，服务器会自动清理过期文件。' : 'PDF 已保存在当前页面，请及时下载；刷新页面后需重新生成。'); show('resultBox', true); el('downloadBtn').focus(); }
   async function convert() {
     if (busy || !groups[mode].length || mode === 'word' && !wordReady) return;
     invalidate(); signal = { cancelled: false }; setBusy(true, '准备生成 PDF…');
     try {
       if (mode === 'word') {
         var data = new FormData(); data.append('kind', 'word'); data.append('files', groups.word[0].file, groups.word[0].name);
-        var metadata = await new Promise(function (resolve, reject) { xhr = api('POST', 'convert', data, function (error, value) { xhr = null; if (error) reject(error); else resolve(value); }, true); });
+        var metadata = await new Promise(function (resolve, reject) { xhr = api('POST', directDownload ? 'render' : 'convert', data, function (error, value) { xhr = null; if (error) reject(error); else resolve(value); }, true, directDownload); });
         if (signal.cancelled) throw new Error('已取消');
-        result(metadata.name, apiPath('download') + '?id=' + encodeURIComponent(metadata.id), true);
+        if (directDownload) {
+          resultURL = URL.createObjectURL(metadata);
+          result(groups.word[0].name.replace(/\.docx?$/i, '.pdf'), resultURL, false);
+        } else result(metadata.name, apiPath('download') + '?id=' + encodeURIComponent(metadata.id), true);
       } else {
         var blob = await core.imagesPDF(groups[mode], { paper: el('paper').value, orientation: el('orientation').value, margin: Number(el('margin').value) }, signal, function (done, count) { el('progress').value = done / count * 100; text('progressText', '正在生成 PDF：' + done + ' / ' + count + ' 页'); });
         if (signal.cancelled) throw new Error('已取消'); resultURL = URL.createObjectURL(blob); result(outputName(), resultURL, false);
