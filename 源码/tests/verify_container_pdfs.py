@@ -19,9 +19,10 @@ for name,order in [('ZIP数字排序.pdf',[1,2,3,10]),('手动排序.pdf',[2,3,1
         image=list(page.images)[0].image.convert('RGB')
         pixel=image.getpixel((image.width//2,image.height//2))
         assert rgb_close(pixel,colors[number]),(name,number,pixel)
-        assert abs(float(page.mediabox.width)-595.2756)<.01
-        assert abs(float(page.mediabox.height)-841.8898)<.01
-    checks.append(f'{name}: page order {order}, readable JPEG objects and A4 dimensions')
+        expected=(240,360) if name.startswith(('RAR','7Z')) else (595.2756,841.8898)
+        assert abs(float(page.mediabox.width)-expected[0])<.01
+        assert abs(float(page.mediabox.height)-expected[1])<.01
+    checks.append(f'{name}: page order {order}, readable JPEG objects and selected paper dimensions')
 pdf=read('图片格式.pdf')
 assert len(pdf.pages)==3
 for page,expected in zip(pdf.pages,[(180,120),(225,450),(300,187.5)]):
