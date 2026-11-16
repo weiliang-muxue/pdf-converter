@@ -51,10 +51,10 @@ jobs:
         run: |
           docker run -d --name pdf-smoke --network none --read-only \
             --cap-drop ALL --security-opt no-new-privileges \
+            --mount type=bind,source="$(pwd)/smoke-client",target=/opt/pdf-smoke-client,readonly \
             --tmpfs /tmp:rw,nosuid,nodev,size=536870912,mode=1777 \
             "pdf-converter:${RELEASE_TAG#v}-${IMAGE_ARCH}"
-          docker exec -i pdf-smoke /bin/sh -c 'cat > /tmp/smoke-client && chmod 755 /tmp/smoke-client' < smoke-client
-          docker exec pdf-smoke /tmp/smoke-client
+          docker exec pdf-smoke /opt/pdf-smoke-client
           docker stop --time 400 pdf-smoke
           test "$(docker inspect -f '{{.State.ExitCode}}' pdf-smoke)" = 0
       - name: Show diagnostics
