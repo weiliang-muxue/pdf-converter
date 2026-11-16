@@ -1,51 +1,58 @@
-PDF 文件工坊 K8S 镜像 v1.1.2
+PDF 文件工坊 K8S 镜像 v1.2.0
 
-交付为已经构建好的 Docker-save 离线镜像归档，不需要现场构建或联网下载依赖。
-amd64 镜像标签 pdf-converter:1.1.2-amd64，适配 x86_64 节点。
-arm64 镜像标签 pdf-converter:1.1.2-arm64，适配 aarch64 节点。
-同名 .sha256 文件用于校验归档。请按实际 Pod 所在节点的 CPU 架构选择。
-镜像应推送到全部候选节点可访问的内网镜像仓库，K8S 使用该仓库地址。
-只导入某一台节点时，扩容调度到其他节点可能找不到镜像。
-若采用预加载方式，应覆盖所有候选节点并使用合适的 imagePullPolicy。
-混合 CPU 集群需用 kubernetes.io/arch 约束调度，或由管理员在内网仓库组合多架构清单。
+新增 RAR（RAR4/RAR5）、7Z 图片导入；保留 ZIP、多图排序及 DOC/DOCX 转 PDF。
+移除页面部署标签、英文标语、装饰编号和底部处理说明。
+镜像内置网页、Go 程序、LibreOffice、中文字体、7-Zip 26.06 和运行库。
+部署和运行时无需联网安装依赖，不需要宿主机 Nginx。
 
-镜像已内置启动参数和官方 Office 启动器，无需覆盖 command / args。
-容器端口 8080，网页路径 /。
-网页和 ZIP、多图排序及 Word 转 PDF 接口都在同一端口，不需要 Nginx。
-SLB 和 K8S 继续负责流量分发。通过已有 Service/NodePort 暴露后，访问 IP:端口即可。
-镜像采用内网免登录访问方式。
+本批镜像时间：20261116213342（北京时间，14 位年月日时分秒）。
+按实际运行 Pod 的服务器 CPU 选择，不按访问网页的电脑系统选择：
+- x86_64 / Intel / AMD：word-pdf-20261116213342-amd64.tar.gz
+  docker load -i word-pdf-20261116213342-amd64.tar.gz
+  预期输出：Loaded image: word-pdf-20261116213342-amd64:1.2.0
+- aarch64 / 鲲鹏 / 飞腾：word-pdf-20261116213342-arm64.tar.gz
+  docker load -i word-pdf-20261116213342-arm64.tar.gz
+  预期输出：Loaded image: word-pdf-20261116213342-arm64:1.2.0
+两份镜像功能相同，内部程序和解压引擎均匹配各自 CPU 架构。
+本批不含龙芯容器镜像，不能把 amd64 或 arm64 镜像部署到 LoongArch 节点。
+同名 .sha256 文件用于校验。
 
-多副本与文件处理
-Word PDF 在上传请求的响应里直接返回浏览器。
-下载按钮使用当前页面的 Blob，不再请求某个 Pod，也没有结果 ID。
-无需共享目录、数据库或会话粘滞。增加 Pod 不会导致下载到另一 Pod 后找不到文件。
-转换引擎仅使用必要的临时工作目录，正常完成、失败或取消后清理。
-不保留转换历史和成品 PDF，不挂载持久存储。
-图片及 ZIP 在浏览器处理，不上传。
-每个 Pod 同时执行一个 Word 转换；繁忙时会提示稍后重试，可按负载扩容。
-已完成的 PDF 不依赖 Pod。被强制终止的进行中请求仍需重试。
+容器端口 8080，网页路径 /。启动命令已内置，无需覆盖 command / args。
+镜像上传到所有候选节点可访问的内网镜像仓库，K8S 引用仓库地址。
+仅在某台 ECS 上 docker load 不会自动分发到其他节点。
+通过已有 Service / SLB 暴露后，访问 IP:端口即可。
+混合 CPU 集群应按 kubernetes.io/arch 调度，或在内网仓库组合多架构清单。
+Win7、Win10、信创电脑使用兼容的 Chrome、Edge 或 Firefox 访问相同网址。
 
-K8S 接入参数
-livenessProbe 使用 GET /healthz，端口 8080。
-startupProbe 和 readinessProbe 使用 GET /readyz，端口 8080。
-启动时先实际转换一份测试 Word，再返回 ready；可给启动探针约 180 秒窗口。
-建议 terminationGracePeriodSeconds 为 400。
-收到 SIGTERM 后 readiness 失败，保留 5 秒传播窗口，再等待已有 HTTP 请求结束，最多 360 秒。
-SLB/代理如有请求超时设置，应覆盖 Word 转换所需时间，建议至少 360 秒。
-镜像默认 UID/GID 65534，不需要 privileged、hostPath、Docker socket 或附加 Linux capability。
-不配置 volumeMounts、hostPath 或 PVC。保持容器可写层可用（不要启用 readOnlyRootFilesystem），/tmp 直接使用 Pod 自身的临时可写层；扩容不需要往 ECS 上传文件。
-临时目录必须有足够空间容纳原文件、PDF 和 Office 工作文件。
-不需要指定宿主机发行版。镜像的用户态依赖已经包含，节点使用正常 Linux 容器运行时即可。
+多副本和文件处理
+不配置任何外部 volumeMounts、hostPath、PVC、共享目录或会话粘滞。
+运行依赖全部在镜像内，扩容 Pod 不需要往对应 ECS 目录上传文件。
+/tmp 使用容器自身可写层，不启用 readOnlyRootFilesystem。
+SLB/K8S 负责流量分发，程序不做轮询。
+Word PDF 在同一次 POST 响应中直接返回浏览器，不产生后续 Pod 下载地址。
+RAR/7Z 在单次请求内解压并返回图片，接下来在浏览器中排序和生成 PDF。
+ZIP 和直接选择的图片继续在浏览器处理。
+每个请求完成、失败或取消后清理临时文件；不保留上传文件、PDF、转换历史。
+已返回浏览器的结果不依赖原 Pod；强制终止正在执行的请求时仍需重试。
+每个 Pod 同时执行一个 Word/压缩包任务，繁忙时提示稍后重试。
 
-客户端
-Win7、Win10、信创电脑使用兼容的 Chrome、Edge 或 Firefox 访问同一个地址。
-无需根据客户端操作系统选择镜像。
+文件限制
+压缩包不超过 200 MB，解压后最多 200 张、总计 200 MB，单张不超过 50 MB。
+支持单个未加密压缩包、子文件夹和自然数字排序（1、2、3、10）。
+暂不支持密码保护和分卷压缩包，请先合并或移除密码。
+Word 单个 DOC/DOCX 不超过 50 MB；复杂版式和缺失字体可能影响效果。
 
-验收
-本机浏览器检查包含 ZIP 数字顺序、拖动/按钮/页码排序、DOC/DOCX 和离线下载。
-镜像格式、层校验与真实 Linux 容器验收结果见仓库 Actions 的 Offline container smoke。
-未连接你的 SLB 和 K8S 集群，集群接入以现场 Service、探针和网络配置为准。
+K8S 参数
+livenessProbe: GET /healthz，端口 8080。
+startupProbe / readinessProbe: GET /readyz，端口 8080。
+启动先真实转换测试 Word；建议启动探针窗口 180 秒。
+terminationGracePeriodSeconds 建议 400；代理/SLB 请求超时建议至少 360 秒。
+SIGTERM 后停止就绪，留 5 秒传播窗口，最多等待在途请求 360 秒。
+默认 UID/GID 65534，不需要 privileged、Docker socket 或附加 capability。
+解压子进程设有时间、输出和内存上限；临时可写层需预留足够空间。
 
-最终验收：v1.1.2 的 amd64 / arm64 默认镜像参数均已通过原生 Linux 实际运行，未使用外部挂载，网络禁用。
-覆盖 DOCX、旧 DOC、直接响应、错误/取消清理、健康检查及正常终止。
-运行记录：https://github.com/weiliang-muxue/pdf-converter/actions/runs/43838873267
+源码与其他交付
+代码仓库：https://github.com/weiliang-muxue/pdf-converter
+EXE 和 Nginx 既有离线包保留在 v1.1.2 Release，本次 v1.2.0 更新容器镜像。
+新版网页源码 RAR/7Z 入口需要配套新版解压接口，不能仅替换旧 Nginx 包的 HTML。
+正式发布以两种架构原生 Linux 的 Offline container smoke 验收通过为准。

@@ -26,7 +26,7 @@ with tarfile.open(path,'r:gz') as outer:
     assert '--standalone' in config['config']['Cmd']
     assert config['config']['Cmd'][-1]=='/usr/lib/libreoffice/program/oosplash'
     assert config['config']['StopSignal']=='SIGTERM'
-    assert entry['RepoTags']==['pdf-converter:'+config['config']['Labels']['org.opencontainers.image.version']+'-'+expected_arch]
+    assert entry['RepoTags']==['word-pdf-'+config['config']['Labels']['com.pdf-tool.build-time']+'-'+expected_arch+':'+config['config']['Labels']['org.opencontainers.image.version']]
     assert not config['config'].get('Volumes')
     members={}
     registry_hashes={}
@@ -40,11 +40,13 @@ with tarfile.open(path,'r:gz') as outer:
                     members[name]=member
                 if member.isfile() and (name.startswith('usr/lib/libreoffice/share/.registry/') or name.startswith('etc/libreoffice/registry/')):
                     registry_hashes[name]=digest(inner.extractfile(member))
-                if name=='opt/pdf-tool/pdf-tool':
+                if name in ['opt/pdf-tool/pdf-tool','opt/pdf-tool/7zzs']:
                     h=inner.extractfile(member).read(64)
                     assert h[:4]==b'\x7fELF' and int.from_bytes(h[18:20],'little')=={'amd64':62,'arm64':183}[expected_arch]
-    for name in ['opt/pdf-tool/pdf-tool','usr/lib/libreoffice/program/soffice.bin','usr/lib/libreoffice/program/oosplash']:
+    for name in ['opt/pdf-tool/pdf-tool','opt/pdf-tool/7zzs','usr/lib/libreoffice/program/soffice.bin','usr/lib/libreoffice/program/oosplash']:
         assert members[name].isfile() and members[name].mode & 0o111
+    assert members['opt/pdf-tool/licenses/7zip-License.txt'].isfile()
+    assert members['opt/pdf-tool/licenses/7zip-source.tar.xz'].isfile()
     for name, value in registry_hashes.items():
         prefix='usr/lib/libreoffice/share/.registry/'
         if name.startswith(prefix):

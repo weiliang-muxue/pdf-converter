@@ -10,14 +10,15 @@ import socket
 import urllib.request
 
 p=Path(__file__).resolve().parents[2]
-work=p/'临时文件/container-v1.1.0'
-tempBase=Path(r'E:\CodeXWork\.codex-data\tmp')
+work=p/'临时文件/container-v1.2.0'
+tempBase=Path('E:/CodeXWork/.codex-data/tmp')
 tempBase.mkdir(parents=True,exist_ok=True)
 temp=Path(tempfile.mkdtemp(prefix='pdfct-',dir=tempBase))
 temp.mkdir(parents=True,exist_ok=True)
 env=dict(os.environ,TEMP=str(temp),TMP=str(temp),TMPDIR=str(temp),PYTHONIOENCODING='utf-8',
     PLAYWRIGHT_MODULE=r'E:\CodeXWork\.codex-data\codex-runtimes\codex-primary-runtime\dependencies\node\node_modules\playwright',
     PDF_TEST_URL='http://127.0.0.1:18891/',
+    PDF_TOOL_ARCHIVER=str(work/'7zip/windows-full/7z.exe'),
     PDF_LEGACY_DOC=r'E:\CodeXWork\.build\pdf-tool-20261102\verification\fixtures\legacy\中文合同样例.doc')
 log=(work/'service.log').open('wb')
 process=subprocess.Popen([str(work/'bin/pdf-tool-test.exe'),'--standalone','--listen','127.0.0.1:18891',
@@ -26,6 +27,8 @@ process=subprocess.Popen([str(work/'bin/pdf-tool-test.exe'),'--standalone','--li
 opener=urllib.request.build_opener(urllib.request.ProxyHandler({}))
 try:
     for attempt in range(240):
+        if 'startup conversion failed' in (work/'service.log').read_text(encoding='utf-8',errors='replace'):
+            raise RuntimeError('Local Office startup failed; inspect service.log')
         if process.poll() is not None: raise RuntimeError('Service failed: '+(work/'service.log').read_text(encoding='utf-8'))
         try:
             with opener.open(env['PDF_TEST_URL']+'readyz',timeout=2) as response:

@@ -5,7 +5,7 @@ on:
       release_tag:
         description: Release containing offline image archives
         required: true
-        default: v1.1.2
+        default: v1.2.0
       verify_launcher:
         description: Test bundled official launcher before rebuilding release images
         type: boolean
@@ -34,10 +34,17 @@ jobs:
       - name: Download and verify release archive
         run: |
           python3 - <<'PY'
-          import hashlib, os, pathlib, re, urllib.request
+          import hashlib, json, os, pathlib, re, urllib.request
           tag=os.environ['RELEASE_TAG']
           assert re.fullmatch(r'v1\.\d+\.\d+',tag)
-          name='pdf-converter-k8s-'+os.environ['IMAGE_ARCH']+'-'+tag+'.tar.gz'
+          release=json.loads(pathlib.Path('源码/container/release.json').read_text())
+          assert tag == 'v'+release['version']
+          stamp=release['build_time']
+          assert re.fullmatch(r'\d{14}',stamp)
+          image='word-pdf-'+stamp+'-'+os.environ['IMAGE_ARCH']
+          name=image+'.tar.gz'
+          with open(os.environ['GITHUB_ENV'],'a') as env:
+              env.write('IMAGE_FILE='+name+'\nIMAGE_NAME='+image+':'+release['version']+'\n')
           base='https://github.com/weiliang-muxue/pdf-converter/releases/download/'+tag+'/'
           for filename in [name,name+'.sha256']:
               urllib.request.urlretrieve(base+filename,filename)
@@ -48,14 +55,14 @@ jobs:
           PY
       - name: Import image and build smoke client
         run: |
-          docker load -i "pdf-converter-k8s-${IMAGE_ARCH}-${RELEASE_TAG}.tar.gz"
+          docker load -i "${IMAGE_FILE}"
           cd 源码
           CGO_ENABLED=0 go build -mod=vendor -trimpath -o ../smoke-client ./tests/container-smoke
       - name: Embed verification client in disposable test image
         run: |
           mkdir smoke-context
           mv smoke-client smoke-context/
-          printf 'FROM pdf-converter:%s-%s\nCOPY --chmod=755 smoke-client /opt/pdf-smoke-client\n' "${RELEASE_TAG#v}" "${IMAGE_ARCH}" > smoke-context/Dockerfile
+          printf 'FROM %s\nCOPY --chmod=755 smoke-client /opt/pdf-smoke-client\n' "${IMAGE_NAME}" > smoke-context/Dockerfile
           docker build --network none --pull=false -t pdf-smoke-test smoke-context
       - name: Test offline unprivileged container
         run: |
@@ -66,11 +73,43 @@ jobs:
           docker exec pdf-smoke /opt/pdf-smoke-client
           docker stop --time 400 pdf-smoke
           test "$(docker inspect -f '{{.State.ExitCode}}' pdf-smoke)" = 0
+      - name: Check full browser flow against the released image
+        if: matrix.arch == 'amd64'
+        env:
+          BROWSER_CHANNEL: chrome
+          PDF_TEST_URL: http://127.0.0.1:8080/
+        run: |
+          # Development-only checks; nothing is installed into the delivered image.
+          npm install --prefix .browser-test --no-save --ignore-scripts playwright@1.62.1
+          python3 -m pip install --target .browser-test/python 'pypdf==5.4.0' 'Pillow==11.2.1'
+          python3 -m zipfile -e 源码/tests/browser-fixtures.zip .browser-test/fixtures
+          docker run -d --name pdf-browser --network host --cap-drop ALL --security-opt no-new-privileges "${IMAGE_NAME}"
+          test "$(docker inspect -f '{{len .Mounts}}' pdf-browser)" = 0
+          python3 - <<'PY'
+          import time, urllib.request
+          for i in range(120):
+              try:
+                  with urllib.request.urlopen('http://127.0.0.1:8080/readyz',timeout=2) as r:
+                      if r.status==200: break
+              except Exception: time.sleep(1)
+          else: raise RuntimeError('Browser test service not ready')
+          PY
+          export PLAYWRIGHT_MODULE="$PWD/.browser-test/node_modules/playwright"
+          node 源码/tests/container_browser.cjs .browser-test/fixtures .browser-test/results
+          PYTHONPATH="$PWD/.browser-test/python" python3 源码/tests/verify_container_pdfs.py .browser-test/results
+      - name: Keep browser evidence
+        if: always() && matrix.arch == 'amd64'
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-evidence-amd64
+          path: .browser-test/results/
+          retention-days: 14
       - name: Show diagnostics
         if: always()
         run: |
           docker logs pdf-smoke 2>&1 || true
+          docker logs pdf-browser 2>&1 || true
           docker inspect -f '{{json .State}}' pdf-smoke || true
       - name: Remove test container
         if: always()
-        run: docker rm -f pdf-smoke || true
+        run: docker rm -f pdf-smoke pdf-browser || true

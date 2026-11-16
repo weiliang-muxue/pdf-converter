@@ -1,0 +1,14 @@
+{
+  "architecture": "arm64",
+  "tag": "word-pdf-20261116213342-arm64:1.2.0",
+  "image_id": "sha256:7943b19676cc1c31776adc7c0ea825ab02c47e07c5d886a415bef58096da081e",
+  "bytes": 266781762,
+  "sha256": "fd32ef90aaeb77b582dc06abe4d5aae42d4e598433bab8ef3512e7bcefd1a5e1",
+  "archive": "word-pdf-20261116213342-arm64.tar.gz",
+  "runtime_sha256": "86390adcae34331da9c9f5c09696078e21b3d81f6c8055294028cf17bb9a92cf",
+  "binary_sha256": "fd2d68d9bdf3990510646543a780fac4eecacec2c8c528cfe1cb9401ea285704",
+  "diff_ids": [
+    "sha256:c7bf94a7b0c8ea8e0f27ffbdf9b7db3a94d76b7e793f194dcb030108465a86d5",
+    "sha256:c6e2f93e03b3ba9c4c3e8b6e3cbd69ea765e13eb9ac0366c02b7a09724283bea"
+  ]
+}

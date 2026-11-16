@@ -5,6 +5,7 @@ import (
 	"archive/zip"
 	"bytes"
 	"context"
+	"embed"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -13,9 +14,14 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
+	"strings"
 	"time"
 )
+
+//go:embed fixtures/*
+var archiveFixtures embed.FS
 
 const base = "http://127.0.0.1:8080"
 
@@ -96,6 +102,56 @@ func render(doc []byte, name string) (int, []byte) {
 	}
 	return r.StatusCode, b
 }
+func archiveChecks() {
+	for _, name := range []string{"photos-rar4.rar", "photos-rar5.rar", "photos.7z", "photos.zip", "encrypted.7z"} {
+		raw, err := archiveFixtures.ReadFile("fixtures/" + name)
+		must(err == nil, "fixture missing")
+		var b bytes.Buffer
+		m := multipart.NewWriter(&b)
+		f, _ := m.CreateFormFile("files", name)
+		f.Write(raw)
+		m.Close()
+		req, _ := http.NewRequest("POST", base+"/word-api/archive", &b)
+		req.Header.Set("Content-Type", m.FormDataContentType())
+		req.Header.Set("X-PDF-Request", "1")
+		resp, err := client.Do(req)
+		must(err == nil, fmt.Sprint(err))
+		data, err := io.ReadAll(resp.Body)
+		resp.Body.Close()
+		must(err == nil, "archive response failed")
+		if name == "encrypted.7z" {
+			must(resp.StatusCode == 400, "encrypted archive accepted")
+			continue
+		}
+		must(resp.StatusCode == 200, fmt.Sprintf("archive %s HTTP %d: %s", name, resp.StatusCode, data))
+		z, err := zip.NewReader(bytes.NewReader(data), int64(len(data)))
+		must(err == nil, "invalid archive output")
+		must(len(z.File) == 4, "wrong image count")
+		wanted := map[string]bool{"1.png": true, "2.png": true, "3.png": true, "10.png": true}
+		for _, item := range z.File {
+			n := path.Base(item.Name)
+			must(wanted[n], "unexpected/duplicate name")
+			delete(wanted, n)
+			r, err := item.Open()
+			must(err == nil, "bad ZIP entry")
+			image, err := io.ReadAll(r)
+			r.Close()
+			must(err == nil && bytes.HasPrefix(image, []byte{137, 80, 78, 71}), "image bytes/CRC failure")
+		}
+		for attempt := 0; attempt < 100; attempt++ {
+			dirs, _ := filepath.Glob(filepath.Join(os.TempDir(), "pdf-tool-*", "archive-*"))
+			if len(dirs) == 0 {
+				break
+			}
+			time.Sleep(10 * time.Millisecond)
+		}
+		dirs, _ := filepath.Glob(filepath.Join(os.TempDir(), "pdf-tool-*", "archive-*"))
+		must(len(dirs) == 0, "archive state retained")
+	}
+	s, b := get("/")
+	must(s == 200 && !strings.Contains(string(b), "YOUR FILES") && !strings.Contains(string(b), "processingBadge"), "old UI elements retained")
+}
+
 func main() {
 	ready := false
 	for i := 0; i < 120; i++ {
@@ -136,6 +192,7 @@ func main() {
 	var status map[string]interface{}
 	json.Unmarshal(b, &status)
 	must(s == 200 && status["wordReady"] == true && status["directDownload"] == true, "status mismatch")
+	archiveChecks()
 	doc := docx()
 	s, pdf := render(doc, "probe.docx")
 	must(s == 200 && bytes.HasPrefix(pdf, []byte("%PDF-")) && len(pdf) > 1000, fmt.Sprintf("conversion: HTTP %d %s", s, pdf))
@@ -191,7 +248,7 @@ func main() {
 	}
 	s, _ = get("/healthz")
 	must(s == 200, "liveness failed")
-	result := map[string]interface{}{"pdf_bytes": len(pdf), "direct_response": true, "legacy_doc": true, "temporary_files_cleaned": true, "cancel_cleanup": true, "offline_container": true, "version": status["version"], "architecture": status["architecture"]}
+	result := map[string]interface{}{"archives_zip_rar4_rar5_7z": true, "pdf_bytes": len(pdf), "direct_response": true, "legacy_doc": true, "temporary_files_cleaned": true, "cancel_cleanup": true, "offline_container": true, "version": status["version"], "architecture": status["architecture"]}
 	text, _ := json.Marshal(result)
 	fmt.Println("PASS:", string(text))
 }

@@ -35,3 +35,10 @@ amd64、arm64 使用 bookworm，loong64 使用 unstable 的对应架构包。
 https://snapshot.debian.org/ 查找。未修改包内二进制；只组合运行环境、
 补充静态用户配置、把绝对符号链接转换为等价相对链接，省略手册及翻译目录。
 离线包只在私有目录内使用，不向宿主操作系统安装这些包。
+
+7-Zip 26.06
+官方未修改的 Linux 7zzs，amd64/arm64 两个架构。
+来源：https://github.com/ip7z/7zip/releases/tag/26.06
+许可：GNU LGPL 与 unRAR restriction 等，完整条款见 third_party/7zip/License.txt。
+对应完整官方源码随仓库和镜像提供：third_party/7zip/7z2606-src.tar.xz。
+二进制 SHA256 固定在 third_party/7zip/manifest.json，构建前校验。

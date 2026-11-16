@@ -51,6 +51,7 @@ func (a *application) standaloneHandler() http.Handler {
 		writeJSON(w, 200, map[string]string{"status": "ready"})
 	})
 	mux.HandleFunc("/word-api/status", a.sameOrigin(a.status))
+	mux.HandleFunc("/word-api/archive", a.sameOrigin(a.importArchive))
 	mux.HandleFunc("/word-api/render", a.sameOrigin(func(w http.ResponseWriter, r *http.Request) {
 		if !a.wordReady() {
 			fail(w, 503, "Word 引擎尚未就绪")

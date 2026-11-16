@@ -1,1 +1,4 @@
 * -text
+
+# Preserve the upstream license byte-for-byte (original CRLF).
+源码/third_party/7zip/License.txt whitespace=cr-at-eol

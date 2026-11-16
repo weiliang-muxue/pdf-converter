@@ -12,9 +12,11 @@ import json
 import shutil
 import tarfile
 
-VERSION = '1.1.2'
-CREATED = '2026-11-16T00:00:00Z'
 PROJECT = Path(__file__).resolve().parents[2]
+RELEASE = json.loads((PROJECT/'源码/container/release.json').read_text(encoding='utf-8'))
+VERSION = RELEASE['version']
+BUILD_TIME = RELEASE['build_time']
+CREATED = RELEASE['created']
 WORK = PROJECT / '临时文件' / ('container-v' + VERSION)
 OUT = PROJECT / '成果' / ('K8S镜像-v' + VERSION)
 
@@ -96,6 +98,14 @@ def build(arch, reuse_runtime=None):
     app = root / 'application-layer.tar'
     with tarfile.open(app, 'w', format=tarfile.PAX_FORMAT) as tar:
         add_path(tar, 'opt/pdf-tool/pdf-tool', binary, 0o755)
+        archive_root = PROJECT/'源码/third_party/7zip'
+        archive_meta = json.loads((archive_root/'manifest.json').read_text())
+        assert sha(archive_root/arch/'7zzs') == archive_meta['files'][arch+'/7zzs']
+        h = (archive_root/arch/'7zzs').read_bytes()[:64]
+        assert h[:4] == b'\x7fELF' and int.from_bytes(h[18:20], 'little') == {'amd64':62, 'arm64':183}[arch]
+        add_path(tar, 'opt/pdf-tool/7zzs', archive_root/arch/'7zzs', 0o755)
+        add_path(tar, 'opt/pdf-tool/licenses/7zip-License.txt', archive_root/'License.txt')
+        add_path(tar, 'opt/pdf-tool/licenses/7zip-source.tar.xz', archive_root/'7z2606-src.tar.xz')
         add_path(tar, 'opt/pdf-tool/licenses/GO_LICENSE.txt', PROJECT/'源码/third_party/GO_LICENSE.txt')
         add_path(tar, 'opt/pdf-tool/licenses/x-image-LICENSE.txt', PROJECT/'源码/vendor/golang.org/x/image/LICENSE')
         add_path(tar, 'opt/pdf-tool/licenses/JSZIP-LICENSE.txt', PROJECT/'html/网站文件/assets/JSZIP-LICENSE.txt')
@@ -121,8 +131,10 @@ def build(arch, reuse_runtime=None):
             'Labels': {
                 'org.opencontainers.image.title': 'PDF converter',
                 'org.opencontainers.image.version': VERSION,
+                'org.opencontainers.image.created': CREATED,
+                'com.pdf-tool.build-time': BUILD_TIME,
                 'org.opencontainers.image.source': 'https://github.com/weiliang-muxue/pdf-converter',
-                'org.opencontainers.image.description': 'Offline stateless ZIP, images and Word to PDF. No Nginx dependency.',
+                'org.opencontainers.image.description': 'Offline stateless ZIP, RAR, 7Z, images and Word to PDF. No Nginx dependency.',
             },
         },
         'rootfs': {'type': 'layers', 'diff_ids': ['sha256:'+base_sha, 'sha256:'+app_sha]},
@@ -133,7 +145,8 @@ def build(arch, reuse_runtime=None):
     }
     config_bytes = json_bytes(config)
     config_sha = hashlib.sha256(config_bytes).hexdigest()
-    image_tag = 'pdf-converter:'+VERSION+'-'+arch
+    image_name = 'word-pdf-'+BUILD_TIME+'-'+arch
+    image_tag = image_name+':'+VERSION
     docker_manifest = [{
         'Config': config_sha+'.json', 'RepoTags': [image_tag],
         'Layers': [base_sha+'/layer.tar', app_sha+'/layer.tar'],
@@ -144,7 +157,7 @@ def build(arch, reuse_runtime=None):
         add_bytes(tar, 'manifest.json', json_bytes(docker_manifest))
         add_path(tar, base_sha+'/layer.tar', base)
         add_path(tar, app_sha+'/layer.tar', app)
-    archive = OUT/('pdf-converter-k8s-'+arch+'-v'+VERSION+'.tar.gz')
+    archive = OUT/(image_name+'.tar.gz')
     with raw.open('rb') as src, archive.open('wb') as dst:
         with gzip.GzipFile(filename='', mode='wb', fileobj=dst, compresslevel=9, mtime=0) as gz:
             shutil.copyfileobj(src, gz, 1024 * 1024)

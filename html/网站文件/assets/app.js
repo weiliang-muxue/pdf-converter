@@ -16,11 +16,11 @@
     if (binary) request.responseType = 'blob';
     request.onload = function () {
       if (binary) {
-        if (request.status >= 200 && request.status < 300 && /^application\/pdf\b/i.test(request.getResponseHeader('Content-Type') || '')) {
+        if (request.status >= 200 && request.status < 300 && (binary === 'zip' ? /^application\/zip\b/i : /^application\/pdf\b/i).test(request.getResponseHeader('Content-Type') || '')) {
           callback(null, request.response); return;
         }
         var reader = new FileReader();
-        reader.onload = function () { var error; try { error = JSON.parse(reader.result).error; } catch (_) {} callback(new Error(error || 'Word 转换失败，请稍后重试')); };
+        reader.onload = function () { var error; try { error = JSON.parse(reader.result).error; } catch (_) {} callback(new Error(error || '文件处理失败，请稍后重试')); };
         reader.onerror = function () { callback(new Error('无法读取转换结果')); };
         reader.readAsText(request.response); return;
       }
@@ -28,24 +28,23 @@
       if (request.status >= 200 && request.status < 300 && result) callback(null, result);
       else callback(new Error(result && result.error ? result.error : 'Word 转换服务未连接，请联系管理员启用服务。图片功能可独立使用。'));
     };
-    request.onerror = function () { callback(new Error('无法连接 Word 服务，请确认当前内网连接和服务状态')); };
-    request.ontimeout = function () { callback(new Error(isConvert ? 'Word 转换超时，请稍后重试或检查文档' : 'Word 服务检查超时')); };
+    request.onerror = function () { callback(new Error('无法连接，请稍后重试')); };
+    request.ontimeout = function () { callback(new Error(isConvert ? '文件处理超时，请减少文件大小后重试' : 'Word 服务检查超时')); };
     request.onabort = function () { callback(new Error('已取消')); };
     if (isConvert) {
-      request.upload.onprogress = function (event) { if (event.lengthComputable) { el('progress').value = event.loaded / event.total * 75; text('progressText', '正在上传 Word：' + Math.round(event.loaded / event.total * 100) + '%'); } };
-      request.upload.onload = function () { el('progress').removeAttribute('value'); text('progressText', 'Word 已上传，正在转换，请稍候…'); };
+      request.upload.onprogress = function (event) { if (event.lengthComputable) { el('progress').value = event.loaded / event.total * 75; text('progressText', '正在上传文件：' + Math.round(event.loaded / event.total * 100) + '%'); } };
+      request.upload.onload = function () { el('progress').removeAttribute('value'); text('progressText', '文件已上传，正在处理，请稍候…'); };
     }
     request.send(data || null); return request;
   }
   function checkService() {
     if (serviceChecking) return;
-    serviceChecking = true; wordReady = false; text('wordServiceLabel', '正在检查 Word 转换服务…'); text('wordServiceHint', 'Word 文件由内网服务器处理。'); update();
+    serviceChecking = true; wordReady = false; text('wordServiceLabel', '正在检查 Word 转换服务…'); text('wordServiceHint', '支持 DOC、DOCX，转换完成后下载 PDF。'); update();
     if (location.protocol === 'file:') { serviceChecking = false; text('wordServiceLabel', '当前为本地 HTML 文件'); text('wordServiceHint', '图片功能可以直接使用；Word 请通过部署好的内网网页访问。'); update(); return; }
     api('GET', 'status', null, function (error, data) {
       serviceChecking = false; wordReady = !error && !!data.wordReady; directDownload = !error && !!data.directDownload;
       text('wordServiceLabel', wordReady ? 'Word 转换服务已就绪' : 'Word 转换服务尚未就绪');
-      var serverLabel = data && data.system ? '已连接：' + data.system + ' / ' + data.architecture + (data.engineTarget ? '，自动匹配 ' + data.engineTarget + '。' : '。') : '';
-      text('wordServiceHint', wordReady ? serverLabel + (directDownload ? '文档在内网转换，完成后返回当前浏览器。' : '文档在内网转换，结果保留 60 分钟。') : '请联系管理员启用 Word 转换服务。压缩包和图片功能不受影响。');
+      text('wordServiceHint', wordReady ? '请选择一个文档，点击生成 PDF。' : '转换暂不可用，请稍后重新检查。');
       el('wordNotice').className = 'notice' + (wordReady ? ' ready' : ''); update();
     });
   }
@@ -58,7 +57,7 @@
     ['zipTab','imagesTab','wordTab','paper','margin','outputName'].forEach(function (id) { el(id).disabled = busy; });
     el('orientation').disabled = busy || el('paper').value === 'original'; el('retryService').disabled = busy || serviceChecking;
     text('summary', list.length ? (isWord ? '已选择 1 个 Word 文档' : '已排列 ' + list.length + ' 页') + ' · ' + sizeText(total(list)) : '等待添加文件');
-    text('summaryHint', isWord ? '由内网服务器处理，转换后下载 PDF' : '按列表顺序生成，图片保留在当前浏览器');
+    text('summaryHint', isWord ? '确认文档后生成 PDF' : '按列表顺序生成 PDF');
     document.body.className = busy ? 'busy' : '';
   }
   function revokeItems(items) { items.forEach(function (item) { if (item.preview) URL.revokeObjectURL(item.preview); }); }
@@ -101,13 +100,19 @@
   async function receiveFiles(files) {
     if (busy || !files || !files.length) return;
     if (mode === 'zip') {
-      if (files.length !== 1 || !/\.zip$/i.test(files[0].name)) { message('请选择一个普通 ZIP 压缩包。RAR、7Z 请先另存为 ZIP。'); return; }
-      if (files[0].size > core.maxTotal) { message('ZIP 文件不能超过 200 MB'); return; }
-      var file = files[0]; signal = { cancelled: false }; invalidate(); setBusy(true, '正在读取 ZIP 图片目录…');
+      if (files.length !== 1 || !/\.(zip|rar|7z)$/i.test(files[0].name)) { message('请选择一个 ZIP、RAR 或 7Z 压缩包。'); return; }
+      if (files[0].size > core.maxTotal) { message('压缩包不能超过 200 MB'); return; }
+      var file = files[0]; signal = { cancelled: false }; invalidate(); setBusy(true, '正在读取图片目录…');
       try {
-        var imported = await core.importZip(file, signal, function (done, total) { el('progress').value = done / total * 100; text('progressText', '正在解压图片 ' + done + ' / ' + total); });
+        var archive = file;
+        if (!/\.zip$/i.test(file.name)) {
+          if (location.protocol === 'file:') throw new Error('请通过网页地址打开工具后导入 RAR 或 7Z。');
+          var upload = new FormData(); upload.append('files', file, file.name);
+          archive = await new Promise(function (resolve, reject) { xhr = api('POST', 'archive', upload, function (error, value) { xhr = null; if (error) reject(error); else resolve(value); }, true, 'zip'); });
+        }
+        var imported = await core.importZip(archive, signal, function (done, total) { el('progress').value = done / total * 100; text('progressText', '正在解压图片 ' + done + ' / ' + total); });
         if (signal.cancelled) throw new Error('已取消');
-        revokeItems(groups.zip); groups.zip = imported.items; names.zip = file.name.replace(/\.zip$/i, ''); el('outputName').value = names.zip;
+        revokeItems(groups.zip); groups.zip = imported.items; names.zip = file.name.replace(/\.(zip|rar|7z)$/i, ''); el('outputName').value = names.zip;
         zipLabel = file.name + ' · 已按数字名称排列 ' + imported.items.length + ' 张图片' + (imported.ignored ? ' · 忽略 ' + imported.ignored + ' 个非图片文件' : '');
       } catch (error) { message(error.message); }
       finally { setBusy(false); }
@@ -133,17 +138,15 @@
     ['zip','images','word'].forEach(function (name) { el(name + 'Tab').className = 'tab' + (name === mode ? ' active' : ''); el(name + 'Tab').setAttribute('aria-pressed', String(name === mode)); });
     var zip = mode === 'zip', word = mode === 'word';
     text('listTitleText', word ? '确认待转换文档' : '确认 PDF 页面顺序');
-    text('stepTitle', zip ? '导入一个 ZIP 压缩包' : word ? '选择一个 Word 文档' : '添加需要合并的图片');
+    text('stepTitle', zip ? '导入一个压缩包' : word ? '选择一个 Word 文档' : '添加需要合并的图片');
     text('stepHint', zip ? '图片以 1、2、3… 命名，解压后按数字大小自动排序。' : word ? '支持 DOC、DOCX，生成一份便于阅读和分享的 PDF。' : '可多次添加图片，按照你希望的阅读顺序排列。');
-    text('dropTitle', zip ? '将 ZIP 压缩包拖放到这里' : word ? '将 Word 文档拖放到这里' : '将多张图片拖放到这里');
+    text('dropTitle', zip ? '将压缩包拖放到这里' : word ? '将 Word 文档拖放到这里' : '将多张图片拖放到这里');
     text('dropHint', zip ? '支持文件夹内的图片，自动忽略非图片文件' : word ? '一次选择一个文档，尽量保留文字、表格和图片版式' : '支持 JPG、PNG、WebP、BMP、GIF，可一次选择多张');
-    text('chooseBtn', zip ? '选择 ZIP 压缩包' : word ? '选择 Word 文档' : '选择图片');
-    text('limits', zip ? 'ZIP 最大 200 MB · 最多 200 张图片 · 支持普通 ZIP' : word ? 'DOC / DOCX · 单个文件最大 50 MB' : '单张最大 50 MB / 2000 万像素 · 最多 200 张 / 200 MB');
+    text('chooseBtn', zip ? '选择压缩包' : word ? '选择 Word 文档' : '选择图片');
+    text('limits', zip ? 'ZIP / RAR / 7Z · 最大 200 MB · 最多 200 张图片' : word ? 'DOC / DOCX · 单个文件最大 50 MB' : '单张最大 50 MB / 2000 万像素 · 最多 200 张 / 200 MB');
     text('listHint', word ? '确认文档后点击生成，完成后下载对应 PDF。' : '从上到下依次为第 1、2、3… 页，可拖动、上下移动或直接改页码。');
     text('formatNote', word ? '不支持密码保护文档；复杂排版及缺失字体可能影响转换结果。' : '一张图片一页，保持比例；透明背景转为白色；GIF 仅导出一帧，最长边超过 4000 像素会适当缩小。');
-    text('processingBadge', word ? '内网服务器处理' : '图片不离开浏览器');
-    text('footerPrivacy', word ? 'Word 上传到你部署的内网服务器处理，不使用外部转换服务' : '图片和 ZIP 仅在当前浏览器处理，不上传到服务器');
-    el('fileInput').accept = zip ? '.zip' : word ? '.doc,.docx' : '.jpg,.jpeg,.png,.webp,.bmp,.gif'; el('fileInput').multiple = mode === 'images'; el('fileInput').value = '';
+    el('fileInput').accept = zip ? '.zip,.rar,.7z' : word ? '.doc,.docx' : '.jpg,.jpeg,.png,.webp,.bmp,.gif'; el('fileInput').multiple = mode === 'images'; el('fileInput').value = '';
     el('outputName').value = names[mode] || '图片合并'; render(); if (word) checkService();
   }
   function outputName() { var name = el('outputName').value.trim().replace(/\.pdf$/i, '').replace(/[<>:"/\\|?*\u0000-\u001f]/g, '_'); return (name || '图片合并') + '.pdf'; }

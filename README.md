@@ -1,13 +1,14 @@
 # PDF 文件工坊
 
 离线 PDF 转换工具，保留三种交付方式，当前主要交付是 K8S 独立镜像。
-v1.1.2 已通过 amd64 / ARM64 原生 Linux 最终验收。v1.1.0 和 v1.1.1 为失败候选，请勿部署。
+当前镜像更新：v1.2.0，新增 RAR/7Z 导入及简化界面。正式镜像以 Release 非预发布状态及对应 Actions 成功记录为准。
+v1.1.2 为上一稳定版；EXE、Nginx 离线包继续保留。
 
 ## 下载
 
-[统一下载页：镜像、EXE、Nginx 离线包](https://github.com/weiliang-muxue/pdf-converter/releases/tag/v1.1.2)
+[新版容器镜像](https://github.com/weiliang-muxue/pdf-converter/releases/tag/v1.2.0) · [既有 EXE / Nginx 离线包](https://github.com/weiliang-muxue/pdf-converter/releases/tag/v1.1.2)
 
-- K8S：pdf-converter-k8s-amd64-v1.1.2.tar.gz 或 pdf-converter-k8s-arm64-v1.1.2.tar.gz。
+- K8S：word-pdf-20261116213342-amd64.tar.gz 或 word-pdf-20261116213342-arm64.tar.gz。
 - Windows EXE：pdf-tool-windows-v1.0.3.zip，包含 Win7、Win10 程序和完整共用 Word 引擎。
 - HTML/Nginx：pdf-converter-nginx-x86_64-v1.1.2.tar.gz 或 pdf-converter-nginx-aarch64-v1.1.2.tar.gz。
 - 原生龙芯：pdf-tool-linux-loong64-v1.1.2.tar.gz；上游 LoongArch64 ABI，实机未验收。
@@ -21,7 +22,7 @@ Nginx 和龙芯包是对原 1.0.3 程序的离线配置修订，程序本身仍�
 镜像内置完整网页、转换程序、LibreOffice、中文字体和运行库，运行期间无需联网下载依赖。
 容器端口 8080，通过现有 Service/SLB 暴露后访问 IP:端口，无需宿主机 Nginx。
 
-- x86_64 节点选择 pdf-converter:1.1.2-amd64；aarch64 节点选择 pdf-converter:1.1.2-arm64。
+- x86_64 节点选择 word-pdf-20261116213342-amd64:1.2.0；aarch64 节点选择 word-pdf-20261116213342-arm64:1.2.0。
 - 两种镜像功能相同，只对应服务器 CPU；Win7、Win10、信创客户端访问同一个网址。
 - 不配置外部 volumeMounts、hostPath、PVC 或共享目录。临时文件使用 Pod 自身可写层，不启用 readOnlyRootFilesystem。
 - 镜像上传到所有候选节点可访问的内网镜像仓库；扩容不需要往各台 ECS 上传文件。
@@ -29,7 +30,7 @@ Nginx 和龙芯包是对原 1.0.3 程序的离线配置修订，程序本身仍�
 
 Word PDF 在同一次上传请求中直接返回，浏览器下载使用本地 Blob，不再请求原 Pod。
 上传文件、转换结果和引擎临时配置在请求完成、失败或取消后清理。
-每个 Pod 同时执行一个 Word 转换，繁忙时返回明确提示，可按负载扩容。
+每个 Pod 同时执行一个 Word 或压缩包解压任务，繁忙时返回明确提示，可按负载扩容。
 
 健康接口为 /healthz 和 /readyz；启动时真实转换测试 Word 后才就绪。
 收到 SIGTERM 时撤销就绪并等待在途请求，建议 terminationGracePeriodSeconds 为 400，代理超时至少 360 秒。
@@ -39,14 +40,15 @@ Word PDF 在同一次上传请求中直接返回，浏览器下载使用本地 B
 
 ## 网页功能
 
-ZIP 内图片按数字名称排列，例如 1、2、3、10；多图支持拖动、上下移动和修改页码。
-PDF 按当前列表顺序生成。图片和 ZIP 在浏览器处理，不上传服务器。
+镜像版支持 ZIP、RAR4/RAR5、7Z，包内图片按数字名称排列，例如 1、2、3、10；多图支持拖动、上下移动和修改页码。
+PDF 按当前列表顺序生成。图片和 ZIP 在浏览器处理；RAR/7Z 单请求解压后返回图片，不保留上传文件。
 DOC/DOCX 通过内网服务器转换为 PDF。页面及脚本均在包内，不使用 CDN 或在线转换服务。
 
 ## 原 EXE 和 Nginx 方式
 
 EXE 压缩包需完整解压，保留共用 LibreOffice 目录。Win7 SP1 离线补丁也在包内。
 Nginx 包按服务器 uname -m 选择架构，完整解压后放置 index.html，并运行随包启动脚本。
+RAR/7Z 是本次容器新增功能，不能只替换旧 Nginx 包的 HTML 来启用。
 原 Nginx 方案需要已有 Nginx 及 root/sudo 权限；其原下载方式不用于 K8S 多副本交付。
 
 [原 Nginx 部署说明](html/使用说明.txt) · [阿里云 Linux 3 验证范围](html/阿里云Linux3验证说明.txt)

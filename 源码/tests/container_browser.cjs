@@ -43,6 +43,9 @@ let browser;
     return download.suggestedFilename();
   }
   await page.goto(base);
+  assert.equal(await page.locator('.offline-badge,.eyebrow,.intro-note,.tab-number,#processingBadge,#footerPrivacy').count(), 0);
+  assert(!/内网服务器处理|图片不离开浏览器|YOUR FILES|本地部署/.test(await page.locator('body').innerText()));
+  assert.equal(await page.locator('#fileInput').getAttribute('accept'), '.zip,.rar,.7z');
   await page.screenshot({ path: path.join(output, '首页-桌面.png'), fullPage: true });
   await upload('数字照片.zip');
   assert.deepEqual(await names(), ['相册/1.png', '相册/2.png', '相册/3.png', '相册/10.png']);
@@ -106,6 +109,17 @@ let browser;
   check('Corrupt image errors and cancellation preserve editable list');
   assert.equal(requests.filter(x => x.url.includes('/word-api/')).length, 0);
   check('ZIP and image conversion made no backend requests');
+  await page.locator('#zipTab').click();
+  for (const [archive, pdf] of [['数字照片.rar','RAR数字排序.pdf'],['数字照片-rar5.rar','RAR5数字排序.pdf'],['数字照片.7z','7Z数字排序.pdf']]) {
+    await upload(archive);
+    assert.deepEqual(await names(), ['1.png','2.png','3.png','10.png']);
+    await generate(pdf);
+    check(archive + ': extracted, naturally sorted, PDF downloaded');
+  }
+  await upload('加密.7z');
+  await page.locator('#message').waitFor({ state:'visible' });
+  assert.equal((await names()).length,4);
+  check('Encrypted 7Z rejected and previous images preserved');
   await page.locator('#wordTab').click();
   await page.waitForFunction(() => document.querySelector('#wordServiceLabel').textContent.includes('已就绪'));
   await upload('中文文档.docx');
@@ -122,7 +136,7 @@ let browser;
 
   const health = await page.request.get(base + 'word-api/status');
   const serverInfo=await health.json();
-  assert.equal(serverInfo.version, '1.1.0');
+  assert.equal(serverInfo.version, '1.2.0');
   assert.equal(serverInfo.directDownload, true);
   assert.equal(serverInfo.wordReady, true);
   assert.equal((await page.request.get(base+'readyz')).status(),200);
@@ -130,10 +144,10 @@ let browser;
   assert.equal((await page.request.get(base+'api/status')).status(),404);
   assert.equal((await page.request.get(base+'word-api/download?id=invalid')).status(),404);
   const conversionRequests=requests.filter(x=>x.url.includes('/word-api/') && x.method==='POST');
-  assert(conversionRequests.every(x=>x.url.endsWith('/word-api/render')));
+  assert(conversionRequests.every(x=>x.url.endsWith('/word-api/render') || x.url.endsWith('/word-api/archive')));
   assert(!requests.some(x=>x.url.includes('/word-api/download')));
   // A browser-side download must work after every server connection is blocked.
-  await context.route('http://127.0.0.1:18891/**', route => route.abort());
+  await context.route(base + '**', route => route.abort());
   const offlineDownloadPromise = page.waitForEvent('download');
   await page.locator('#downloadBtn').click();
   const offlineDownload = await offlineDownloadPromise;
