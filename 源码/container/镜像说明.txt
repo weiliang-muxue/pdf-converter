@@ -1,15 +1,15 @@
-PDF 文件工坊 K8S 镜像 v1.1.1
+PDF 文件工坊 K8S 镜像 v1.1.2
 
 交付为已经构建好的 Docker-save 离线镜像归档，不需要现场构建或联网下载依赖。
-amd64 镜像标签 pdf-converter:1.1.1-amd64，适配 x86_64 节点。
-arm64 镜像标签 pdf-converter:1.1.1-arm64，适配 aarch64 节点。
+amd64 镜像标签 pdf-converter:1.1.2-amd64，适配 x86_64 节点。
+arm64 镜像标签 pdf-converter:1.1.2-arm64，适配 aarch64 节点。
 同名 .sha256 文件用于校验归档。请按实际 Pod 所在节点的 CPU 架构选择。
 镜像应推送到全部候选节点可访问的内网镜像仓库，K8S 使用该仓库地址。
 只导入某一台节点时，扩容调度到其他节点可能找不到镜像。
 若采用预加载方式，应覆盖所有候选节点并使用合适的 imagePullPolicy。
 混合 CPU 集群需用 kubernetes.io/arch 约束调度，或由管理员在内网仓库组合多架构清单。
 
-镜像已内置启动参数，无需覆盖 command / args。
+镜像已内置启动参数和官方 Office 启动器，无需覆盖 command / args。
 容器端口 8080，网页路径 /。
 网页和 ZIP、多图排序及 Word 转 PDF 接口都在同一端口，不需要 Nginx。
 SLB 和 K8S 继续负责流量分发。通过已有 Service/NodePort 暴露后，访问 IP:端口即可。

@@ -5,7 +5,7 @@ on:
       release_tag:
         description: Release containing offline image archives
         required: true
-        default: v1.1.1
+        default: v1.1.2
       verify_launcher:
         description: Test bundled official launcher before rebuilding release images
         type: boolean

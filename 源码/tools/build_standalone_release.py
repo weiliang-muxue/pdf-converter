@@ -86,13 +86,13 @@ def loong():
         source[rel]=root/rel
     verify_expected(root/'pdf-tool-linux-loong64','信创Linux/pdf-tool-linux-loong64')
     verify_expected(root/'离线运行环境/runtime-loong64.tar.gz','信创Linux/离线运行环境/runtime-loong64.tar.gz')
-    archive=OUT/'pdf-tool-linux-loong64-v1.1.1.tar.gz'
+    archive=OUT/'pdf-tool-linux-loong64-v1.1.2.tar.gz'
     with tarfile.open(archive,'w:gz',compresslevel=6,format=tarfile.PAX_FORMAT) as tar:
         for rel,item in source.items():
             info=tarfile.TarInfo('pdf-tool-linux-loong64/'+rel);info.size=item.stat().st_size
             info.mode=0o755 if rel.endswith('.sh') or rel=='pdf-tool-linux-loong64' else 0o644
             with item.open('rb') as stream:tar.addfile(info,stream)
-        note='原生 Linux LoongArch64 离线包修订 v1.1.1，程序为 v1.0.3，修复离线配置激活。只用于上游 ABI / Linux 5.19+ 的 LoongArch64，不适用于旧 MIPS/旧 ABI。需要管理员权限，启动后程序降权运行。含完整 Word 引擎，无需联网安装。静态架构与依赖已检查，龙芯实机未验收。\n'
+        note='原生 Linux LoongArch64 离线包修订 v1.1.2，程序为 v1.0.3，修复离线配置激活。只用于上游 ABI / Linux 5.19+ 的 LoongArch64，不适用于旧 MIPS/旧 ABI。需要管理员权限，启动后程序降权运行。含完整 Word 引擎，无需联网安装。静态架构与依赖已检查，龙芯实机未验收。\n'
         data=note.encode();info=tarfile.TarInfo('pdf-tool-linux-loong64/版本说明.txt');info.size=len(data);info.mode=0o644;tar.addfile(info,io.BytesIO(data))
     with tarfile.open(archive,'r:gz') as tar:
         for member in tar:

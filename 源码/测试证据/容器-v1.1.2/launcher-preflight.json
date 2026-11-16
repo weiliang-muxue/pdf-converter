@@ -1,0 +1,15 @@
+{
+  "scope": "Diagnostic: v1.1.1 runtime with official bundled oosplash launch override; NOT final archive acceptance",
+  "workflow": "https://github.com/weiliang-muxue/pdf-converter/actions/runs/43835359665",
+  "result": "PASS",
+  "architectures": [
+    "amd64",
+    "arm64"
+  ],
+  "external_mounts": 0,
+  "network": "none",
+  "docx": true,
+  "doc": true,
+  "cancel_cleanup": true,
+  "direct_response": true
+}

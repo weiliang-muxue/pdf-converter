@@ -12,7 +12,7 @@ import json
 import shutil
 import tarfile
 
-VERSION = '1.1.1'
+VERSION = '1.1.2'
 CREATED = '2026-11-16T00:00:00Z'
 PROJECT = Path(__file__).resolve().parents[2]
 WORK = PROJECT / '临时文件' / ('container-v' + VERSION)
@@ -40,7 +40,7 @@ def add_path(tar, name, source, mode=0o644):
     with source.open('rb') as stream:
         tar.addfile(info, stream)
 
-def build(arch):
+def build(arch, reuse_runtime=None):
     root = WORK / arch
     root.mkdir(parents=True, exist_ok=True)
     OUT.mkdir(parents=True, exist_ok=True)
@@ -54,38 +54,44 @@ def build(arch):
     if header[:4] != b'\x7fELF' or int.from_bytes(header[18:20], 'little') != {'amd64':62, 'arm64':183}[arch]:
         raise ValueError('Wrong executable architecture')
     base = root / 'runtime-layer.tar'
-    original = root / 'original-runtime.tar'
-    with gzip.open(runtime, 'rb') as src, original.open('wb') as dst:
-        shutil.copyfileobj(src, dst, 1024 * 1024)
-    # Package concatenation repeats directory headers. OCI/Docker layers must
-    # contain one final entry per path, preserving the last tar entry's state.
-    with tarfile.open(original, 'r:') as source, tarfile.open(base, 'w', format=tarfile.PAX_FORMAT) as target:
-        final = {}
-        for member in source:
-            key = member.name.removeprefix('./').rstrip('/')
-            if key and key != '.':
-                final[key] = member
-        # Debian postinst normally copies these defaults into /etc. A raw
-        # offline rootfs has not run it. Activate the complete registry now.
-        registry_prefix = 'usr/lib/libreoffice/share/.registry/'
-        copied = 0
-        for key, member in list(final.items()):
-            if key.startswith(registry_prefix) and member.isfile():
-                data = source.extractfile(member).read()
-                if key.endswith('.xcd'):
-                    ET.fromstring(data)
-                destination = 'etc/libreoffice/registry/' + key[len(registry_prefix):]
-                if destination not in final:
-                    clone = copy.copy(member)
-                    clone.name = destination
-                    final[destination] = clone
-                    copied += 1
-        for required in ['main.xcd', 'writer.xcd', 'Langpack-en-US.xcd', 'res/fcfg_langpack_en-US.xcd']:
-            assert final['etc/libreoffice/registry/' + required].isfile(), required
-        print('Prepared offline LibreOffice registry:', copied, 'files', flush=True)
-        for key, member in sorted(final.items(), key=lambda pair: pair[1].offset):
-            member.name = key
-            target.addfile(member, source.extractfile(member) if member.isfile() else None)
+    if reuse_runtime is not None:
+        prior = json.loads(reuse_runtime.with_name('build-result.json').read_text(encoding='utf-8'))
+        assert prior['architecture'] == arch
+        assert 'sha256:' + sha(reuse_runtime) == prior['diff_ids'][0]
+        shutil.copyfile(reuse_runtime, base)
+    else:
+        original = root / 'original-runtime.tar'
+        with gzip.open(runtime, 'rb') as src, original.open('wb') as dst:
+            shutil.copyfileobj(src, dst, 1024 * 1024)
+        # Package concatenation repeats directory headers. OCI/Docker layers must
+        # contain one final entry per path, preserving the last tar entry's state.
+        with tarfile.open(original, 'r:') as source, tarfile.open(base, 'w', format=tarfile.PAX_FORMAT) as target:
+            final = {}
+            for member in source:
+                key = member.name.removeprefix('./').rstrip('/')
+                if key and key != '.':
+                    final[key] = member
+            # Debian postinst normally copies these defaults into /etc. A raw
+            # offline rootfs has not run it. Activate the complete registry now.
+            registry_prefix = 'usr/lib/libreoffice/share/.registry/'
+            copied = 0
+            for key, member in list(final.items()):
+                if key.startswith(registry_prefix) and member.isfile():
+                    data = source.extractfile(member).read()
+                    if key.endswith('.xcd'):
+                        ET.fromstring(data)
+                    destination = 'etc/libreoffice/registry/' + key[len(registry_prefix):]
+                    if destination not in final:
+                        clone = copy.copy(member)
+                        clone.name = destination
+                        final[destination] = clone
+                        copied += 1
+            for required in ['main.xcd', 'writer.xcd', 'Langpack-en-US.xcd', 'res/fcfg_langpack_en-US.xcd']:
+                assert final['etc/libreoffice/registry/' + required].isfile(), required
+            print('Prepared offline LibreOffice registry:', copied, 'files', flush=True)
+            for key, member in sorted(final.items(), key=lambda pair: pair[1].offset):
+                member.name = key
+                target.addfile(member, source.extractfile(member) if member.isfile() else None)
     base_sha = sha(base)
     app = root / 'application-layer.tar'
     with tarfile.open(app, 'w', format=tarfile.PAX_FORMAT) as tar:
@@ -110,7 +116,7 @@ def build(arch):
                 'PDF_ENGINE_VARIANT=LibreOffice',
             ],
             'Entrypoint': ['/opt/pdf-tool/pdf-tool'],
-            'Cmd': ['--standalone','--listen','0.0.0.0:8080','--office','/usr/lib/libreoffice/program/soffice.bin'],
+            'Cmd': ['--standalone','--listen','0.0.0.0:8080','--office','/usr/lib/libreoffice/program/oosplash'],
             'ExposedPorts': {'8080/tcp': {}}, 'StopSignal': 'SIGTERM',
             'Labels': {
                 'org.opencontainers.image.title': 'PDF converter',
@@ -155,7 +161,7 @@ def build(arch):
         'ENV PATH=/usr/bin:/bin HOME=/tmp TMPDIR=/tmp LANG=C.UTF-8 XDG_CACHE_HOME=/tmp/.cache SAL_USE_VCLPLUGIN=svp\n'
         'USER 65534:65534\nWORKDIR /tmp\nEXPOSE 8080\nSTOPSIGNAL SIGTERM\n'
         'ENTRYPOINT ["/opt/pdf-tool/pdf-tool"]\n'
-        'CMD ["--standalone","--listen","0.0.0.0:8080","--office","/usr/lib/libreoffice/program/soffice.bin"]\n',
+        'CMD ["--standalone","--listen","0.0.0.0:8080","--office","/usr/lib/libreoffice/program/oosplash"]\n',
         encoding='utf-8')
     print(json.dumps(result,ensure_ascii=False),flush=True)
     return result
@@ -163,4 +169,6 @@ def build(arch):
 if __name__ == '__main__':
     parser=argparse.ArgumentParser()
     parser.add_argument('architecture', choices=['amd64','arm64'])
-    build(parser.parse_args().architecture)
+    parser.add_argument('--reuse-runtime-layer', type=Path)
+    args=parser.parse_args()
+    build(args.architecture, args.reuse_runtime_layer)

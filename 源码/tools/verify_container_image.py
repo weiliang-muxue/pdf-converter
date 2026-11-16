@@ -24,6 +24,7 @@ with tarfile.open(path,'r:gz') as outer:
     assert config['config']['User']=='65534:65534'
     assert config['config']['ExposedPorts']=={'8080/tcp':{}}
     assert '--standalone' in config['config']['Cmd']
+    assert config['config']['Cmd'][-1]=='/usr/lib/libreoffice/program/oosplash'
     assert config['config']['StopSignal']=='SIGTERM'
     assert entry['RepoTags']==['pdf-converter:'+config['config']['Labels']['org.opencontainers.image.version']+'-'+expected_arch]
     assert not config['config'].get('Volumes')
@@ -42,7 +43,7 @@ with tarfile.open(path,'r:gz') as outer:
                 if name=='opt/pdf-tool/pdf-tool':
                     h=inner.extractfile(member).read(64)
                     assert h[:4]==b'\x7fELF' and int.from_bytes(h[18:20],'little')=={'amd64':62,'arm64':183}[expected_arch]
-    for name in ['opt/pdf-tool/pdf-tool','usr/lib/libreoffice/program/soffice.bin']:
+    for name in ['opt/pdf-tool/pdf-tool','usr/lib/libreoffice/program/soffice.bin','usr/lib/libreoffice/program/oosplash']:
         assert members[name].isfile() and members[name].mode & 0o111
     for name, value in registry_hashes.items():
         prefix='usr/lib/libreoffice/share/.registry/'
