@@ -1,0 +1,194 @@
+{
+  "version": "1.1.2",
+  "final_default_command_validation": {
+    "run_id": 43838873267,
+    "status": "completed",
+    "conclusion": "success",
+    "url": "https://github.com/weiliang-muxue/pdf-converter/actions/runs/43838873267",
+    "jobs": [
+      {
+        "id": 133202253552,
+        "name": "smoke (arm64, ubuntu-24.04-arm)",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Download and verify release archive",
+            "conclusion": "success"
+          },
+          {
+            "name": "Import image and build smoke client",
+            "conclusion": "success"
+          },
+          {
+            "name": "Embed verification client in disposable test image",
+            "conclusion": "success"
+          },
+          {
+            "name": "Test offline unprivileged container",
+            "conclusion": "success"
+          },
+          {
+            "name": "Show diagnostics",
+            "conclusion": "success"
+          },
+          {
+            "name": "Remove test container",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 133202253981,
+        "name": "smoke (amd64, ubuntu-24.04)",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Download and verify release archive",
+            "conclusion": "success"
+          },
+          {
+            "name": "Import image and build smoke client",
+            "conclusion": "success"
+          },
+          {
+            "name": "Embed verification client in disposable test image",
+            "conclusion": "success"
+          },
+          {
+            "name": "Test offline unprivileged container",
+            "conclusion": "success"
+          },
+          {
+            "name": "Show diagnostics",
+            "conclusion": "success"
+          },
+          {
+            "name": "Remove test container",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ]
+  },
+  "image_source_tag": "v1.1.2",
+  "external_mounts": 0,
+  "external_network": "disabled in native acceptance",
+  "docx": "PASS",
+  "doc": "PASS",
+  "cancel_cleanup": "PASS",
+  "direct_pdf_response": "PASS",
+  "graceful_stop": "PASS",
+  "browser_evidence": "../容器-v1.1.0/browser-results.json",
+  "browser_code": "Unchanged from the real Edge and bundled Windows LibreOffice acceptance",
+  "image_validation": "Independent SHA-256, active registry, ELF, fonts, default launcher and no Volumes: PASS",
+  "production_k8s_slb": "Not accessed",
+  "win7_loongarch_hardware": "Not accessed",
+  "release_assets": [
+    {
+      "name": "pdf-converter-k8s-amd64-v1.1.2.tar.gz",
+      "bytes": 267592880,
+      "digest": "sha256:391ff57accd906f14d713f271b3fac6a4204fb933802c5e0ea7193ad3f986415",
+      "url": "https://github.com/weiliang-muxue/pdf-converter/releases/download/v1.1.2/pdf-converter-k8s-amd64-v1.1.2.tar.gz"
+    },
+    {
+      "name": "pdf-converter-k8s-amd64-v1.1.2.tar.gz.sha256",
+      "bytes": 105,
+      "digest": "sha256:834cfcd34f7022541f925d9ba738dc562483822be6846b3c28f5ec52b7f6dbcf",
+      "url": "https://github.com/weiliang-muxue/pdf-converter/releases/download/v1.1.2/pdf-converter-k8s-amd64-v1.1.2.tar.gz.sha256"
+    },
+    {
+      "name": "pdf-converter-k8s-arm64-v1.1.2.tar.gz",
+      "bytes": 263698307,
+      "digest": "sha256:0152f21b1723dfc8e87146f1e0e4e3c5b4405d67d680581dcb5cae6c771ccbe2",
+      "url": "https://github.com/weiliang-muxue/pdf-converter/releases/download/v1.1.2/pdf-converter-k8s-arm64-v1.1.2.tar.gz"
+    },
+    {
+      "name": "pdf-converter-k8s-arm64-v1.1.2.tar.gz.sha256",
+      "bytes": 105,
+      "digest": "sha256:858bc9ead0d099a5e7de026db55a81a6326cca207937feb738c136cc68cf8165",
+      "url": "https://github.com/weiliang-muxue/pdf-converter/releases/download/v1.1.2/pdf-converter-k8s-arm64-v1.1.2.tar.gz.sha256"
+    },
+    {
+      "name": "pdf-converter-nginx-aarch64-v1.1.2.tar.gz",
+      "bytes": 261275152,
+      "digest": "sha256:04b7862b100493dddbf6ee4a1f76bfe1f48e441d65c36c56b19ffbb9b5a11ff0",
+      "url": "https://github.com/weiliang-muxue/pdf-converter/releases/download/v1.1.2/pdf-converter-nginx-aarch64-v1.1.2.tar.gz"
+    },
+    {
+      "name": "pdf-converter-nginx-aarch64-v1.1.2.tar.gz.sha256",
+      "bytes": 109,
+      "digest": "sha256:beb9089635081b91cb40a40f20c7fcd3066b4da4857106939a4d0744ea1e9419",
+      "url": "https://github.com/weiliang-muxue/pdf-converter/releases/download/v1.1.2/pdf-converter-nginx-aarch64-v1.1.2.tar.gz.sha256"
+    },
+    {
+      "name": "pdf-converter-nginx-x86_64-v1.1.2.tar.gz",
+      "bytes": 265553572,
+      "digest": "sha256:c61fe67e25494d3bc28054c93eec79d1eb3274a4d7a96543452954408b5e84c5",
+      "url": "https://github.com/weiliang-muxue/pdf-converter/releases/download/v1.1.2/pdf-converter-nginx-x86_64-v1.1.2.tar.gz"
+    },
+    {
+      "name": "pdf-converter-nginx-x86_64-v1.1.2.tar.gz.sha256",
+      "bytes": 108,
+      "digest": "sha256:bff6dc4ac776fc5c2296b8f43a7cbe31a0f5f19769e38aa298a4457b985a89c6",
+      "url": "https://github.com/weiliang-muxue/pdf-converter/releases/download/v1.1.2/pdf-converter-nginx-x86_64-v1.1.2.tar.gz.sha256"
+    },
+    {
+      "name": "pdf-tool-linux-loong64-v1.1.2.tar.gz",
+      "bytes": 268425783,
+      "digest": "sha256:78e5d18d04924bb25974dbeb2e3dfae40030528a2953033b735b5fd36c3722d7",
+      "url": "https://github.com/weiliang-muxue/pdf-converter/releases/download/v1.1.2/pdf-tool-linux-loong64-v1.1.2.tar.gz"
+    },
+    {
+      "name": "pdf-tool-linux-loong64-v1.1.2.tar.gz.sha256",
+      "bytes": 104,
+      "digest": "sha256:583fbcc24e1b89a3e6e6000cfe3e5c5cc14e543b3a4be2d81dc765ce30a38ffb",
+      "url": "https://github.com/weiliang-muxue/pdf-converter/releases/download/v1.1.2/pdf-tool-linux-loong64-v1.1.2.tar.gz.sha256"
+    },
+    {
+      "name": "pdf-tool-windows-v1.0.3.zip",
+      "bytes": 479449157,
+      "digest": "sha256:5711b8cedf41976c6ef28cc78c9e59782038ff160683be81f97db3ed1a836fc4",
+      "url": "https://github.com/weiliang-muxue/pdf-converter/releases/download/v1.1.2/pdf-tool-windows-v1.0.3.zip"
+    },
+    {
+      "name": "pdf-tool-windows-v1.0.3.zip.sha256",
+      "bytes": 95,
+      "digest": "sha256:5ec3b2cf9fa51a0cda648abbf6044f0535f835e90aa44d7e23864699d50c2478",
+      "url": "https://github.com/weiliang-muxue/pdf-converter/releases/download/v1.1.2/pdf-tool-windows-v1.0.3.zip.sha256"
+    }
+  ]
+}

@@ -13,7 +13,7 @@ def add(t,name,data,mode=0o644):
  m=tarfile.TarInfo(name);m.size=len(data);m.mode=mode;t.addfile(m,io.BytesIO(data))
 def build(arch):
  OUT.mkdir(parents=True,exist_ok=True)
- src=P/'成果'/('阿里云Linux3-'+arch+'离线部署包.tar.gz')
+ src=P/'制作资料/原始离线交付-v1.0.3'/('阿里云Linux3-'+arch+'离线部署包.tar.gz')
  assert sha(src)==EXPECTED[arch]
  dst=OUT/('pdf-converter-nginx-'+arch+'-v1.1.2.tar.gz')
  hashes={}

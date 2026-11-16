@@ -121,3 +121,5 @@ GitHub 的 container-smoke 工作流下载精确交付归档，在 amd64 / ARM64
 2026-11-16：实际 Linux 容器测试定位到 raw DEB 运行环境未执行 postinst，导致活动配置目录为空。镜像在构建时补齐；原 Nginx/独立 Linux 在启动时补齐。静态 ELF 依赖检查无法发现此问题，发布必须等待 DOC/DOCX 实际转换验收。
 
 容器和离线 Linux 入口使用随包 oosplash 启动器，它负责 LibreOffice 首次配置完成后的重启；直接执行 soffice.bin 会把正常初始化退出码 81 误判成转换失败。上游实现见 https://github.com/LibreOffice/core/blob/libreoffice-7-4/desktop/unx/source/start.c 。两架构预验证记录见 测试证据/容器-v1.1.2/launcher-preflight.json；最终验收必须使用镜像默认参数，不开启工作流的 verify_launcher 诊断覆盖。
+
+本次成果目录只保留最终镜像、EXE 和 Nginx 三类交付。原始 v1.0.3 Nginx 发布归档保留在 ../制作资料/原始离线交付-v1.0.3，供 build_legacy_updates.py 做受哈希保护的离线修订；该大文件输入不进入 Git，原件仍可从历史 v1.0.3 Release 获取。构建缓存和失败候选可再生文件已清理，原始 exe/离线引擎未裁剪。

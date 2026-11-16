@@ -1,0 +1,14 @@
+{
+  "architecture": "amd64",
+  "tag": "pdf-converter:1.1.2-amd64",
+  "image_id": "sha256:edc72d677afe894b653a0c5751052d0989c3a72eb5150145838998c1511e34a0",
+  "bytes": 267592880,
+  "sha256": "391ff57accd906f14d713f271b3fac6a4204fb933802c5e0ea7193ad3f986415",
+  "archive": "pdf-converter-k8s-amd64-v1.1.2.tar.gz",
+  "runtime_sha256": "95bfb49a3db52b8b567cad71902ac768b3ba07b555b3dd4babf58c5c48c5633d",
+  "binary_sha256": "c386339179f10afa145fb2640f42f6455859f45768ed881ee54d57b9db9bc499",
+  "diff_ids": [
+    "sha256:5c6b9d638a0ec29cb5ff6ae3a2e2ae4b730ca0d52fd9e6009cdfc9299260b098",
+    "sha256:7c6ff652794c49f0af3ba4e82332e2df7f5bbd5028ef50be7fc13405b9ddae55"
+  ]
+}

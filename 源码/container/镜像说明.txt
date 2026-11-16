@@ -45,3 +45,7 @@ Win7、Win10、信创电脑使用兼容的 Chrome、Edge 或 Firefox 访问同�
 本机浏览器检查包含 ZIP 数字顺序、拖动/按钮/页码排序、DOC/DOCX 和离线下载。
 镜像格式、层校验与真实 Linux 容器验收结果见仓库 Actions 的 Offline container smoke。
 未连接你的 SLB 和 K8S 集群，集群接入以现场 Service、探针和网络配置为准。
+
+最终验收：v1.1.2 的 amd64 / arm64 默认镜像参数均已通过原生 Linux 实际运行，未使用外部挂载，网络禁用。
+覆盖 DOCX、旧 DOC、直接响应、错误/取消清理、健康检查及正常终止。
+运行记录：https://github.com/weiliang-muxue/pdf-converter/actions/runs/43838873267

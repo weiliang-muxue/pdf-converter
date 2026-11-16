@@ -6,7 +6,9 @@ amd64 用于 x86_64 节点，arm64 用于 aarch64 节点；客户端 Windows / �
 镜像放入所有候选节点能访问的内网镜像仓库，扩容无需向 ECS 手动上传程序或文件。
 Word PDF 通过上传请求直接返回，浏览器下载不依赖原 Pod；临时转换文件结束后清理。
 使用 Pod 自身可写层作为临时空间，不开启 readOnlyRootFilesystem。接入参数见镜像目录中的“镜像说明.txt”。
-v1.1.0 已确认存在 Word 引擎配置遗漏，请勿部署。最新验收结果以 GitHub Release 和 Actions 为准。
+v1.1.0 和 v1.1.1 是失败候选，请勿部署。v1.1.2 默认配置在 amd64/ARM64 原生 Linux 上验收通过。
+正式下载：https://github.com/weiliang-muxue/pdf-converter/releases/tag/v1.1.2
+验收记录：https://github.com/weiliang-muxue/pdf-converter/actions/runs/43838873267
 
 成果/Nginx离线版-v1.1.2：修复同一离线配置问题后的原 Nginx 方式，程序仍为 v1.0.3。
 成果/EXE离线版-v1.0.3：原 Windows EXE 完整离线压缩包，以及更新启动脚本的龙芯离线包。

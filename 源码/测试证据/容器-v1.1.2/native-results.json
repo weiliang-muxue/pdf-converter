@@ -1,0 +1,24 @@
+[
+  {
+    "architecture": "amd64",
+    "cancel_cleanup": true,
+    "direct_response": true,
+    "legacy_doc": true,
+    "offline_container": true,
+    "pdf_bytes": 10185,
+    "temporary_files_cleaned": true,
+    "version": "1.1.2",
+    "default_image_command": true
+  },
+  {
+    "architecture": "arm64",
+    "cancel_cleanup": true,
+    "direct_response": true,
+    "legacy_doc": true,
+    "offline_container": true,
+    "pdf_bytes": 10185,
+    "temporary_files_cleaned": true,
+    "version": "1.1.2",
+    "default_image_command": true
+  }
+]

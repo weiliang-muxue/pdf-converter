@@ -1,7 +1,7 @@
 # PDF 文件工坊
 
 离线 PDF 转换工具，保留三种交付方式，当前主要交付是 K8S 独立镜像。
-v1.1.2 正在进行原生 Linux 最终验收；v1.1.0 和 v1.1.1 为失败候选，请勿部署。
+v1.1.2 已通过 amd64 / ARM64 原生 Linux 最终验收。v1.1.0 和 v1.1.1 为失败候选，请勿部署。
 
 ## 下载
 
@@ -56,7 +56,9 @@ Nginx 包按服务器 uname -m 选择架构，完整解压后放置 index.html�
 Go 服务、构建和测试脚本位于“源码”；网页可编辑源位于“html/网站文件”；Linux 入口和依赖清单位于“exe/信创Linux”。
 
 已验证浏览器 ZIP 数字顺序、多图排序、DOC/DOCX、断开后下载、取消清理及无外部网络请求。
-当前镜像修复在构建时激活 Debian 包中未安装的 LibreOffice 配置，并校验活动配置与原文件逐字节一致。
+当前镜像已修复 LibreOffice 配置激活和官方启动器入口；默认配置在禁网、非 root、零外部挂载条件下通过真实 DOC/DOCX 转换、取消清理和正常退出验收。
+
+[最终验收运行记录](https://github.com/weiliang-muxue/pdf-converter/actions/runs/43838873267) · [完整验收证据](源码/测试证据/容器-v1.1.2/validation.json)
 实际 Alibaba Cloud Linux 3/K8S/SLB、Win7 和龙芯硬件未连接验收，不把静态兼容性检查当作实机认证。
 
 [构建与验证说明](源码/README.md) · [第三方组件说明](源码/THIRD_PARTY_NOTICES.txt)
