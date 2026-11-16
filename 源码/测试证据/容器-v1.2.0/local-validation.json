@@ -1,0 +1,9 @@
+{
+  "go_tests": "passed with real 7-Zip 26.06: ZIP, RAR4, RAR5, solid 7Z, encrypted/broken archive rejection, cleanup and cancellation",
+  "zip_core_tests": "passed",
+  "windows7_source_build": "passed with Go 1.20.14 windows/386; no Win7 hardware run",
+  "browser": "local Edge archive/image/UI checks passed, screenshots visually checked at desktop and 375px mobile widths",
+  "local_windows_office": "startup timed out; not counted as a successful Word test",
+  "linux_acceptance": "Native/default-image and full browser run 43880989907 passed after initial amd64 RAR failure in 43880482205. Superseded candidate; final release acceptance required for v1.2.1.",
+  "image_mounts": "no external volumes declared; actual runtime checked in native workflow"
+}

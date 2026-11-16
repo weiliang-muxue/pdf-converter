@@ -1,14 +1,14 @@
 # PDF 文件工坊
 
 离线 PDF 转换工具，保留三种交付方式，当前主要交付是 K8S 独立镜像。
-当前镜像更新：v1.2.0，新增 RAR/7Z 导入及简化界面。正式镜像以 Release 非预发布状态及对应 Actions 成功记录为准。
+当前镜像更新：v1.2.1，新增 RAR/7Z 导入及简化界面。正式镜像以 Release 非预发布状态及对应 Actions 成功记录为准。
 v1.1.2 为上一稳定版；EXE、Nginx 离线包继续保留。
 
 ## 下载
 
-[新版容器镜像](https://github.com/weiliang-muxue/pdf-converter/releases/tag/v1.2.0) · [既有 EXE / Nginx 离线包](https://github.com/weiliang-muxue/pdf-converter/releases/tag/v1.1.2)
+[新版容器镜像](https://github.com/weiliang-muxue/pdf-converter/releases/tag/v1.2.1) · [既有 EXE / Nginx 离线包](https://github.com/weiliang-muxue/pdf-converter/releases/tag/v1.1.2)
 
-- K8S：word-pdf-20261116213342-amd64.tar.gz 或 word-pdf-20261116213342-arm64.tar.gz。
+- K8S：word-pdf-20261116220524-amd64.tar.gz 或 word-pdf-20261116220524-arm64.tar.gz。
 - Windows EXE：pdf-tool-windows-v1.0.3.zip，包含 Win7、Win10 程序和完整共用 Word 引擎。
 - HTML/Nginx：pdf-converter-nginx-x86_64-v1.1.2.tar.gz 或 pdf-converter-nginx-aarch64-v1.1.2.tar.gz。
 - 原生龙芯：pdf-tool-linux-loong64-v1.1.2.tar.gz；上游 LoongArch64 ABI，实机未验收。
@@ -22,7 +22,7 @@ Nginx 和龙芯包是对原 1.0.3 程序的离线配置修订，程序本身仍�
 镜像内置完整网页、转换程序、LibreOffice、中文字体和运行库，运行期间无需联网下载依赖。
 容器端口 8080，通过现有 Service/SLB 暴露后访问 IP:端口，无需宿主机 Nginx。
 
-- x86_64 节点选择 word-pdf-20261116213342-amd64:1.2.0；aarch64 节点选择 word-pdf-20261116213342-arm64:1.2.0。
+- x86_64 节点选择 word-pdf-20261116220524-amd64:1.2.1；aarch64 节点选择 word-pdf-20261116220524-arm64:1.2.1。
 - 两种镜像功能相同，只对应服务器 CPU；Win7、Win10、信创客户端访问同一个网址。
 - 不配置外部 volumeMounts、hostPath、PVC 或共享目录。临时文件使用 Pod 自身可写层，不启用 readOnlyRootFilesystem。
 - 镜像上传到所有候选节点可访问的内网镜像仓库；扩容不需要往各台 ECS 上传文件。

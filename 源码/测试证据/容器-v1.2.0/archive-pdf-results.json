@@ -1,0 +1,10 @@
+{
+  "checks": [
+    "ZIP数字排序.pdf: page order [1, 2, 3, 10], readable JPEG objects and selected paper dimensions",
+    "手动排序.pdf: page order [2, 3, 1], readable JPEG objects and selected paper dimensions",
+    "RAR数字排序.pdf: page order [1, 2, 3, 10], readable JPEG objects and selected paper dimensions",
+    "RAR5数字排序.pdf: page order [1, 2, 3, 10], readable JPEG objects and selected paper dimensions",
+    "7Z数字排序.pdf: page order [1, 2, 3, 10], readable JPEG objects and selected paper dimensions",
+    "PNG transparency flattened to white; EXIF orientation and 96 DPI dimensions correct; WebP decoded"
+  ]
+}

@@ -1,18 +1,18 @@
-PDF 文件工坊 K8S 镜像 v1.2.0
+PDF 文件工坊 K8S 镜像 v1.2.1
 
 新增 RAR（RAR4/RAR5）、7Z 图片导入；保留 ZIP、多图排序及 DOC/DOCX 转 PDF。
 移除页面部署标签、英文标语、装饰编号和底部处理说明。
 镜像内置网页、Go 程序、LibreOffice、中文字体、7-Zip 26.06 和运行库。
 部署和运行时无需联网安装依赖，不需要宿主机 Nginx。
 
-本批镜像时间：20261116213342（北京时间，14 位年月日时分秒）。
+本批镜像时间：20261116220524（北京时间，14 位年月日时分秒）。
 按实际运行 Pod 的服务器 CPU 选择，不按访问网页的电脑系统选择：
-- x86_64 / Intel / AMD：word-pdf-20261116213342-amd64.tar.gz
-  docker load -i word-pdf-20261116213342-amd64.tar.gz
-  预期输出：Loaded image: word-pdf-20261116213342-amd64:1.2.0
-- aarch64 / 鲲鹏 / 飞腾：word-pdf-20261116213342-arm64.tar.gz
-  docker load -i word-pdf-20261116213342-arm64.tar.gz
-  预期输出：Loaded image: word-pdf-20261116213342-arm64:1.2.0
+- x86_64 / Intel / AMD：word-pdf-20261116220524-amd64.tar.gz
+  docker load -i word-pdf-20261116220524-amd64.tar.gz
+  预期输出：Loaded image: word-pdf-20261116220524-amd64:1.2.1
+- aarch64 / 鲲鹏 / 飞腾：word-pdf-20261116220524-arm64.tar.gz
+  docker load -i word-pdf-20261116220524-arm64.tar.gz
+  预期输出：Loaded image: word-pdf-20261116220524-arm64:1.2.1
 两份镜像功能相同，内部程序和解压引擎均匹配各自 CPU 架构。
 本批不含龙芯容器镜像，不能把 amd64 或 arm64 镜像部署到 LoongArch 节点。
 同名 .sha256 文件用于校验。
@@ -53,6 +53,6 @@ SIGTERM 后停止就绪，留 5 秒传播窗口，最多等待在途请求 360 �
 
 源码与其他交付
 代码仓库：https://github.com/weiliang-muxue/pdf-converter
-EXE 和 Nginx 既有离线包保留在 v1.1.2 Release，本次 v1.2.0 更新容器镜像。
+EXE 和 Nginx 既有离线包保留在 v1.1.2 Release，本次 v1.2.1 更新容器镜像。
 新版网页源码 RAR/7Z 入口需要配套新版解压接口，不能仅替换旧 Nginx 包的 HTML。
 正式发布以两种架构原生 Linux 的 Offline container smoke 验收通过为准。

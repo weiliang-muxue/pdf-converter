@@ -5,7 +5,7 @@ on:
       release_tag:
         description: Release containing offline image archives
         required: true
-        default: v1.2.0
+        default: v1.2.1
       verify_launcher:
         description: Test bundled official launcher before rebuilding release images
         type: boolean
@@ -94,6 +94,9 @@ jobs:
               except Exception: time.sleep(1)
           else: raise RuntimeError('Browser test service not ready')
           PY
+          docker cp pdf-browser:/usr/share/fonts .browser-test/fonts
+          printf '<fontconfig><include>/etc/fonts/fonts.conf</include><dir>%s/.browser-test/fonts</dir><cachedir>%s/.browser-test/font-cache</cachedir></fontconfig>' "$PWD" "$PWD" > .browser-test/fonts.conf
+          export FONTCONFIG_FILE="$PWD/.browser-test/fonts.conf"
           export PLAYWRIGHT_MODULE="$PWD/.browser-test/node_modules/playwright"
           node 源码/tests/container_browser.cjs .browser-test/fixtures .browser-test/results
           PYTHONPATH="$PWD/.browser-test/python" python3 源码/tests/verify_container_pdfs.py .browser-test/results

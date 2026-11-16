@@ -1,0 +1,13 @@
+{
+  "run": "https://github.com/weiliang-muxue/pdf-converter/actions/runs/43881563055",
+  "attempts_per_architecture": {
+    "go_worker": 100,
+    "bounded_shell": 100
+  },
+  "failures": {
+    "amd64": 0,
+    "arm64": 0
+  },
+  "initial_failure": "First native amd64 RAR4 request returned HTTP 400; not reproduced by this comparison. Do not treat rerun success alone as a root-cause determination.",
+  "followup": "Replace limits set inside the Go helper with constant /bin/sh positional-argument launcher; verify 100 HTTP archive requests on each final v1.2.1 image."
+}

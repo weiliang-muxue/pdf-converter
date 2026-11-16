@@ -43,7 +43,7 @@ with tarfile.open(path,'r:gz') as outer:
                 if name in ['opt/pdf-tool/pdf-tool','opt/pdf-tool/7zzs']:
                     h=inner.extractfile(member).read(64)
                     assert h[:4]==b'\x7fELF' and int.from_bytes(h[18:20],'little')=={'amd64':62,'arm64':183}[expected_arch]
-    for name in ['opt/pdf-tool/pdf-tool','opt/pdf-tool/7zzs','usr/lib/libreoffice/program/soffice.bin','usr/lib/libreoffice/program/oosplash']:
+    for name in ['opt/pdf-tool/pdf-tool','opt/pdf-tool/7zzs','bin/dash','usr/lib/libreoffice/program/soffice.bin','usr/lib/libreoffice/program/oosplash']:
         assert members[name].isfile() and members[name].mode & 0o111
     assert members['opt/pdf-tool/licenses/7zip-License.txt'].isfile()
     assert members['opt/pdf-tool/licenses/7zip-source.tar.xz'].isfile()

@@ -136,7 +136,7 @@ let browser;
 
   const health = await page.request.get(base + 'word-api/status');
   const serverInfo=await health.json();
-  assert.equal(serverInfo.version, '1.2.0');
+  assert.equal(serverInfo.version, JSON.parse(fs.readFileSync(path.join(__dirname, '../container/release.json'), 'utf8')).version);
   assert.equal(serverInfo.directDownload, true);
   assert.equal(serverInfo.wordReady, true);
   assert.equal((await page.request.get(base+'readyz')).status(),200);
