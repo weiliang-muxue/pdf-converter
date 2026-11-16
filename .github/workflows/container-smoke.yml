@@ -6,9 +6,6 @@ on:
         description: Release containing offline image archives
         required: true
         default: v1.1.0
-      release_id:
-        description: Draft release ID
-        required: true
 permissions:
   contents: read
 jobs:
@@ -25,29 +22,21 @@ jobs:
     timeout-minutes: 15
     env:
       IMAGE_ARCH: ${{ matrix.arch }}
-      RELEASE_ID: ${{ inputs.release_id }}
       RELEASE_TAG: ${{ inputs.release_tag }}
     steps:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
       - name: Download and verify release archive
-        env:
-          GH_TOKEN: ${{ github.token }}
         run: |
           python3 - <<'PY'
-          import hashlib, json, os, pathlib, re, subprocess
+          import hashlib, os, pathlib, re, urllib.request
           tag=os.environ['RELEASE_TAG']
           assert re.fullmatch(r'v1\.\d+\.\d+',tag)
           name='pdf-converter-k8s-'+os.environ['IMAGE_ARCH']+'-'+tag+'.tar.gz'
-          release_id=os.environ['RELEASE_ID']
-          assert release_id.isdigit()
-          repo='repos/weiliang-muxue/pdf-converter'
-          assets=json.loads(subprocess.check_output(['gh','api',repo+'/releases/'+release_id+'/assets?per_page=100']))
+          base='https://github.com/weiliang-muxue/pdf-converter/releases/download/'+tag+'/'
           for filename in [name,name+'.sha256']:
-              asset=next(a for a in assets if a['name']==filename)
-              with open(filename,'wb') as destination:
-                  subprocess.run(['gh','api','-H','Accept: application/octet-stream',repo+'/releases/assets/'+str(asset['id'])],stdout=destination,check=True)
+              urllib.request.urlretrieve(base+filename,filename)
           expected=pathlib.Path(name+'.sha256').read_text().split()[0]
           with open(name,'rb') as stream:
               assert hashlib.file_digest(stream,'sha256').hexdigest()==expected
