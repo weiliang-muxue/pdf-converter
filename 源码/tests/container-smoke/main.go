@@ -4,6 +4,7 @@ package main
 import (
 	"archive/zip"
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -11,6 +12,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"time"
 )
@@ -103,6 +105,27 @@ func main() {
 			break
 		}
 		time.Sleep(time.Second)
+	}
+	if !ready {
+		dir, err := os.MkdirTemp("", "engine-diagnostic-")
+		if err != nil {
+			panic(err)
+		}
+		defer os.RemoveAll(dir)
+		input := filepath.Join(dir, "probe.docx")
+		if err := os.WriteFile(input, docx(), 0600); err != nil {
+			panic(err)
+		}
+		commands := [][]string{
+			{"--headless", "--version"},
+			{"-env:UserInstallation=file://" + filepath.Join(dir, "profile"), "--headless", "--nologo", "--nodefault", "--norestore", "--convert-to", "pdf:writer_pdf_Export", "--outdir", dir, input},
+		}
+		for _, args := range commands {
+			ctx, stop := context.WithTimeout(context.Background(), 30*time.Second)
+			output, err := exec.CommandContext(ctx, "/usr/lib/libreoffice/program/soffice.bin", args...).CombinedOutput()
+			stop()
+			fmt.Printf("ENGINE DIAGNOSTIC %v: %v\\n%s\\n", args, err, output)
+		}
 	}
 	must(ready, "startup conversion failed")
 	s, b := get("/")
