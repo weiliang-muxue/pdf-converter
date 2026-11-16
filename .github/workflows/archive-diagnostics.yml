@@ -1,0 +1,84 @@
+name: Collect archive launcher diagnostics
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Release containing offline image archives
+        required: true
+        default: v1.2.0
+      verify_launcher:
+        description: Test bundled official launcher before rebuilding release images
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  smoke:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: amd64
+            runner: ubuntu-24.04
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 15
+    env:
+      IMAGE_ARCH: ${{ matrix.arch }}
+      RELEASE_TAG: ${{ inputs.release_tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Download and verify release archive
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, os, pathlib, re, urllib.request
+          tag=os.environ['RELEASE_TAG']
+          assert re.fullmatch(r'v1\.\d+\.\d+',tag)
+          release=json.loads(pathlib.Path('源码/container/release.json').read_text())
+          assert tag == 'v'+release['version']
+          stamp=release['build_time']
+          assert re.fullmatch(r'\d{14}',stamp)
+          image='word-pdf-'+stamp+'-'+os.environ['IMAGE_ARCH']
+          name=image+'.tar.gz'
+          with open(os.environ['GITHUB_ENV'],'a') as env:
+              env.write('IMAGE_FILE='+name+'\nIMAGE_NAME='+image+':'+release['version']+'\n')
+          base='https://github.com/weiliang-muxue/pdf-converter/releases/download/'+tag+'/'
+          for filename in [name,name+'.sha256']:
+              urllib.request.urlretrieve(base+filename,filename)
+          expected=pathlib.Path(name+'.sha256').read_text().split()[0]
+          with open(name,'rb') as stream:
+              assert hashlib.file_digest(stream,'sha256').hexdigest()==expected
+          print('Verified',name,expected)
+          PY
+      - name: Import image and build smoke client
+        run: |
+          docker load -i "${IMAGE_FILE}"
+          cd 源码
+          CGO_ENABLED=0 go build -mod=vendor -trimpath -o ../smoke-client ./tests/container-smoke
+      - name: Embed verification client in disposable test image
+        run: |
+          mkdir smoke-context
+          mv smoke-client smoke-context/
+          printf 'FROM %s\nCOPY --chmod=755 smoke-client /opt/pdf-smoke-client\n' "${IMAGE_NAME}" > smoke-context/Dockerfile
+          docker build --network none --pull=false -t pdf-smoke-test smoke-context
+      - name: Test offline unprivileged container
+        run: |
+          docker run -d --name pdf-smoke --network none \
+            --cap-drop ALL --security-opt no-new-privileges \
+            pdf-smoke-test ${{ inputs.verify_launcher && '--standalone --listen 0.0.0.0:8080 --office /usr/lib/libreoffice/program/oosplash' || '' }}
+          test "$(docker inspect -f '{{len .Mounts}}' pdf-smoke)" = 0
+          docker exec pdf-smoke /opt/pdf-smoke-client --archive-diagnostics
+          docker stop --time 400 pdf-smoke
+          test "$(docker inspect -f '{{.State.ExitCode}}' pdf-smoke)" = 0
+      - name: Show diagnostics
+        if: always()
+        run: |
+          docker logs pdf-smoke 2>&1 || true
+          docker logs pdf-browser 2>&1 || true
+          docker inspect -f '{{json .State}}' pdf-smoke || true
+      - name: Remove test container
+        if: always()
+        run: docker rm -f pdf-smoke pdf-browser || true
