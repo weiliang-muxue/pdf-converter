@@ -123,6 +123,45 @@ func archiveChecks() {
 			must(resp.StatusCode == 400, "encrypted archive accepted")
 			continue
 		}
+		if resp.StatusCode != 200 {
+			dir, err := os.MkdirTemp("", "archive-diagnostic-")
+			must(err == nil, "diagnostic temp")
+			defer os.RemoveAll(dir)
+			input := filepath.Join(dir, "fixture.rar")
+			os.WriteFile(input, raw, 0600)
+			for _, limited := range []bool{false, true} {
+				for _, mode := range []string{"l", "x"} {
+					command := "/opt/pdf-tool/7zzs"
+					args := []string{}
+					if limited {
+						command = "/opt/pdf-tool/pdf-tool"
+						args = append(args, "--archive-worker")
+					}
+					args = append(args, mode, "-trar", "-sccUTF-8", "-p-", "-y", "-mmt=1")
+					if mode == "x" {
+						args = append(args, "-so", "-spd", "-ssc", "-bb0", "-bd")
+					} else {
+						args = append(args, "-slt", "-ba")
+					}
+					args = append(args, "--", input)
+					if mode == "x" {
+						args = append(args, "10.png")
+					}
+					ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+					cmd := exec.CommandContext(ctx, command, args...)
+					cmd.Dir = dir
+					var output, diagnostic bytes.Buffer
+					cmd.Stdout = &output
+					cmd.Stderr = &diagnostic
+					err := cmd.Run()
+					cancel()
+					fmt.Printf("ARCHIVE DIAGNOSTIC limited=%v mode=%s error=%v bytes=%d stderr=%q\n", limited, mode, err, output.Len(), diagnostic.String())
+					if mode == "l" {
+						fmt.Println(output.String())
+					}
+				}
+			}
+		}
 		must(resp.StatusCode == 200, fmt.Sprintf("archive %s HTTP %d: %s", name, resp.StatusCode, data))
 		z, err := zip.NewReader(bytes.NewReader(data), int64(len(data)))
 		must(err == nil, "invalid archive output")
