@@ -1,0 +1,16 @@
+{
+  "architecture": "amd64",
+  "tag": "pdf-converter:1.1.1-amd64",
+  "image_id": "sha256:c00d2b9d5c370db4e875c4c71ce33325d07016fccccf717e71821d0a6dada0b3",
+  "bytes": 267593114,
+  "sha256": "175a5df2eb0c61cfff48093520d33a5e08554dbbde854113551f99eea0ade42d",
+  "archive": "pdf-converter-k8s-amd64-v1.1.1.tar.gz",
+  "runtime_sha256": "95bfb49a3db52b8b567cad71902ac768b3ba07b555b3dd4babf58c5c48c5633d",
+  "binary_sha256": "6dc4939afe1d41591eaaf537bf0f7b7f160114a3adeaf0c6ba96050738c0150f",
+  "diff_ids": [
+    "sha256:5c6b9d638a0ec29cb5ff6ae3a2e2ae4b730ca0d52fd9e6009cdfc9299260b098",
+    "sha256:e2676b1f42f4acee34a3d6b1f7e769040a0165ce74344cf01a86b4ee778a51f3"
+  ],
+  "independent_payload_verification": "PASS: layers, executable architecture, fonts, complete active registry, no Volumes",
+  "rootfs_entries": 8422
+}

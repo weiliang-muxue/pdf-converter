@@ -1,75 +1,62 @@
 # PDF 文件工坊
 
-离线图片、ZIP 图片和 Word 转 PDF 工具，提供浏览器界面与 Go 后台。提供 v1.1.1 K8S 独立容器镜像，并保留 v1.0.3 原 Nginx 部署包。
+离线 PDF 转换工具，保留三种交付方式，当前主要交付是 K8S 独立镜像。
+v1.1.1 正在进行原生 Linux 最终验收；v1.1.0 已发现 Word 引擎配置遗漏，请勿部署。
 
-## K8S 容器镜像
+## 下载
 
-v1.1.1 正在完成原生 Linux 容器验收，通过后才作为正式镜像。v1.1.0 已发现引擎配置遗漏，请勿部署。
+[统一下载页：镜像、EXE、Nginx 离线包](https://github.com/weiliang-muxue/pdf-converter/releases/tag/v1.1.1)
 
-v1.1.1 镜像内置完整网页、转换程序、LibreOffice、字体及运行库，监听 8080。
-SLB / K8S 负责流量分发，应用不增加轮询逻辑。无需接入宿主机 Nginx。
+- K8S：pdf-converter-k8s-amd64-v1.1.1.tar.gz 或 pdf-converter-k8s-arm64-v1.1.1.tar.gz。
+- Windows EXE：pdf-tool-windows-v1.0.3.zip，包含 Win7、Win10 程序和完整共用 Word 引擎。
+- HTML/Nginx：pdf-converter-nginx-x86_64-v1.1.1.tar.gz 或 pdf-converter-nginx-aarch64-v1.1.1.tar.gz。
+- 原生龙芯：pdf-tool-linux-loong64-v1.1.1.tar.gz；上游 LoongArch64 ABI，实机未验收。
 
-- amd64 节点使用 `pdf-converter:1.1.1-amd64`。
-- arm64 节点使用 `pdf-converter:1.1.1-arm64`。
-- Word 在同一 HTTP 请求中返回 PDF，浏览器本地下载。无 Pod 结果状态、共享存储或会话粘滞要求。
-- 转换临时文件按请求清理，不保留成品 PDF。健康接口为 `/healthz` 和 `/readyz`。
-- SIGTERM 时先撤销就绪，再等待在途请求。建议 K8S 终止宽限期 400 秒。
-- 镜像默认非 root 用户 65534。无需任何外部挂载；临时文件使用 Pod 自身的可写层。
+每份归档提供同名 .sha256 校验文件。大体积程序和依赖在 Release 附件，维护源码在本仓库。
+Nginx 和龙芯包是对原 1.0.3 程序的离线配置修订，程序本身仍显示 1.0.3。
+原 EXE 支持多图排序和 Word 转换；ZIP 图片入口在 HTML/Nginx 和镜像版。
 
-[镜像接入参数](源码/container/镜像说明.txt) · [Linux 容器验收](https://github.com/weiliang-muxue/pdf-converter/actions/workflows/container-smoke.yml)
+## K8S 镜像
 
-## 获取原 Nginx 部署包
+镜像内置完整网页、转换程序、LibreOffice、中文字体和运行库，运行期间无需联网下载依赖。
+容器端口 8080，通过现有 Service/SLB 暴露后访问 IP:端口，无需宿主机 Nginx。
 
-在服务器执行 `uname -m` 后，选择对应的 x86_64 或 aarch64 包及 SHA-256 文件。两个包分别包含完整的离线运行环境。
+- x86_64 节点选择 pdf-converter:1.1.1-amd64；aarch64 节点选择 pdf-converter:1.1.1-arm64。
+- 两种镜像功能相同，只对应服务器 CPU；Win7、Win10、信创客户端访问同一个网址。
+- 不配置外部 volumeMounts、hostPath、PVC 或共享目录。临时文件使用 Pod 自身可写层，不启用 readOnlyRootFilesystem。
+- 镜像上传到所有候选节点可访问的内网镜像仓库；扩容不需要往各台 ECS 上传文件。
+- SLB/K8S 负责流量分发，应用不加入轮询、共享结果状态或会话粘滞。
 
-[下载 Release 部署包](https://github.com/weiliang-muxue/pdf-converter/releases/tag/v1.0.3)
+Word PDF 在同一次上传请求中直接返回，浏览器下载使用本地 Blob，不再请求原 Pod。
+上传文件、转换结果和引擎临时配置在请求完成、失败或取消后清理。
+每个 Pod 同时执行一个 Word 转换，繁忙时返回明确提示，可按负载扩容。
 
+健康接口为 /healthz 和 /readyz；启动时真实转换测试 Word 后才就绪。
+收到 SIGTERM 时撤销就绪并等待在途请求，建议 terminationGracePeriodSeconds 为 400，代理超时至少 360 秒。
+强制杀死 Pod 的在途请求仍需重试；已经返回浏览器的 PDF 不受影响。
 
-GitHub 附件名称与服务器架构对应。
+[完整镜像接入参数](源码/container/镜像说明.txt) · [原生 Linux 验收](https://github.com/weiliang-muxue/pdf-converter/actions/workflows/container-smoke.yml)
 
-- x86_64 使用 pdf-converter-linux-x86_64-v1.0.3.tar.gz。
-- aarch64 使用 pdf-converter-linux-aarch64-v1.0.3.tar.gz。
+## 网页功能
 
-同时下载同名 .sha256 文件。以 x86_64 包为例，校验并解压后执行下面的部署步骤。
+ZIP 内图片按数字名称排列，例如 1、2、3、10；多图支持拖动、上下移动和修改页码。
+PDF 按当前列表顺序生成。图片和 ZIP 在浏览器处理，不上传服务器。
+DOC/DOCX 通过内网服务器转换为 PDF。页面及脚本均在包内，不使用 CDN 或在线转换服务。
 
-```sh
-sha256sum -c pdf-converter-linux-x86_64-v1.0.3.tar.gz.sha256
-sudo tar -xzf pdf-converter-linux-x86_64-v1.0.3.tar.gz -C /opt
-```
+## 原 EXE 和 Nginx 方式
 
-## 功能
+EXE 压缩包需完整解压，保留共用 LibreOffice 目录。Win7 SP1 离线补丁也在包内。
+Nginx 包按服务器 uname -m 选择架构，完整解压后放置 index.html，并运行随包启动脚本。
+原 Nginx 方案需要已有 Nginx 及 root/sudo 权限；其原下载方式不用于 K8S 多副本交付。
 
-- ZIP 内图片按数字名称排列，例如 1、2、3、10。
-- 多图支持拖动、上下移动和修改页码，按列表顺序生成 PDF。
-- DOC、DOCX 在内网服务器转换为 PDF。
-- 图片和 ZIP 在访问者的浏览器中处理。
-- Linux 启动器识别系统和 CPU，启动后台并自动配置现有 Nginx。
-- 网页脚本、字体处理引擎和服务器运行库随离线包提供。
+[原 Nginx 部署说明](html/使用说明.txt) · [阿里云 Linux 3 验证范围](html/阿里云Linux3验证说明.txt)
 
-Win7、Win10、信创电脑通过兼容的现代浏览器访问同一个网址。服务器部署目标为 Alibaba Cloud Linux 3 x86_64 / ARM64。
+## 源码和验证范围
 
-## 部署
+Go 服务、构建和测试脚本位于“源码”；网页可编辑源位于“html/网站文件”；Linux 入口和依赖清单位于“exe/信创Linux”。
 
-服务器需要已有正常运行的 Nginx，以及 root / sudo 权限。
-
-1. 从 Release 下载对应架构的包和校验文件，校验后解压到 /opt，得到 /opt/pdf。
-2. 将 /opt/pdf/html/index.html 放入现有 Nginx 网站的 pdf 子目录。
-3. 执行离线包中的启动入口。
-
-    sudo sh /opt/pdf/html/start-linux.sh
-
-首次启动会解包私有运行环境。网页显示 Word 转换服务已就绪后，可上传文件验证。前台运行时保持该终端打开，后台启动命令见包内的“部署与验证.txt”。
-
-[详细部署说明](html/使用说明.txt) · [阿里云 Linux 3 验证记录](html/阿里云Linux3验证说明.txt)
-
-## 源码与构建
-
-Go 服务、构建和测试脚本位于“源码”，网页源码位于“html/网站文件”。Linux 启动脚本和运行环境来源清单位于“exe/信创Linux”。
-
-部署包通过 Release 分发。维护构建时准备相应的 Go 编译器和离线运行环境，具体版本和生成方法见源码说明。
+已验证浏览器 ZIP 数字顺序、多图排序、DOC/DOCX、断开后下载、取消清理及无外部网络请求。
+当前镜像修复在构建时激活 Debian 包中未安装的 LibreOffice 配置，并校验活动配置与原文件逐字节一致。
+实际 Alibaba Cloud Linux 3/K8S/SLB、Win7 和龙芯硬件未连接验收，不把静态兼容性检查当作实机认证。
 
 [构建与验证说明](源码/README.md) · [第三方组件说明](源码/THIRD_PARTY_NOTICES.txt)
-
-## 验证状态
-
-已完成 Go 回归、Windows 本机转换及就绪检查、Nginx 配置验证、Linux 启动流程模拟、运行环境依赖检查和无损压缩校验。Alibaba Cloud Linux 3、Win7、信创实机的完整验收仍需在对应环境执行。

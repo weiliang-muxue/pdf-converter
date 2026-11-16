@@ -110,10 +110,12 @@ node tests/ui.cjs ./test-output "http://127.0.0.1:8080/#token=测试口令"
 
 ## K8S 镜像维护
 
-容器版使用独立模式 `--standalone`，镜像版本通过 `-ldflags="-X main.version=1.1.0"` 注入。默认源码版本仍为旧部署方案的 1.0.3，以便维护原包。
+容器版使用独立模式 `--standalone`，镜像版本通过 `-ldflags="-X main.version=1.1.1"` 注入。默认源码版本仍为旧部署方案的 1.0.3，以便维护原包。
 
-网页可编辑源仍在 ../html/网站文件。修改后运行 tools/sync_container_web.py 同步到 standaloneweb，然后编译。镜像构建器 tools/build_container_images.py 使用已校验的原离线运行库和 临时文件/container-v1.1.0/bin/pdf-tool-linux-{amd64,arm64}。它按最终有效路径去掉重复 tar 头，不裁剪引擎文件，生成 Docker-save 格式归档。tools/verify_container_image.py 和官方 crane 可独立验证镜像。
+网页可编辑源仍在 ../html/网站文件。修改后运行 tools/sync_container_web.py 同步到 standaloneweb，然后编译。镜像构建器 tools/build_container_images.py 使用已校验的原离线运行库和 临时文件/container-v1.1.1/bin/pdf-tool-linux-{amd64,arm64}。它按最终有效路径去掉重复 tar 头，将 Debian 包中 share/.registry 的原始配置完整激活到 etc/libreoffice/registry，不裁剪引擎文件，生成 Docker-save 格式归档。tools/verify_container_image.py 和官方 crane 可独立验证镜像。
 
 容器接口 /word-api/render 直接返回 PDF；网页根据 status.directDownload 选择该接口。旧 Nginx 接口仍使用原下载逻辑。转换引擎的 TMP/TEMP/TMPDIR 被限制在每个请求的私有目录，结束后整体清理。
 
-GitHub 的 container-smoke 工作流下载精确交付归档，在 amd64 / ARM64 原生 Linux 运行器使用禁网、非 root、只读根文件系统执行实际 Word 转换、错误和取消清理检查。测试程序不进入交付镜像。
+GitHub 的 container-smoke 工作流下载精确交付归档，在 amd64 / ARM64 原生 Linux 运行器使用禁网、非 root、零外部挂载执行实际 Word 转换、错误和取消清理检查。测试程序不进入交付镜像。
+
+2026-11-16：实际 Linux 容器测试定位到 raw DEB 运行环境未执行 postinst，导致活动配置目录为空。镜像在构建时补齐；原 Nginx/独立 Linux 在启动时补齐。静态 ELF 依赖检查无法发现此问题，发布必须等待 DOC/DOCX 实际转换验收。

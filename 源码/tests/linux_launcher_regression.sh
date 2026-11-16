@@ -58,6 +58,14 @@ test_runtime_permissions() {
     : > "$app_dir/离线运行环境/runtime-amd64.tar.gz"
     : > "$app_dir/离线运行环境/runtime-amd64.sha256"
     : > "$case_dir/events.log"
+    mkdir -p "$runtime_root/usr/lib/libreoffice/share/.registry/res"
+    printf '<registry>main</registry>' > "$runtime_root/usr/lib/libreoffice/share/.registry/main.xcd"
+    printf '<registry>writer</registry>' > "$runtime_root/usr/lib/libreoffice/share/.registry/writer.xcd"
+    printf '<registry>language</registry>' > "$runtime_root/usr/lib/libreoffice/share/.registry/res/en-US.xcd"
+    if [ "$scenario" = modern ]; then
+        mkdir -p "$runtime_root/usr/lib/libreoffice/share/registry"
+        mv "$runtime_root/usr/lib/libreoffice/share/.registry/writer.xcd" "$runtime_root/usr/lib/libreoffice/share/registry/writer.xcd"
+    fi
     if [ "$scenario" = ready ]; then
         mkdir -p "$runtime_root/opt/pdf-tool" "$runtime_root/home/pdftool" "$runtime_root/tmp" "$runtime_root/dev" "$runtime_root/proc"
         : > "$runtime_root/.pdf-runtime-ready"
@@ -68,15 +76,23 @@ test_runtime_permissions() {
         umask 077
         sh "$app_dir/start-offline.sh" --listen 127.0.0.1:8787
     ) > "$case_dir/stdout.log" 2> "$case_dir/stderr.log"
+    for config in main.xcd res/en-US.xcd; do
+        cmp "$runtime_root/usr/lib/libreoffice/share/.registry/$config" "$runtime_root/etc/libreoffice/registry/$config"
+    done
+    if [ "$scenario" = modern ]; then
+        [ -s "$runtime_root/usr/lib/libreoffice/share/registry/writer.xcd" ]
+    else
+        cmp "$runtime_root/usr/lib/libreoffice/share/.registry/writer.xcd" "$runtime_root/etc/libreoffice/registry/writer.xcd"
+    fi
     grep -F "chmod|755|$runtime_root|" "$case_dir/events.log" >/dev/null
     grep -F "chroot|--userspec=65534:65534|$runtime_root|" "$case_dir/events.log" >/dev/null
-    if [ "$scenario" = fresh ]; then
+    if [ "$scenario" != ready ]; then
         grep -F 'tar|' "$case_dir/events.log" >/dev/null
     elif grep -F 'tar|' "$case_dir/events.log" >/dev/null; then
         echo 'FAIL: existing runtime unexpectedly re-extracted' >&2
         exit 1
     fi
-    echo "PASS: root traversal permission, $scenario branch (simulated OS)"
+    echo "PASS: active registry and root traversal permission, $scenario branch (simulated OS)"
 }
 test_readiness_order() {
     local scenario=$1
@@ -146,6 +162,7 @@ SERVICE
 }
 test_runtime_permissions fresh
 test_runtime_permissions ready
+test_runtime_permissions modern
 test_readiness_order failure
 test_readiness_order success
 echo "Results saved in $RUN_ROOT"

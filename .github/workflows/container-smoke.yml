@@ -6,6 +6,10 @@ on:
         description: Release containing offline image archives
         required: true
         default: v1.1.1
+      verify_launcher:
+        description: Test bundled official launcher before rebuilding release images
+        type: boolean
+        default: false
 permissions:
   contents: read
 jobs:
@@ -57,7 +61,7 @@ jobs:
         run: |
           docker run -d --name pdf-smoke --network none \
             --cap-drop ALL --security-opt no-new-privileges \
-            pdf-smoke-test
+            pdf-smoke-test ${{ inputs.verify_launcher && '--standalone --listen 0.0.0.0:8080 --office /usr/lib/libreoffice/program/oosplash' || '' }}
           test "$(docker inspect -f '{{len .Mounts}}' pdf-smoke)" = 0
           docker exec pdf-smoke /opt/pdf-smoke-client
           docker stop --time 400 pdf-smoke

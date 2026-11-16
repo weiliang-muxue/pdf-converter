@@ -29,7 +29,7 @@ def build(arch):
     obj=json.loads(data);obj['package_version']='1.1.1';obj['fix']='Activate packaged LibreOffice registry before launch'
     data=json.dumps(obj,ensure_ascii=False,indent=2).encode()
    elif rel=='部署与验证.txt':
-    data=('离线包修订 v1.1.1：修复 Word 引擎配置未激活导致的启动失败。程序版本仍为 1.0.3。\n\n'+data.decode('utf-8')).encode()
+    data=('离线包修订 v1.1.1：修复 Word 引擎配置未激活导致的启动失败。程序版本仍为 1.0.3。\n\n'+data.decode('utf-8').replace('阿里云Linux3-'+arch+'离线部署包.tar.gz',dst.name)).encode()
    add(new,m.name,data,m.mode);hashes[rel]=hashlib.sha256(data).hexdigest()
   add(new,'pdf/SHA256SUMS.txt',''.join(h+'  '+n+'\n' for n,h in sorted(hashes.items())).encode())
  with tarfile.open(dst,'r|gz') as t:

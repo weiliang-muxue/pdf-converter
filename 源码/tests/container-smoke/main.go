@@ -122,7 +122,7 @@ func main() {
 		}
 		for _, args := range commands {
 			ctx, stop := context.WithTimeout(context.Background(), 30*time.Second)
-			output, err := exec.CommandContext(ctx, "/usr/lib/libreoffice/program/soffice.bin", args...).CombinedOutput()
+			output, err := exec.CommandContext(ctx, "/usr/lib/libreoffice/program/oosplash", args...).CombinedOutput()
 			stop()
 			fmt.Printf("ENGINE DIAGNOSTIC %v: %v\n%s\n", args, err, output)
 		}
@@ -151,7 +151,7 @@ func main() {
 		panic(e)
 	}
 	ctx, stop := context.WithTimeout(context.Background(), 30*time.Second)
-	output, err := exec.CommandContext(ctx, "/usr/lib/libreoffice/program/soffice.bin",
+	output, err := exec.CommandContext(ctx, "/usr/lib/libreoffice/program/oosplash",
 		"-env:UserInstallation=file://"+filepath.Join(dir, "profile"), "--headless",
 		"--convert-to", "doc:MS Word 97", "--outdir", dir, input).CombinedOutput()
 	stop()

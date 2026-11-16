@@ -59,7 +59,7 @@ if [ -d "$REGISTRY_SOURCE" ]; then
   chmod 755 "$REGISTRY_TARGET"
 fi
 for CONFIG in main.xcd writer.xcd; do
-  [ -s "$REGISTRY_TARGET/$CONFIG" ] || { echo "Missing LibreOffice registry: $CONFIG" >&2; exit 1; }
+  [ -s "$REGISTRY_TARGET/$CONFIG" ] || [ -s "$ROOT/usr/lib/libreoffice/share/registry/$CONFIG" ] || { echo "Missing LibreOffice registry: $CONFIG" >&2; exit 1; }
 done
 # The HTML launcher and systemd use umask 077. The archive does not contain
 # the root directory itself, so repair its traversal mode on every launch,
@@ -76,7 +76,7 @@ env -i PATH=/usr/bin:/bin HOME=/home/pdftool LANG=C.UTF-8 TMPDIR=/tmp \
   PDF_HOST_OS="${PDF_HOST_OS:-Linux}" PDF_HOST_ARCH="${PDF_HOST_ARCH:-$(uname -m)}" \
   PDF_ENGINE_VARIANT="${PDF_ENGINE_VARIANT:-Linux $ARCH}" \
   "$CHROOT_COMMAND" --userspec=65534:65534 "$ROOT" /opt/pdf-tool/pdf-tool \
-  --server --office /usr/lib/libreoffice/program/soffice.bin "$@" &
+  --server --office /usr/lib/libreoffice/program/oosplash "$@" &
 CHILD_PID=$!
 STATUS=0
 wait "$CHILD_PID" || STATUS=$?

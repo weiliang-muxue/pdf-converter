@@ -1,0 +1,14 @@
+{
+  "date": "2026-11-16",
+  "fix": "Raw Debian packages had defaults in share/.registry but active etc/libreoffice/registry was empty; copied complete configuration at image build time.",
+  "go_tests": "PASS",
+  "smoke_client_compilation": "PASS",
+  "browser_evidence": "../容器-v1.1.0/browser-results.json",
+  "browser_source_comparison": "git diff v1.1.0 v1.1.1 -- 源码/main.go 源码/standalone.go 源码/word.go 源码/standaloneweb: no changes; image application version only changed via ldflags.",
+  "image_payloads": "Independent SHA-256, layer, ELF architecture, active registry and fonts checks PASS",
+  "launcher_regression": "PASS: fresh runtime, existing runtime, modern registry layout, failed service, successful service (simulated OS)",
+  "linux_native_container_validation": "FAIL: registry corrected; direct soffice.bin returns restart exit code 81. Testing official bundled oosplash launcher before rebuilding.",
+  "workflow_url": "https://github.com/weiliang-muxue/pdf-converter/actions/runs/43834480775",
+  "production_k8s_cluster": "Not accessed",
+  "win7_loongarch_hardware": "Not accessed"
+}
