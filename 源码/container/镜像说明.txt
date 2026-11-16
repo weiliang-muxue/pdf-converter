@@ -55,4 +55,5 @@ SIGTERM 后停止就绪，留 5 秒传播窗口，最多等待在途请求 360 �
 代码仓库：https://github.com/weiliang-muxue/pdf-converter
 EXE 和 Nginx 既有离线包保留在 v1.1.2 Release，本次 v1.2.1 更新容器镜像。
 新版网页源码 RAR/7Z 入口需要配套新版解压接口，不能仅替换旧 Nginx 包的 HTML。
-正式发布以两种架构原生 Linux 的 Offline container smoke 验收通过为准。
+最终验收已通过：两种架构各 100 次压缩包请求、上传中断清理、DOC/DOCX、禁网和零外部挂载；完整 Chrome 网页及 PDF 内容校验通过。
+验收记录：https://github.com/weiliang-muxue/pdf-converter/actions/runs/43884453185

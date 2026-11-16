@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-16T14:20:54.661Z",
+  "browser": "157.0.8103.50",
+  "checks": [
+    "ZIP numeric order 1, 2, 3, 10 and downloadable PDF",
+    "Invalid, encrypted, traversal, oversized and corrupt ZIP rejected; previous list preserved",
+    "Manual selection order, up button, page-number move and drag reorder",
+    "Numeric sort and remove",
+    "Transparent PNG, EXIF-rotated JPEG and WebP; original paper dimensions",
+    "Corrupt image errors and cancellation preserve editable list",
+    "ZIP and image conversion made no backend requests",
+    "数字照片.rar: extracted, naturally sorted, PDF downloaded",
+    "数字照片-rar5.rar: extracted, naturally sorted, PDF downloaded",
+    "数字照片.7z: extracted, naturally sorted, PDF downloaded",
+    "Encrypted 7Z rejected and previous images preserved",
+    "DOCX returned in the same request as a browser Blob, without download token",
+    "PDF download works without any server request; no Pod affinity or retained file required",
+    "No JavaScript errors or external network requests"
+  ],
+  "errors": [],
+  "external": [],
+  "requestCount": 11
+}

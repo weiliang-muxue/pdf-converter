@@ -1,0 +1,31 @@
+{
+  "run_url": "https://github.com/weiliang-muxue/pdf-converter/actions/runs/43884453185",
+  "results": [
+    {
+      "architecture": "arm64",
+      "archive_cancel_cleanup": true,
+      "archive_requests": 100,
+      "archives_zip_rar4_rar5_7z": true,
+      "cancel_cleanup": true,
+      "direct_response": true,
+      "legacy_doc": true,
+      "offline_container": true,
+      "pdf_bytes": 10185,
+      "temporary_files_cleaned": true,
+      "version": "1.2.1"
+    },
+    {
+      "architecture": "amd64",
+      "archive_cancel_cleanup": true,
+      "archive_requests": 100,
+      "archives_zip_rar4_rar5_7z": true,
+      "cancel_cleanup": true,
+      "direct_response": true,
+      "legacy_doc": true,
+      "offline_container": true,
+      "pdf_bytes": 10185,
+      "temporary_files_cleaned": true,
+      "version": "1.2.1"
+    }
+  ]
+}

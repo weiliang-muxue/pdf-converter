@@ -1,21 +1,30 @@
 项目目录导航
 
-当前首选交付：成果/K8S镜像-v1.1.2。无需宿主机 Nginx、外部目录挂载、PVC 或共享存储。
-镜像内置网页、主程序、Word 引擎、字体和运行库。容器端口 8080，接入现有 K8S Service / SLB 后访问 IP:端口。
-amd64 用于 x86_64 节点，arm64 用于 aarch64 节点；客户端 Windows / 信创系统不影响镜像选择。
-镜像放入所有候选节点能访问的内网镜像仓库，扩容无需向 ECS 手动上传程序或文件。
-Word PDF 通过上传请求直接返回，浏览器下载不依赖原 Pod；临时转换文件结束后清理。
-使用 Pod 自身可写层作为临时空间，不开启 readOnlyRootFilesystem。接入参数见镜像目录中的“镜像说明.txt”。
-v1.1.0 和 v1.1.1 是失败候选，请勿部署。v1.1.2 默认配置在 amd64/ARM64 原生 Linux 上验收通过。
-正式下载：https://github.com/weiliang-muxue/pdf-converter/releases/tag/v1.1.2
-验收记录：https://github.com/weiliang-muxue/pdf-converter/actions/runs/43838873267
+当前首选交付：成果/K8S镜像-v1.2.1。
+支持 ZIP、RAR（RAR4/RAR5）、7Z 内图片按数字名称排序，多图自由排序，以及 DOC/DOCX 转 PDF。
+你要求移除的部署说明、英文标语和装饰编号均已移除。
+不需要宿主机 Nginx、外部目录挂载、PVC 或共享目录；所有运行依赖均在镜像中。
+容器端口 8080，接入现有 K8S Service / SLB 后访问 IP:端口。
 
-成果/Nginx离线版-v1.1.2：修复同一离线配置问题后的原 Nginx 方式，程序仍为 v1.0.3。
-成果/EXE离线版-v1.0.3：原 Windows EXE 完整离线压缩包，以及更新启动脚本的龙芯离线包。
-html：网页和原 Nginx 启动脚本。
-源码：Go 源码、镜像与各类交付构建工具、测试证据。
-exe：Windows 和 Linux 原始程序、完整离线引擎。
-日志：发布和验收记录。
+word-pdf-20261116220524-amd64.tar.gz：x86_64 / Intel / AMD 节点。
+word-pdf-20261116220524-arm64.tar.gz：aarch64 / 鲲鹏 / 飞腾节点。
+对应 docker load 显示 word-pdf-20261116220524-amd64:1.2.1 或 word-pdf-20261116220524-arm64:1.2.1。
+客户端 Windows / 信创系统不影响镜像选择。
+镜像放入候选节点可访问的内网镜像仓库，扩容无需向 ECS 目录上传文件。
+PDF 和解压图片在同一次请求中返回，不依赖原 Pod 下载，不保留转换结果。
+临时文件完成、错误或取消后清理；使用 Pod 自身可写层，不开启 readOnlyRootFilesystem。
+接入参数、限制及 SHA256 见镜像目录。
+
+正式下载：https://github.com/weiliang-muxue/pdf-converter/releases/tag/v1.2.1
+验收记录：https://github.com/weiliang-muxue/pdf-converter/actions/runs/43884453185
+两种架构各完成 100 次压缩包请求，并通过 Word、取消清理和网页功能检查。
+v1.2.0 为已撤回候选，请勿部署。
+
+成果/Nginx离线版-v1.1.2：保留原 Nginx 交付，程序版本仍为 1.0.3。
+成果/EXE离线版-v1.0.3：保留 Windows EXE 完整离线包和原生龙芯包。
+html / 源码 / exe：网页、各类交付源码及原始离线引擎。
+日志：发布和验收记录。历史备份：上一稳定镜像。
+本次 RAR/7Z 功能在新版镜像中交付，旧 Nginx 离线包不能只替换 HTML 来启用。
 
 以下为原独立 EXE / Nginx 使用说明；其中结果保留 60 分钟等旧行为不适用于 K8S 镜像。
 镜像版和 HTML 版支持 ZIP 图片数字排序；原 EXE 仅提供多图手动排序和 Word 转换。

@@ -1,0 +1,179 @@
+{
+  "version": "1.2.1",
+  "image_source_commit": "0979934c84a0bb66f163510ecee7e67313faf821",
+  "test_commit": "0979934c84a0bb66f163510ecee7e67313faf821",
+  "native": {
+    "run_id": 43884453185,
+    "status": "completed",
+    "conclusion": "success",
+    "url": "https://github.com/weiliang-muxue/pdf-converter/actions/runs/43884453185",
+    "jobs": [
+      {
+        "id": 133358707625,
+        "name": "smoke (arm64, ubuntu-24.04-arm)",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Download and verify release archive",
+            "conclusion": "success"
+          },
+          {
+            "name": "Import image and build smoke client",
+            "conclusion": "success"
+          },
+          {
+            "name": "Embed verification client in disposable test image",
+            "conclusion": "success"
+          },
+          {
+            "name": "Test offline unprivileged container",
+            "conclusion": "success"
+          },
+          {
+            "name": "Check full browser flow against the released image",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Keep browser evidence",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Show diagnostics",
+            "conclusion": "success"
+          },
+          {
+            "name": "Remove test container",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 133358707862,
+        "name": "smoke (amd64, ubuntu-24.04)",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Download and verify release archive",
+            "conclusion": "success"
+          },
+          {
+            "name": "Import image and build smoke client",
+            "conclusion": "success"
+          },
+          {
+            "name": "Embed verification client in disposable test image",
+            "conclusion": "success"
+          },
+          {
+            "name": "Test offline unprivileged container",
+            "conclusion": "success"
+          },
+          {
+            "name": "Check full browser flow against the released image",
+            "conclusion": "success"
+          },
+          {
+            "name": "Keep browser evidence",
+            "conclusion": "success"
+          },
+          {
+            "name": "Show diagnostics",
+            "conclusion": "success"
+          },
+          {
+            "name": "Remove test container",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ]
+  },
+  "browser_checks": [
+    "ZIP numeric order 1, 2, 3, 10 and downloadable PDF",
+    "Invalid, encrypted, traversal, oversized and corrupt ZIP rejected; previous list preserved",
+    "Manual selection order, up button, page-number move and drag reorder",
+    "Numeric sort and remove",
+    "Transparent PNG, EXIF-rotated JPEG and WebP; original paper dimensions",
+    "Corrupt image errors and cancellation preserve editable list",
+    "ZIP and image conversion made no backend requests",
+    "数字照片.rar: extracted, naturally sorted, PDF downloaded",
+    "数字照片-rar5.rar: extracted, naturally sorted, PDF downloaded",
+    "数字照片.7z: extracted, naturally sorted, PDF downloaded",
+    "Encrypted 7Z rejected and previous images preserved",
+    "DOCX returned in the same request as a browser Blob, without download token",
+    "PDF download works without any server request; no Pod affinity or retained file required",
+    "No JavaScript errors or external network requests"
+  ],
+  "pdf_checks": [
+    "ZIP数字排序.pdf: page order [1, 2, 3, 10], readable JPEG objects and selected paper dimensions",
+    "手动排序.pdf: page order [2, 3, 1], readable JPEG objects and selected paper dimensions",
+    "RAR数字排序.pdf: page order [1, 2, 3, 10], readable JPEG objects and selected paper dimensions",
+    "RAR5数字排序.pdf: page order [1, 2, 3, 10], readable JPEG objects and selected paper dimensions",
+    "7Z数字排序.pdf: page order [1, 2, 3, 10], readable JPEG objects and selected paper dimensions",
+    "PNG transparency flattened to white; EXIF orientation and 96 DPI dimensions correct; WebP decoded",
+    "DOCX: 2 pages, Chinese text and page-break markers preserved"
+  ],
+  "assets": {
+    "word-pdf-20261116220524-amd64.tar.gz.sha256": {
+      "sha256": "1954b38ac8b7e3733b265fb66c5c5badb8f6f9f90042795fd3f296cecf23cb1f",
+      "size": 104,
+      "id": 755111354
+    },
+    "word-pdf-20261116220524-amd64.tar.gz": {
+      "sha256": "cccd8631b025680aab9f948226961bb4ff1f25af7e2497d8ffd96c9a389c5755",
+      "size": 270859627,
+      "id": 755111676
+    },
+    "word-pdf-20261116220524-arm64.tar.gz.sha256": {
+      "sha256": "a68e1b265b0d603935ea8bcf18635471298147681f884e9df4069a6443814d42",
+      "size": 104,
+      "id": 755120018
+    },
+    "word-pdf-20261116220524-arm64.tar.gz": {
+      "sha256": "6ee5afafd2ecb201ee4398e21172916fa081c5abbd95377bbea899af0a5d59fa",
+      "size": 266781167,
+      "id": 755120289
+    }
+  },
+  "constraints": {
+    "offline_native": true,
+    "external_mounts": false,
+    "pod_affinity": false,
+    "retained_conversion_files": false
+  },
+  "scope": "Native amd64 and arm64 Linux runners; real Chrome browser. Actual customer Alibaba Linux 3 K8S/SLB and Win7 client hardware were not accessed."
+}

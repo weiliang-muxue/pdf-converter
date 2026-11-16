@@ -1,8 +1,8 @@
 # PDF 文件工坊
 
 离线 PDF 转换工具，保留三种交付方式，当前主要交付是 K8S 独立镜像。
-当前镜像更新：v1.2.1，新增 RAR/7Z 导入及简化界面。正式镜像以 Release 非预发布状态及对应 Actions 成功记录为准。
-v1.1.2 为上一稳定版；EXE、Nginx 离线包继续保留。
+当前正式镜像 v1.2.1：支持 ZIP、RAR、7Z，简化界面；amd64 / arm64 原生 Linux、连续导入与完整浏览器验收均通过。
+v1.1.2 为上一稳定版；EXE、Nginx 离线包继续保留。v1.2.0 已撤回候选，请勿部署。
 
 ## 下载
 
@@ -57,10 +57,10 @@ RAR/7Z 是本次容器新增功能，不能只替换旧 Nginx 包的 HTML 来启
 
 Go 服务、构建和测试脚本位于“源码”；网页可编辑源位于“html/网站文件”；Linux 入口和依赖清单位于“exe/信创Linux”。
 
-已验证浏览器 ZIP 数字顺序、多图排序、DOC/DOCX、断开后下载、取消清理及无外部网络请求。
+两种架构各连续验证 100 个 ZIP/RAR4/RAR5/7Z 请求，包括加密包拒绝；验证上传中断清理、DOC/DOCX、无外部挂载及禁网运行。真实浏览器验证数字顺序、手动排序、下载、中文 Word、手机布局及无外部请求。
 当前镜像已修复 LibreOffice 配置激活和官方启动器入口；默认配置在禁网、非 root、零外部挂载条件下通过真实 DOC/DOCX 转换、取消清理和正常退出验收。
 
-[最终验收运行记录](https://github.com/weiliang-muxue/pdf-converter/actions/runs/43838873267) · [完整验收证据](源码/测试证据/容器-v1.1.2/validation.json)
+[最终验收运行记录](https://github.com/weiliang-muxue/pdf-converter/actions/runs/43884453185) · [完整验收证据](源码/测试证据/容器-v1.2.1/validation.json)
 实际 Alibaba Cloud Linux 3/K8S/SLB、Win7 和龙芯硬件未连接验收，不把静态兼容性检查当作实机认证。
 
 [构建与验证说明](源码/README.md) · [第三方组件说明](源码/THIRD_PARTY_NOTICES.txt)
